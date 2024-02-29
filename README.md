@@ -1,6 +1,4 @@
 # Netflix Reproduction Project
-
-## Description
 This project aims to reproduce the Netflix template (updated a few years ago) and its main functionalities. It starts with a simulated login function, where you can access using the following credentials:
 
 - Email: "marcomilza@gmail.com"
