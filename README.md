@@ -12,7 +12,9 @@ After login, users are directed to the main screen, which features:
 
 Users can choose between series and movies by clicking on the poster or perform a search using the search bar, which displays a list of titles matching the entered letters sequence. This data is fetched from the server via an API call.
 
-Additionally, there is a feature to add titles to favorites for both movies and TV shows.
+Once clicked on the content of interest, a screen opens displaying detailed information about the show: including a cover image and plot synopsis. From this point, users can access the movie itself with a single click (unfortunately replaced by its trailer for copyright reasons 😄).
+
+Additionally, there is a feature to add titles to favorites for both movies and TV shows, and to rate them with stars.
 
 ## Technical Specifications
 The project is developed using only front-end technologies. A RESTful API was used, pointing to a public service. The backend (database and data processing requested via API) was not under my control.
