@@ -125,14 +125,13 @@ ul {
     &.search-item {
       position: relative;
       .input-wrap {
-        position: absolute;
-        right: calc(100% + 20px);
-        top: 50%;
-        transform: translateY(-50%);
-        height: 26px;
-        overflow: scroll;
+          position: absolute;
+          right: calc(100% + 20px);
+          top: 50%;
+          transform: translateY(-50%);
+          height: 26px;
         input {
-          height: 100%;
+          height: 26px;
           padding: 0 8px;
           font-size: 1rem;
           background-color: $searchBarCol;
@@ -145,8 +144,8 @@ ul {
         &::before {
           position: absolute;
           top: 50%;
+          right: 3px;
           transform: translateY(-25%);
-          right: 2.5%;
           @include pseudo();
           @include equilateral-triangle(down, 3px, $brand);
         }
