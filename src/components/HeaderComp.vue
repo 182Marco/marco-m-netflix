@@ -5,7 +5,8 @@
   >
     <div class="cont">
       <div class="wrap-logoNav">
-        <img src="@/assets/img/brand.svg" alt="logo" />
+        <img class="tablet" src="@/assets/img/brand.svg" alt="logo" />
+        <img class="mobile" src="@/assets/img/netflix.png" alt="logo" />
         <slot></slot>
       </div>
       <NavbarRight />
@@ -98,6 +99,24 @@ header {
         width: 13%;
         min-width: 130px;
         margin-right: 15px;
+
+        &.mobile {
+          display: none;
+          width: 17px;
+          min-width: unset;
+        }
+
+        @media (max-width: 768px) {
+          &.mobile {
+            display: block;
+          }
+        }
+
+        @media (max-width: 769px) {
+          &.tablet {
+            display: none;
+          }
+        }
       }
     }
   }

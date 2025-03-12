@@ -22,17 +22,17 @@
           class="fas fa-search"
         ></i>
       </li>
-      <li>
+      <li class="tablet">
         <a href="#">
           <i class="fas fa-gift"></i>
         </a>
       </li>
-      <li>
+      <li class="tablet">
         <a href="#">
           <i class="fas fa-bell"></i>
         </a>
       </li>
-      <li>
+      <li class="tablet">
         <a href="#" class="withArrow">
           <img src="@/assets/img/marcoMilza.webp" alt="Autore dell' App" />
           <div class="arrow"></div>
@@ -104,6 +104,13 @@ ul {
   padding: 0;
   li {
     margin-left: 20px;
+
+    @media (max-width: 460px) {
+      &.tablet {
+        display: none;
+      }
+    }
+
     a {
       color: $white;
       font-size: 1.3rem;
@@ -125,11 +132,11 @@ ul {
     &.search-item {
       position: relative;
       .input-wrap {
-          position: absolute;
-          right: calc(100% + 20px);
-          top: 50%;
-          transform: translateY(-50%);
-          height: 26px;
+        position: absolute;
+        right: calc(100% + 20px);
+        top: 50%;
+        transform: translateY(-50%);
+        height: 26px;
         input {
           height: 26px;
           padding: 0 8px;
