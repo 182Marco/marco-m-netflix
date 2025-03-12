@@ -2,7 +2,7 @@
   <!-- tag che si vedono solo con apertura della preview -->
   <div class="bg-in-preview" :class="{ active: open }">
     <i
-      class=" close x fas fa-times"
+      class="close x fas fa-times"
       :class="{ active: open }"
       @click="open = false"
     ></i>
@@ -12,12 +12,15 @@
       </h1>
       <div class="stars" :class="{ active: open }">
         <i
-          v-for="(n, i) in Math.ceil(obj.vote_average / 2)"
+          v-for="(n, i) in Math.ceil(
+            obj.vote_average ? obj.vote_average / 2 : 0
+          )"
           :key="i"
           class="fas fa-star"
         ></i>
         <i
-          v-for="(n, i) in 5 - Math.ceil(obj.vote_average / 2)"
+          v-for="(n, i) in 5 -
+          Math.ceil(obj.vote_average ? obj.vote_average / 2 : 0)"
           :key="`_${i}`"
           class="far fa-star"
         ></i>
@@ -83,9 +86,7 @@
             v-if="obj.poster_path"
             class="img-big"
             :class="{ active: open }"
-            :style="
-              `background-image: url(https://image.tmdb.org/t/p/w342${obj.poster_path})`
-            "
+            :style="`background-image: url(https://image.tmdb.org/t/p/w342${obj.poster_path})`"
           ></div>
           <!-- placeoholder in prview quando img mancante -->
           <div
