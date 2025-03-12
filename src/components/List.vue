@@ -34,6 +34,10 @@ export default {
   display: flex;
   width: 92vw;
   margin: 0 auto;
+
+  @media (max-width: 800px) {
+    margin-left: 25px;
+  }
   &.cards {
     margin-top: 50px;
     overflow-x: auto;

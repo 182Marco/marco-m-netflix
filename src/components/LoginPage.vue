@@ -24,9 +24,7 @@
           type="password"
           @keyup.enter="ceckSignIn(users, mailIn, pswIn)"
         />
-        <button @click="ceckSignIn(users, mailIn, pswIn)">
-          Sign In
-        </button>
+        <button @click="ceckSignIn(users, mailIn, pswIn)">Sign In</button>
         <p v-if="er">Mail o Password errati</p>
       </div>
     </div>
@@ -102,13 +100,23 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
   margin: 0 auto;
   @include flex(row, center, center);
+
+  @media (max-width: 800px) {
+    height: calc(73% - 40px);
+  }
+
   .txt-box {
     @include width-height(70%, 80%);
     h2 {
       margin-top: 0;
       color: $white;
       font-size: 2rem;
+
+      @media (max-width: 600px) {
+        font-size: 1.5rem;
+      }
     }
+
     input,
     button {
       border-radius: 3px;
@@ -119,6 +127,11 @@ export default {
       color: $white;
       padding-left: 20px;
       font-size: 1.2rem;
+
+      @media (max-width: 600px) {
+        font-size: 0.9rem;
+      }
+
       &:focus {
         border: none;
       }
@@ -141,6 +154,10 @@ export default {
       &:hover {
         border: 0;
         box-shadow: 0 0 1px 1px $brand;
+      }
+
+      @media (max-width: 800px) {
+        font-size: 1rem;
       }
     }
     p {

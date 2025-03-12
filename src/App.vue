@@ -3,16 +3,15 @@
     <!-- login -->
     <InitialBg v-show="!accountDone">
       <LoginPage v-show="!loginDone" />
-      <!-- scelta utente -->
+      <!-- user selection -->
       <Account v-show="loginDone && !accountDone" />
     </InitialBg>
-    <!-- comincia app vera e propria -->
+    <!-- main app starts -->
     <div class="appMenu-page" v-show="accountDone">
-      <!-- <header msg="Welcome to Your Vue.js App" /> -->
       <HeaderComp>
         <NavbarLeft :links="linksNavLf" />
       </HeaderComp>
-      <!-- film spinto molto su jumbo -->
+      <!-- featured movie on jumbo -->
       <PromoMovie />
       <List :title="`Movies matching your search`" v-show="movies.length > 0">
         <Card v-for="el in movies" :key="el.id" :obj="el" />
@@ -20,20 +19,20 @@
       <List :title="`Series matching your search`" v-show="series.length > 0">
         <Card v-for="el in series" :key="el.id" :obj="el" />
       </List>
-      <List :title="`Popular movie on Netflix:`">
+      <List :title="`Popular movies on Netflix:`">
         <Card v-for="el in popularMov" :key="el.id" :obj="el" />
       </List>
       <List :title="`Popular series on Netflix`">
         <Card v-for="el in popularSeries" :key="el.id" :obj="el" />
       </List>
       <List
-        :title="`Your favourites movie list`"
+        :title="`Your favourite movie list`"
         v-show="favouriteMovies.length > 0"
       >
         <Card v-for="el in favouriteMovies" :key="`favM_${el.id}`" :obj="el" />
       </List>
       <List
-        :title="`Your favourites series list`"
+        :title="`Your favourite series list`"
         v-show="favouriteSeries.length > 0"
       >
         <Card v-for="el in favouriteSeries" :key="`favS_${el.id}`" :obj="el" />
@@ -73,17 +72,11 @@ export default {
   },
   data() {
     return {
-      // array che si poplano al caricamento
+      // arrays populated on page load
       popularMov: [],
       popularSeries: [],
       imgSize: "w780",
-      linksNavLf: [
-        "Home",
-        "Serie TV",
-        "Film",
-        "Nuovi e popolari",
-        "La mia lista",
-      ],
+      linksNavLf: ["Home", "TV Series", "Movies", "New & Popular", "My List"],
     };
   },
   computed: {
@@ -101,23 +94,31 @@ export default {
     ]),
   },
   methods: {
-    // chiamata per popolare subito l'app con film trend
-    // rimuovere dalle serie preferite
-    getTrends(type) {
-      axios
-        .get(
+    async getTrends(type) {
+      try {
+        const response = await axios.get(
           `${this.basicUrl}/${type}/popular?api_key=${this.apikey}&language=en-US&page=1`
-        )
-        .then((r) => {
-          // aumentare le props con una favurite true/false
-          r.data.result = [
-            ...r.data.results.map((e) => ({ ...e, favourite: false })),
+        );
+
+        if (
+          response.data &&
+          Array.isArray(response.data.results) &&
+          response.data.results.length > 0
+        ) {
+          response.data.result = [
+            ...response.data.results.map((e) => ({ ...e, favourite: false })),
           ];
-          // faccio un ceck per capire se sono film per scegliere array da popolare
-          r.data.results[0].title
-            ? (this.popularMov = r.data.result)
-            : (this.popularSeries = r.data.result);
-        });
+          if (response.data.results[0].title) {
+            this.popularMov = response.data.result;
+          } else {
+            this.popularSeries = response.data.result;
+          }
+        } else {
+          console.error("No results found or invalid data:", response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     },
   },
 };
@@ -127,7 +128,7 @@ export default {
 /* fonts */
 @import "~@fontsource/montserrat/index.css";
 @import "~@fontsource/montserrat/700.css";
-/* parcials */
+/* partials */
 @import "@/scss/var";
 @import "@/scss/reset";
 @import "@/scss/mixins";
@@ -135,7 +136,6 @@ export default {
 #app {
   margin: 0;
   padding: 0;
-  background-color: $main-bg;
   background-color: $main-bg;
   color: $titleOfGrupsCol;
 }
@@ -147,6 +147,7 @@ export default {
 img {
   width: 50px;
 }
+
 .original-lang {
   margin-right: 20px;
 }
@@ -157,6 +158,6 @@ section {
 
 ::-webkit-scrollbar {
   width: 0px;
-  background: transparent; /* make scrollbar transparent */
+  background: transparent;
 }
 </style>

@@ -16,7 +16,7 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
-// components
+import * as U from "../utils";
 import NavbarRight from "./NavbarRight.vue";
 
 export default {
@@ -36,10 +36,12 @@ export default {
   },
   methods: {
     ...mapMutations(["goTransparent", "black"]),
-    // ***
+
     handleScroll() {
       if (!this.colNav) {
-        window.scrollY < 400
+        const screenWidth = window.innerWidth;
+
+        window.scrollY < U.getScrollThreshold(screenWidth)
           ? this.$store.commit("goTransparent")
           : this.$store.commit("black");
       }
