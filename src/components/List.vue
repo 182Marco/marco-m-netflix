@@ -41,7 +41,6 @@ export default {
   &.cards {
     margin-top: 50px;
     overflow-x: auto;
-    overflow-y: hidden;
     flex-wrap: nowrap;
     padding-bottom: 40px;
     @include flex(row, flex-start, flex-start);
