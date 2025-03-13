@@ -1,5 +1,5 @@
 <template>
-  <!-- tag che si vedono solo con apertura della preview -->
+  <!-- tags that are visible only when the preview is opened -->
   <div class="bg-in-preview" :class="{ active: open }">
     <i
       class="close x fas fa-times"
@@ -74,14 +74,14 @@
         :obj="obj"
       ></VideoComp>
     </div>
-    <!-- fine tag che si vedono solo con apertura della preview -->
+    <!-- end of tags visible only when the preview is open -->
     <a class="card" :class="{ active: open }" @click="open = true" href="#">
       <div class="poster" :class="{ active: open }">
         <div class="img-wrap" :class="{ active: open }">
-          <!-- Per la presentazione serviva un bg img 
-        a un contenitore per ottenere l'effto box shadow 
-        in direzione opposta (INSET) tipico della 
-        prefazione di netflix -->
+          <!-- For the presentation, a background
+           image was needed in a container to achieve
+           the box-shadow effect in the opposite direction 
+           (INSET), typical of Netflix previews -->
           <div
             v-if="obj.poster_path"
             class="img-big"
@@ -104,7 +104,7 @@
             :src="`https://image.tmdb.org/t/p/w342${obj.poster_path}`"
             :alt="`${obj.title ? obj.title : obj.name} sign poster`"
           />
-          <!-- placeoholder quando img mancante -->
+          <!-- Placeholder when the image is missing -->
           <img
             v-else
             :class="{ active: open }"
@@ -124,7 +124,6 @@
 import { mapState, mapMutations } from "vuex";
 import axios from "axios";
 import VideoComp from "./VideoComp.vue";
-// components
 
 export default {
   name: "Card",
@@ -149,27 +148,22 @@ export default {
     ...mapState(["flags"]),
   },
   methods: {
-    // MUTAZIONI
     ...mapMutations(["pushFavuriteObj", "removeFavuriteObj"]),
     // *****
-    getData(id, isMovie) {
-      // controllo subito se di tratta di un film per evitare due chiamate axios al posto di una
-      if (isMovie) {
-        axios
-          .get(
-            `${this.BasicUrlMoreDataSingleEL}${this.getMovie}/${id}/videos?api_key=${this.apikey}&language=it-IT`
-          )
-          .then((r) => {
-            this.trailerKey = r.data.results[0].key;
-          });
-      } else {
-        axios
-          .get(
-            `${this.BasicUrlMoreDataSingleEL}${this.getSeries}/${id}/videos?api_key=${this.apikey}&language=en-US`
-          )
-          .then((r) => {
-            this.trailerKey = r.data.results[0].key;
-          });
+    async getData(id, isMovie) {
+      try {
+        const endpoint = isMovie ? this.getMovie : this.getSeries;
+        const language = isMovie ? "it-IT" : "en-US";
+
+        const response = await axios.get(
+          `${this.BasicUrlMoreDataSingleEL}${endpoint}/${id}/videos?api_key=${this.apikey}&language=${language}`
+        );
+
+        if (response.data.results.length > 0) {
+          this.trailerKey = response.data.results[0].key;
+        }
+      } catch (error) {
+        console.error("Error fetching video data:", error);
       }
     },
   },
@@ -182,6 +176,12 @@ export default {
 @import "@/scss/reset";
 @import "@/scss/mixins";
 
+.bg-in-preview {
+  @media (max-width: 800px) {
+    height: 200px;
+  }
+}
+
 .card {
   cursor: pointer;
   min-width: 250px;
@@ -189,28 +189,59 @@ export default {
   padding: 0;
   margin: 0;
   margin-right: 30px;
-  transition: transform 0.3s;
-  &:hover {
-    transform: scale(1.03);
+
+  @media (max-width: 800px) {
+    min-width: unset;
+    height: unset;
   }
+
+  .img-big {
+    @media (max-width: 800px) {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
   .img-wrap {
     height: 350px;
     overflow: scroll;
     width: 100%;
     margin-bottom: 15px;
+    transition: transform 0.3s;
+
+    &:not(.active):hover {
+      transform: scale(1.07);
+    }
+
+    @media (max-width: 800px) {
+      height: 100%;
+      overflow: scroll;
+      width: 100px;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
     img {
       @include width-height(100%, 100%);
       object-fit: contain;
       max-width: 233px;
+
+      @media (max-width: 800px) {
+        width: 100%;
+        height: 100%;
+        max-width: 233px;
+      }
     }
   }
   p {
     margin-top: 10px;
     margin-bottom: 0;
+    @media (max-width: 800px) {
+      margin-top: 0;
+    }
   }
 }
 
-// display solo titolo e foto finche la card non viene cliccata
+// Display only the title and photo until the card is clicked
 .close.x,
 p.name.active,
 .wrap-texts-in-prev {
@@ -221,12 +252,15 @@ p.name.active,
   color: $white;
   font-weight: bold;
   font-size: 1.3rem;
+  @media (max-width: 800px) {
+    font-size: 0.9rem;
+  }
 }
 
 // *****************************************
-// cambiamento completo di stile
-// quanodo a una card si aggiunge
-// la classe active
+// Complete style change
+// When a card is assigned
+// the "active" class
 // *****************************************
 @import "@/scss/cardOpen";
 </style>
