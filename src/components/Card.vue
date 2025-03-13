@@ -204,11 +204,12 @@ export default {
 
   .img-wrap {
     height: 350px;
-    overflow: scroll;
     width: 100%;
     margin-bottom: 15px;
     transition: transform 0.3s;
-
+    &.active {
+      overflow: hidden;
+    }
     &:not(.active):hover {
       transform: scale(1.07);
     }
