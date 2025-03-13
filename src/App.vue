@@ -141,7 +141,10 @@ export default {
 }
 
 .appMenu-page {
-  padding-bottom: 200px;
+  padding: 0 0 200px;
+  @media (max-width: 630px) {
+    padding: 0 0 80px;
+  }
 }
 
 img {
