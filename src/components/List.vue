@@ -41,14 +41,23 @@ export default {
   &.cards {
     margin-top: 50px;
     overflow-x: auto;
+    overflow-y: hidden;
     flex-wrap: nowrap;
     padding-bottom: 40px;
     @include flex(row, flex-start, flex-start);
+    @media (max-width: 630px) {
+      margin-top: 25px;
+      padding-bottom: 20px;
+    }
   }
   h2 {
     margin: 5vh 0 0;
     font-size: 1.8rem;
     color: $white;
+
+    @media (max-width: 630px) {
+      font-size: 1.3rem;
+    }
   }
 }
 </style>
