@@ -4,7 +4,7 @@
   z-index: 20;
   position: fixed;
   width: 100vw;
-  min-height: 100vh;
+  height: 100vh;
   overflow: scroll;
   top: 0;
   right: 0;
@@ -40,6 +40,7 @@
           display: block;
           @include width-height(100%, 100%);
           box-shadow: 0 0 80px 80px #000 inset;
+          border: 1px solid black;
           background-size: cover;
           background-position: center -10%;
           background-repeat: no-repeat;
@@ -98,17 +99,39 @@
   .name-in-preview {
     text-align: center;
     margin: 10px 0;
+  
     @media (max-width: 800px) {
       font-size: 1.7rem;
       text-align: left;
-     }
-     @media (max-width: 600) {
+    }
+  
+    @media (max-width: 600px) {
       font-size: 1.4rem;
-     }
-     @media (max-width: 470) {
+    }
+  
+    @media (max-width: 470px) {
       font-size: 1.2rem;
-     }
+    }
   }
+
+  .overview,
+  .releaseDate,
+  .original-lang.active,
+  .add-to-favourites {
+    @media (max-width: 800px) {
+      font-size: 1.2rem;
+      margin: 20px 0;
+    }
+  
+    @media (max-width: 600px) {
+      font-size: 1.1rem;
+    }
+  
+    @media (max-width: 470px) {
+      font-size: 0.9rem;
+    }
+  }
+  
 
   .original-lang.active {
     display: flex;
