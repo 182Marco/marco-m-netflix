@@ -1,9 +1,12 @@
 module.exports = {
   configureWebpack: {
-    resolve: {
-      alias: {
-        "webpack/lib/RuleSet": require.resolve("webpack/lib/RuleSet"),
-      },
+    module: {
+      rules: [
+        // Your custom rules
+      ],
     },
+    plugins: [
+      // Your custom plugins
+    ],
   },
 };
