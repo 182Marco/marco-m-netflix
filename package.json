@@ -18,8 +18,10 @@
     "npm": "^7.11.2",
     "run": "^1.4.0",
     "serve": "^11.3.2",
+    "terser-webpack-plugin": "^5.3.14",
     "vue": "^2.6.11",
-    "vuex": "^2.5.0"
+    "vuex": "^2.5.0",
+    "webpack": "^5.98.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
