@@ -1,8 +1,9 @@
 module.exports = {
-  publicPath: process.env.NODE_ENV === "production" ? "/marco-m-netflix/" : "/",
-  devServer: {
-    host: "0.0.0.0",
-    allowedHosts: ["all"],
-    disableHostCheck: true,
+  configureWebpack: {
+    resolve: {
+      alias: {
+        "webpack/lib/RuleSet": require.resolve("webpack/lib/RuleSet"),
+      },
+    },
   },
 };

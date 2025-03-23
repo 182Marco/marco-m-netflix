@@ -20,13 +20,14 @@
     "serve": "^11.3.2",
     "terser-webpack-plugin": "^5.3.14",
     "vue": "^2.6.11",
+    "vue-loader": "^17.4.2",
     "vuex": "^2.5.0",
     "webpack": "^5.98.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@vue/cli-service": "^5.0.8",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
