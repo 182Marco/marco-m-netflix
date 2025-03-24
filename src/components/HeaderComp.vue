@@ -15,12 +15,12 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
-import * as U from "../utils";
-import NavbarRight from "./NavbarRight.vue";
+import { mapState, mapMutations } from 'vuex';
+import * as U from '../utils';
+import NavbarRight from './NavbarRight.vue';
 
 export default {
-  name: "HeaderComp",
+  name: 'HeaderComp',
   props: {},
   components: {
     NavbarRight,
@@ -29,21 +29,21 @@ export default {
     return {};
   },
   created() {
-    window.addEventListener("scroll", this.handleScroll);
+    window.addEventListener('scroll', this.handleScroll);
   },
   computed: {
-    ...mapState(["colNav", "transparent", "fillBlack"]),
+    ...mapState(['colNav', 'transparent', 'fillBlack']),
   },
   methods: {
-    ...mapMutations(["goTransparent", "black"]),
+    ...mapMutations(['goTransparent', 'black']),
 
     handleScroll() {
       if (!this.colNav) {
         const screenWidth = window.innerWidth;
 
         window.scrollY < U.getScrollThreshold(screenWidth)
-          ? this.$store.commit("goTransparent")
-          : this.$store.commit("black");
+          ? this.$store.commit('goTransparent')
+          : this.$store.commit('black');
       }
     },
   },
@@ -53,9 +53,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 /* parcials */
-@import "@/scss/var";
-@import "@/scss/reset";
-@import "@/scss/mixins";
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
 
 .fillBlack {
   animation: fillBlack 0.6s forwards;
