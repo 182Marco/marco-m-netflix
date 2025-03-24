@@ -10,10 +10,10 @@
   right: 0;
   display: flex;
   align-items: center;
-   @media (max-width: 500px) {
+  @media (max-width: 500px) {
     padding-top: 50px;
     align-items: flex-start;
-   }
+  }
   .card.active {
     margin: 0;
     z-index: 20;
@@ -45,8 +45,8 @@
           background-position: center -10%;
           background-repeat: no-repeat;
           @media (max-width: 800px) {
-            box-shadow: 0 0 30px 30px  inset;
-           }
+            box-shadow: 0 0 30px 30px inset;
+          }
         }
         img.active {
           display: none;
@@ -90,25 +90,24 @@
   color: $white;
   gap: 10px;
   @media (max-width: 800px) {
-   max-height: 70%;
-   margin: 0 0 0 3%;
-   width: 48%;
+    max-height: 70%;
+    margin: 0 0 0 3%;
+    width: 48%;
   }
-
 
   .name-in-preview {
     text-align: center;
     margin: 10px 0;
-  
+
     @media (max-width: 800px) {
       font-size: 1.7rem;
       text-align: left;
     }
-  
+
     @media (max-width: 600px) {
       font-size: 1.4rem;
     }
-  
+
     @media (max-width: 470px) {
       font-size: 1.2rem;
     }
@@ -122,30 +121,28 @@
       font-size: 1.2rem;
       margin: 20px 0;
     }
-  
+
     @media (max-width: 600px) {
       font-size: 1.1rem;
     }
-  
+
     @media (max-width: 470px) {
       font-size: 0.9rem;
     }
   }
-  
 
   .original-lang.active {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     gap: 7px;
-  
+
     span {
       @media (max-width: 600px) {
         display: inline-block;
         width: 65px;
       }
     }
-  
 
     img {
       height: 15px;
@@ -157,9 +154,9 @@
   .stars.active,
   .original-lang.active,
   .add-to-favourites {
-    font-size: 1rem; 
+    font-size: 1rem;
   }
-  
+
   @media (max-width: 800px) {
     p,
     .stars.active,
@@ -175,7 +172,7 @@
   .releaseDate {
     margin: 0;
     margin-bottom: 15px;
-    @media (max-width: 800px) {   
+    @media (max-width: 800px) {
       margin-bottom: 7px;
     }
   }
@@ -199,6 +196,14 @@
 
       i.fa-play {
         font-size: 0.7rem;
+        position: relative;
+
+        &::before {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
       }
     }
     &:hover {
