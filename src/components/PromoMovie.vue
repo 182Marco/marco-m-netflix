@@ -18,21 +18,21 @@
 </template>
 
 <script>
-import VideoComp from "./VideoComp.vue";
+import VideoComp from './VideoComp.vue';
 
 export default {
-  name: "PromoMovie",
+  name: 'PromoMovie',
   props: {},
   components: {
     VideoComp,
   },
   data() {
     return {
-      idFilmPromo: "157336",
+      idFilmPromo: '157336',
       showVideo: false,
-      key: "t3NQUGtQeAo",
+      key: 't3NQUGtQeAo',
       interstellarObj: {
-        title: "Interstellar",
+        title: 'Interstellar',
       },
     };
   },
@@ -43,9 +43,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 /* parcials */
-@import "@/scss/var";
-@import "@/scss/reset";
-@import "@/scss/mixins";
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
 
 .promo-img {
   width: 100%;
