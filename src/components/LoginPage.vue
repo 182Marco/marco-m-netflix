@@ -24,6 +24,7 @@
           type="password"
           @keyup.enter="ceckSignIn(users, mailIn, pswIn)"
         />
+        <span>(With any mail and psw)</span>
         <button @click="ceckSignIn(users, mailIn, pswIn)">Sign In</button>
         <p v-if="er">Mail o Password errati</p>
       </div>
@@ -64,6 +65,7 @@ export default {
     ...mapMutations(["loginOk"]),
     // ***
     ceckSignIn(arOfObj, mailIn, pswIn) {
+      this.$store.commit("loginOk");
       if (
         arOfObj.filter((e) => e.mail === mailIn && e.psw === pswIn).length > 0
       ) {
@@ -115,6 +117,13 @@ export default {
       @media (max-width: 600px) {
         font-size: 1.5rem;
       }
+    }
+
+    span {
+      color: #fff;
+      font-size: 0.8rem;
+      margin-bottom: 5px;
+      display: block;
     }
 
     input,
