@@ -26,7 +26,7 @@
         ></i>
       </div>
       <p class="overview">
-        {{ obj.overview }}
+        {{ clipLongText(obj.overview) }}
       </p>
       <p class="releaseDate">release date: {{ obj.release_date }}</p>
       <div class="original-lang" :class="{ active: open }">
@@ -88,7 +88,7 @@
             :class="{ active: open }"
             :style="`background-image: url(https://image.tmdb.org/t/p/w342${obj.poster_path})`"
           ></div>
-          <!-- placeoholder in prview quando img mancante -->
+          <!-- placeoholder in prview when img missing -->
           <div
             v-else
             class="img-big place holder"
@@ -113,7 +113,9 @@
           />
         </div>
         <p class="name" :class="{ active: open }">
-          {{ obj.title ? obj.title : obj.name }}
+          {{
+            obj.title ? clipLongText(obj.title, 2) : clipLongText(obj.name, 2)
+          }}
         </p>
       </div>
     </a>
@@ -121,12 +123,13 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
-import axios from "axios";
-import VideoComp from "./VideoComp.vue";
+import * as U from '../utils';
+import { mapState, mapMutations } from 'vuex';
+import axios from 'axios';
+import VideoComp from './VideoComp.vue';
 
 export default {
-  name: "Card",
+  name: 'Card',
   props: {
     obj: Object,
   },
@@ -135,25 +138,25 @@ export default {
   },
   data() {
     return {
-      BasicUrlMoreDataSingleEL: "https://api.themoviedb.org/3",
-      getMovie: "/movie",
-      getSeries: "/tv",
-      trailerKey: "",
+      BasicUrlMoreDataSingleEL: 'https://api.themoviedb.org/3',
+      getMovie: '/movie',
+      getSeries: '/tv',
+      trailerKey: '',
       open: false,
-      apikey: "5f6d881d6af75a5cb6855a550e2cd3d2",
+      apikey: '5f6d881d6af75a5cb6855a550e2cd3d2',
       showVideo: false,
     };
   },
   computed: {
-    ...mapState(["flags"]),
+    ...mapState(['flags']),
   },
   methods: {
-    ...mapMutations(["pushFavuriteObj", "removeFavuriteObj"]),
+    ...mapMutations(['pushFavuriteObj', 'removeFavuriteObj']),
     // *****
     async getData(id, isMovie) {
       try {
         const endpoint = isMovie ? this.getMovie : this.getSeries;
-        const language = isMovie ? "it-IT" : "en-US";
+        const language = isMovie ? 'it-IT' : 'en-US';
 
         const response = await axios.get(
           `${this.BasicUrlMoreDataSingleEL}${endpoint}/${id}/videos?api_key=${this.apikey}&language=${language}`
@@ -163,8 +166,11 @@ export default {
           this.trailerKey = response.data.results[0].key;
         }
       } catch (error) {
-        console.error("Error fetching video data:", error);
+        console.error('Error fetching video data:', error);
       }
+    },
+    clipLongText(str, n) {
+      return U.clipLongText(str, n);
     },
   },
 };
@@ -172,9 +178,9 @@ export default {
 
 <style scoped lang="scss">
 /* parcials */
-@import "@/scss/var";
-@import "@/scss/reset";
-@import "@/scss/mixins";
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
 
 .bg-in-preview {
   @media (max-width: 800px) {
@@ -216,7 +222,6 @@ export default {
 
     @media (max-width: 800px) {
       height: 100%;
-      overflow: scroll;
       width: 100px;
       margin-bottom: 0;
       padding-bottom: 0;
@@ -263,5 +268,5 @@ p.name.active,
 // When a card is assigned
 // the "active" class
 // *****************************************
-@import "@/scss/cardOpen";
+@import '@/scss/cardOpen';
 </style>
