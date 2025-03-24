@@ -13,7 +13,7 @@
 // components
 
 export default {
-  name: "List",
+  name: 'List',
   props: {
     title: String,
   },
@@ -26,9 +26,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 /* parcials */
-@import "@/scss/var";
-@import "@/scss/reset";
-@import "@/scss/mixins";
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
 
 .cont {
   display: flex;
@@ -42,11 +42,9 @@ export default {
     margin-top: 50px;
     overflow-x: auto;
     flex-wrap: nowrap;
-    padding-bottom: 40px;
     @include flex(row, flex-start, flex-start);
     @media (max-width: 630px) {
-      margin-top: 25px;
-      padding-bottom: 20px;
+      margin: 25px 0 20px 25px;
     }
   }
   h2 {
