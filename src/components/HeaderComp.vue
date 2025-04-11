@@ -56,7 +56,8 @@ export default {
 @import '@/scss/mixins';
 
 .fillBlack {
-  animation: fillBlack 0.6s forwards;
+  // animation: fillBlack 0.6s forwards;
+  background-color: $header-col1;
 }
 
 @keyframes fillBlack {
