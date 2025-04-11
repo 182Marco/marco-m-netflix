@@ -1,8 +1,5 @@
 <template>
-  <header
-    :class="{ transparent: transparent, fillBlack: fillBlack }"
-    ref="header"
-  >
+  <header class="fillBlack" ref="header">
     <div class="cont">
       <div class="wrap-logoNav">
         <img class="tablet" src="@/assets/img/brand.svg" alt="logo" />
@@ -20,6 +17,7 @@ import * as U from '../utils';
 import NavbarRight from './NavbarRight.vue';
 
 export default {
+  // TODO ON HEADER   :class="{ transparent: transparent, fillBlack: fillBlack }"
   name: 'HeaderComp',
   props: {},
   components: {
