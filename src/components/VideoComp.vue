@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: "VideoComp",
+  name: 'VideoComp',
   props: {
     keyFromApi: String,
     obj: Object,
@@ -25,9 +25,9 @@ export default {
   data() {
     return {
       renderVideo: true,
-      playWhenCreated: "?autoplay=1",
+      playWhenCreated: '?autoplay=1',
       showXclose: false,
-      noShowReletedWhenStop: "?rel=0",
+      noShowReletedWhenStop: '?rel=0',
     };
   },
   created() {
@@ -47,9 +47,9 @@ export default {
 -->
 
 <style scoped lang="scss">
-@import "@/scss/var";
-@import "@/scss/reset";
-@import "@/scss/mixins";
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
 
 .wrap {
   position: fixed;

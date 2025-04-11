@@ -11,8 +11,8 @@
       src="@/assets/img/interstellar.webp"
       alt="interstellar promo"
     />
-    <button @click="showVideo = true">
-      <i class="fas fa-play"></i> Riproduci
+    <button @click="showVideo = !showVideo">
+      <i class="fas fa-play"></i> Play
     </button>
   </div>
 </template>
@@ -61,6 +61,9 @@ export default {
   position: relative;
   button {
     position: absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     bottom: 17%;
     left: 12%;
     font-size: 1.3rem;
@@ -87,7 +90,7 @@ export default {
 }
 
 .video {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
 }
