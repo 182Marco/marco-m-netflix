@@ -1,4 +1,4 @@
-const countWords = str => str.trim().split(/\s+/).length;
+const countWords = (str) => str.trim().split(/\s+/).length;
 
 const hasMoreThanWords = (str, n) => countWords(str) > (n || 60);
 
@@ -14,7 +14,7 @@ const getRemainingText = (str, n) =>
     .slice(n || 60)
     .join(' ');
 
-const findCutIndex = str => str.search(/[.,]/);
+const findCutIndex = (str) => str.search(/[.,]/);
 
 const clipLongText = (str, n) => {
   if (!hasMoreThanWords(str, n)) {

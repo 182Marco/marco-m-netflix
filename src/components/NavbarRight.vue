@@ -9,10 +9,7 @@
             v-model.trim="query"
             @keyup="$store.dispatch('getAllData')"
           />
-          <select v-model="language" name="" id="">
-            <option value="it-IT">it</option>
-            <option value="en-US">en</option>
-          </select>
+          <LanguageSelector v-model="language" />
         </div>
         <i
           @click="
@@ -43,11 +40,15 @@
 </template>
 
 <script>
-import { mapMutations, mapState, mapActions } from "vuex";
+import { mapMutations, mapState, mapActions } from 'vuex';
 // components
+import LanguageSelector from '@/components/LanguageSelector.vue';
 
 export default {
-  name: "NavbarRight",
+  name: 'NavbarRight',
+  components: {
+    LanguageSelector,
+  },
   props: {},
   data() {
     return {
@@ -56,13 +57,13 @@ export default {
     };
   },
   computed: {
-    ...mapState(["colNav"]),
+    ...mapState(['colNav']),
     query: {
       get() {
         return this.$store.state.query;
       },
       set(value) {
-        this.$store.commit("setQuery", value);
+        this.$store.commit('setQuery', value);
       },
     },
     language: {
@@ -70,20 +71,20 @@ export default {
         return this.$store.state.language;
       },
       set(value) {
-        this.$store.commit("setLanguage", value);
+        this.$store.commit('setLanguage', value);
       },
     },
   },
   methods: {
-    ...mapMutations(["toggleColNav", "setQueryLang"]),
-    ...mapActions(["changeColNav"]),
+    ...mapMutations(['toggleColNav', 'setQueryLang']),
+    ...mapActions(['changeColNav']),
     // ***
     putFocus() {
       this.showSearch = !this.showSearch;
       setTimeout(() => this.$refs.input.focus(), 10);
     },
     sengaPosto() {
-      console.log("funzione da scrivere chiamata");
+      console.log('funzione da scrivere chiamata');
       console.warn(this.query);
       console.log(this.language);
     },
@@ -94,9 +95,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 /* parcials */
-@import "@/scss/var";
-@import "@/scss/reset";
-@import "@/scss/mixins";
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
 
 nav,
 ul {
@@ -105,7 +106,7 @@ ul {
   li {
     margin-left: 20px;
 
-    @media (max-width: 460px) {
+    @media (max-width: 600px) {
       &.tablet {
         display: none;
       }
@@ -139,13 +140,16 @@ ul {
         height: 26px;
         input {
           height: 26px;
-          padding: 0 8px;
+          padding: 0 65px 0 8px;
           font-size: 1rem;
           background-color: $searchBarCol;
           color: $white;
           border-radius: 5px;
           &:focus {
             border: none;
+          }
+          @media (max-width: 350px) {
+            width: 150px;
           }
         }
         &::before {
@@ -164,7 +168,7 @@ ul {
           -webkit-appearance: none;
           -moz-appearance: none;
           text-indent: 1px;
-          text-overflow: "";
+          text-overflow: '';
           background-color: transparent;
           @include width-height(18%, 100%);
           &:focus {

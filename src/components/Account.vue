@@ -14,25 +14,25 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations } from 'vuex';
 // components
 
 export default {
-  name: "Account",
+  name: 'Account',
   props: {},
   data() {
     return {
       avCards: [
         {
-          linkImg: "blueAvatar",
-          nameImg: "img avatar blue",
-          NameUser: "Marco",
+          linkImg: 'blueAvatar',
+          nameImg: 'img avatar blue',
+          NameUser: 'Marco',
         },
       ],
     };
   },
   methods: {
-    ...mapMutations(["accountChosen"]),
+    ...mapMutations(['accountChosen']),
   },
 };
 </script>
@@ -40,9 +40,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 /* parcials */
-@import "@/scss/var";
-@import "@/scss/reset";
-@import "@/scss/mixins";
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
 .cont {
   position: absolute;
   top: 0;

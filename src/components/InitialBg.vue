@@ -9,7 +9,7 @@
 // components
 
 export default {
-  name: "LoginPage",
+  name: 'LoginPage',
   props: {
     blackBg: Boolean,
   },
@@ -23,9 +23,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 /* parcials */
-@import "@/scss/var";
-@import "@/scss/reset";
-@import "@/scss/mixins";
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
 .cont {
   @include width-height(100vw, 100vh);
 }

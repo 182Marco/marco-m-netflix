@@ -71,7 +71,9 @@ export default {
     background-color: $btnCol;
     border: none;
     cursor: pointer;
-    transition: background-color 0.2s, transform 0.2s;
+    transition:
+      background-color 0.2s,
+      transform 0.2s;
     @media (max-width: 580px) {
       font-size: 0.8rem;
       padding: 5px 12.5px;

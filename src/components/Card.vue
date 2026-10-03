@@ -13,7 +13,7 @@
       <div class="stars" :class="{ active: open }">
         <i
           v-for="(n, i) in Math.ceil(
-            obj.vote_average ? obj.vote_average / 2 : 0
+            obj.vote_average ? obj.vote_average / 2 : 0,
           )"
           :key="i"
           class="fas fa-star"
@@ -159,7 +159,7 @@ export default {
         const language = isMovie ? 'it-IT' : 'en-US';
 
         const response = await axios.get(
-          `${this.BasicUrlMoreDataSingleEL}${endpoint}/${id}/videos?api_key=${this.apikey}&language=${language}`
+          `${this.BasicUrlMoreDataSingleEL}${endpoint}/${id}/videos?api_key=${this.apikey}&language=${language}`,
         );
 
         if (response.data.results.length > 0) {

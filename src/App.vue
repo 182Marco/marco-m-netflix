@@ -1,12 +1,5 @@
 <template>
   <div id="app">
-    <!-- login -->
-    <InitialBg v-show="!accountDone">
-      <LoginPage v-show="!loginDone" />
-      <!-- user selection -->
-      <Account v-show="loginDone && !accountDone" />
-    </InitialBg>
-    <!-- main app starts -->
     <div class="appMenu-page" v-show="accountDone">
       <HeaderComp>
         <NavbarLeft :links="linksNavLf" />
@@ -42,19 +35,19 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import axios from "axios";
-import HeaderComp from "./components/HeaderComp.vue";
-import NavbarLeft from "./components/NavbarLeft.vue";
-import List from "./components/List.vue";
-import Card from "./components/Card.vue";
-import LoginPage from "./components/LoginPage.vue";
-import PromoMovie from "./components/PromoMovie.vue";
-import InitialBg from "./components/InitialBg.vue";
-import Account from "./components/Account.vue";
+import { mapState } from 'vuex';
+import axios from 'axios';
+import HeaderComp from './components/HeaderComp.vue';
+import NavbarLeft from './components/NavbarLeft.vue';
+import List from './components/List.vue';
+import Card from './components/Card.vue';
+import LoginPage from './components/LoginPage.vue';
+import PromoMovie from './components/PromoMovie.vue';
+import InitialBg from './components/InitialBg.vue';
+import Account from './components/Account.vue';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     InitialBg,
     LoginPage,
@@ -66,38 +59,38 @@ export default {
     PromoMovie,
   },
   created() {
-    window.addEventListener("scroll", this.handleScroll);
-    this.getTrends("movie");
-    this.getTrends("tv");
+    window.addEventListener('scroll', this.handleScroll);
+    this.getTrends('movie');
+    this.getTrends('tv');
   },
   data() {
     return {
       // arrays populated on page load
       popularMov: [],
       popularSeries: [],
-      imgSize: "w780",
-      linksNavLf: ["Home", "TV Series", "Movies", "New & Popular", "My List"],
+      imgSize: 'w780',
+      linksNavLf: ['Home', 'TV Series', 'Movies', 'New & Popular', 'My List'],
     };
   },
   computed: {
     ...mapState([
-      "loginDone",
-      "accountDone",
-      "favouriteMovies",
-      "favouriteSeries",
-      "movies",
-      "series",
-      "query",
-      "language",
-      "basicUrl",
-      "apikey",
+      'loginDone',
+      'accountDone',
+      'favouriteMovies',
+      'favouriteSeries',
+      'movies',
+      'series',
+      'query',
+      'language',
+      'basicUrl',
+      'apikey',
     ]),
   },
   methods: {
     async getTrends(type) {
       try {
         const response = await axios.get(
-          `${this.basicUrl}/${type}/popular?api_key=${this.apikey}&language=en-US&page=1`
+          `${this.basicUrl}/${type}/popular?api_key=${this.apikey}&language=en-US&page=1`,
         );
 
         if (
@@ -114,10 +107,10 @@ export default {
             this.popularSeries = response.data.result;
           }
         } else {
-          console.error("No results found or invalid data:", response.data);
+          console.error('No results found or invalid data:', response.data);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
       }
     },
   },
@@ -126,12 +119,12 @@ export default {
 
 <style lang="scss">
 /* fonts */
-@import "~@fontsource/montserrat/index.css";
-@import "~@fontsource/montserrat/700.css";
+@import '~@fontsource/montserrat/index.css';
+@import '~@fontsource/montserrat/700.css';
 /* partials */
-@import "@/scss/var";
-@import "@/scss/reset";
-@import "@/scss/mixins";
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
 
 #app {
   margin: 0;
@@ -147,10 +140,6 @@ export default {
   }
 }
 
-img {
-  width: 50px;
-}
-
 .original-lang {
   margin-right: 20px;
 }
@@ -162,5 +151,15 @@ section {
 ::-webkit-scrollbar {
   width: 0px;
   background: transparent;
+}
+
+.flag {
+  width: 50px;
+  height: auto;
+  display: block;
+}
+
+img {
+  object-fit: cover;
 }
 </style>

@@ -10,8 +10,8 @@ const store = () => {
   return new Vuex.Store({
     state: {
       // accesso all'app
-      loginDone: false,
-      accountDone: false,
+      loginDone: true,
+      accountDone: true,
       // colorare nav
       colNav: false,
       transparent: true,
@@ -62,10 +62,10 @@ const store = () => {
       removeFavuriteObj(state, obj) {
         obj.title
           ? (state.favouriteMovies = [
-              ...state.favouriteMovies.filter(e => e.id != obj.id),
+              ...state.favouriteMovies.filter((e) => e.id != obj.id),
             ])
           : (state.favouriteSeries = [
-              ...state.favouriteSeries.filter(e => e.id != obj.id),
+              ...state.favouriteSeries.filter((e) => e.id != obj.id),
             ]);
       },
       // cambiare colore della barra
@@ -103,12 +103,12 @@ const store = () => {
             .get(
               `${state.basicUrl}/search${state.apiMv}?api_key=${state.apikey}&query=${state.query}
               &language=${state.language}
-            `
+            `,
             )
-            .then(res => {
+            .then((res) => {
               // aumentare le props con una favurite true/false
               res.data.result = [
-                ...res.data.results.map(e => ({ ...e, favourite: false })),
+                ...res.data.results.map((e) => ({ ...e, favourite: false })),
               ];
               commit('setSearchedMovies', res.data.result);
             });
@@ -117,12 +117,12 @@ const store = () => {
             .get(
               `${state.basicUrl}/search${state.apiTv}?api_key=${state.apikey}&query=${state.query}
                 &language=${state.language}
-                `
+                `,
             )
-            .then(r => {
+            .then((r) => {
               // aumentare le props con una favurite true/false
               r.data.result = [
-                ...r.data.results.map(e => ({ ...e, favourite: false })),
+                ...r.data.results.map((e) => ({ ...e, favourite: false })),
               ];
               commit('setSearchedSeries', r.data.result);
             });

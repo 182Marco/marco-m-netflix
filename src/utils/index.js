@@ -1,2 +1,2 @@
-export { getScrollThreshold } from "./getScrollThresholdNav";
-export { clipLongText } from "./clipLongText";
+export { getScrollThreshold } from './getScrollThresholdNav';
+export { clipLongText } from './clipLongText';

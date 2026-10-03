@@ -33,43 +33,43 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations } from 'vuex';
 // components
 
 export default {
-  name: "LoginPage",
+  name: 'LoginPage',
   props: {},
   data() {
     return {
       er: false,
-      mailIn: "",
-      pswIn: "",
+      mailIn: '',
+      pswIn: '',
       users: [
         {
-          mail: "marcomilza@gmail.com",
-          psw: "xxx",
+          mail: 'marcomilza@gmail.com',
+          psw: 'xxx',
         },
         {
-          mail: "ugo@gmail.com",
-          psw: "aaa",
+          mail: 'ugo@gmail.com',
+          psw: 'aaa',
         },
         {
-          mail: "p@gmail.it",
-          psw: "bbb",
+          mail: 'p@gmail.it',
+          psw: 'bbb',
         },
       ],
     };
   },
 
   methods: {
-    ...mapMutations(["loginOk"]),
+    ...mapMutations(['loginOk']),
     // ***
     ceckSignIn(arOfObj, mailIn, pswIn) {
-      this.$store.commit("loginOk");
+      this.$store.commit('loginOk');
       if (
         arOfObj.filter((e) => e.mail === mailIn && e.psw === pswIn).length > 0
       ) {
-        this.$store.commit("loginOk");
+        this.$store.commit('loginOk');
       } else {
         this.er = true;
         setTimeout(() => (this.er = false), 3000);
@@ -85,9 +85,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 /* parcials */
-@import "@/scss/var";
-@import "@/scss/reset";
-@import "@/scss/mixins";
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
 .main-cont {
   position: absolute;
   top: 0;

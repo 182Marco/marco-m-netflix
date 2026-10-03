@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: "NavbarLeft",
+  name: 'NavbarLeft',
   props: {
     links: Array,
   },
@@ -20,9 +20,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 /* parcials */
-@import "@/scss/var";
-@import "@/scss/reset";
-@import "@/scss/mixins";
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
 
 nav {
   font-size: 0.85rem;

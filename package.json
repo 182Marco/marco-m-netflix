@@ -4,10 +4,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
-    "build": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
-    "lint": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service lint",
-    "deploy": "gh-pages -d dist"
+    "serve": "cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
+    "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build",
+    "lint": "cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service lint",
+    "deploy": "gh-pages -d dist",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@fontsource/montserrat": "^4.2.2",
@@ -27,9 +29,12 @@
     "@vue/cli-plugin-babel": "^5.0.0",
     "@vue/cli-service": "^5.0.8",
     "babel-eslint": "^10.1.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-vue": "^10.0.0",
     "gh-pages": "^6.3.0",
+    "prettier": "^3.9.9",
     "sass": "^1.32.12",
     "sass-loader": "^10.0.1",
     "vue-template-compiler": "^2.6.11",
