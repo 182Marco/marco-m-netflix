@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import axios from 'axios';
 // moduli
 import accessData from './modules/accessData.js';
+import { searchMovies, searchSeries } from '../features/auth/api/tmdbApi';
 
 Vue.use(Vuex);
 
@@ -97,36 +97,37 @@ const store = () => {
         state.colNav ? commit('black') : commit('goTransparent');
       },
       // chiamata axios quando si fa ricerca
-      getAllData({ state, commit }) {
+      async getAllData({ state, commit }) {
         if (state.query !== '') {
-          // chiamata per i film
-          axios
-            .get(
-              `${state.basicUrl}/search${state.apiMv}?api_key=${state.apikey}&query=${state.query}
-              &language=${state.language}
-            `,
-            )
-            .then((res) => {
-              // aumentare le props con una favurite true/false
-              res.data.result = [
-                ...res.data.results.map((e) => ({ ...e, favourite: false })),
-              ];
-              commit('setSearchedMovies', res.data.result);
+          try {
+            // chiamata per i film
+            const moviesResponse = await searchMovies({
+              query: state.query,
+              language: state.language,
             });
-          // chimata per le serie
-          axios
-            .get(
-              `${state.basicUrl}/search${state.apiTv}?api_key=${state.apikey}&query=${state.query}
-                &language=${state.language}
-                `,
-            )
-            .then((r) => {
-              // aumentare le props con una favurite true/false
-              r.data.result = [
-                ...r.data.results.map((e) => ({ ...e, favourite: false })),
-              ];
-              commit('setSearchedSeries', r.data.result);
+            moviesResponse.data.result = [
+              ...moviesResponse.data.results.map((e) => ({
+                ...e,
+                favourite: false,
+              })),
+            ];
+            commit('setSearchedMovies', moviesResponse.data.result);
+
+            // chimata per le serie
+            const seriesResponse = await searchSeries({
+              query: state.query,
+              language: state.language,
             });
+            seriesResponse.data.result = [
+              ...seriesResponse.data.results.map((e) => ({
+                ...e,
+                favourite: false,
+              })),
+            ];
+            commit('setSearchedSeries', seriesResponse.data.result);
+          } catch (error) {
+            console.error('Error fetching search data:', error);
+          }
         }
       },
     },

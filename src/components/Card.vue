@@ -125,7 +125,7 @@
 <script>
 import * as U from '../utils';
 import { mapState, mapMutations } from 'vuex';
-import axios from 'axios';
+import { getTrailerVideos } from '../features/auth/api/tmdbApi';
 import VideoComp from './VideoComp.vue';
 
 export default {
@@ -138,13 +138,8 @@ export default {
   },
   data() {
     return {
-      BasicUrlMoreDataSingleEL:
-        process.env.VUE_APP_TMDB_BASE_URL || 'https://api.themoviedb.org/3',
-      getMovie: '/movie',
-      getSeries: '/tv',
       trailerKey: '',
       open: false,
-      apikey: process.env.VUE_APP_TMDB_API_KEY || '',
       showVideo: false,
     };
   },
@@ -156,12 +151,7 @@ export default {
     // *****
     async getData(id, isMovie) {
       try {
-        const endpoint = isMovie ? this.getMovie : this.getSeries;
-        const language = isMovie ? 'it-IT' : 'en-US';
-
-        const response = await axios.get(
-          `${this.BasicUrlMoreDataSingleEL}${endpoint}/${id}/videos?api_key=${this.apikey}&language=${language}`,
-        );
+        const response = await getTrailerVideos({ id, isMovie });
 
         if (response.data.results.length > 0) {
           this.trailerKey = response.data.results[0].key;

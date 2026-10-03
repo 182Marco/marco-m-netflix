@@ -36,7 +36,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import axios from 'axios';
+import { getPopularTrends } from './features/auth/api/tmdbApi';
 import HeaderComp from './components/HeaderComp.vue';
 import NavbarLeft from './components/NavbarLeft.vue';
 import List from './components/List.vue';
@@ -82,16 +82,12 @@ export default {
       'series',
       'query',
       'language',
-      'basicUrl',
-      'apikey',
     ]),
   },
   methods: {
     async getTrends(type) {
       try {
-        const response = await axios.get(
-          `${this.basicUrl}/${type}/popular?api_key=${this.apikey}&language=en-US&page=1`,
-        );
+        const response = await getPopularTrends(type);
 
         if (
           response.data &&
