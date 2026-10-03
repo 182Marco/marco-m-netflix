@@ -4,12 +4,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
-    "build": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
-    "lint": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service lint",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "dev:vue": "vue-cli-service serve",
+    "build:vue": "vue-cli-service build",
+    "lint:vue": "vue-cli-service lint",
+    "serve": "vue-cli-service serve",
+    "lint": "vue-cli-service lint",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@builder.io/qwik": "^1.14.1",
     "@fontsource/montserrat": "^4.2.2",
     "@vue/cli": "^5.0.8",
     "axios": "^0.21.1",
@@ -24,6 +31,7 @@
     "vuex": "^2.5.0"
   },
   "devDependencies": {
+    "@types/node": "^24.6.1",
     "@vue/cli-plugin-babel": "^5.0.0",
     "@vue/cli-service": "^5.0.8",
     "babel-eslint": "^10.1.0",
@@ -32,6 +40,8 @@
     "gh-pages": "^6.3.0",
     "sass": "^1.32.12",
     "sass-loader": "^10.0.1",
+    "typescript": "^5.9.3",
+    "vite": "^5.4.8",
     "vue-template-compiler": "^2.6.11",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.0.0"

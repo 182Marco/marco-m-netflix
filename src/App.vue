@@ -1,13 +1,6 @@
 <template>
   <div id="app">
-    <!-- login -->
-    <InitialBg v-show="!accountDone">
-      <LoginPage v-show="!loginDone" />
-      <!-- user selection -->
-      <Account v-show="loginDone && !accountDone" />
-    </InitialBg>
-    <!-- main app starts -->
-    <div class="appMenu-page" v-show="accountDone">
+    <div class="appMenu-page">
       <HeaderComp>
         <NavbarLeft :links="linksNavLf" />
       </HeaderComp>
@@ -48,17 +41,11 @@ import HeaderComp from "./components/HeaderComp.vue";
 import NavbarLeft from "./components/NavbarLeft.vue";
 import List from "./components/List.vue";
 import Card from "./components/Card.vue";
-import LoginPage from "./components/LoginPage.vue";
 import PromoMovie from "./components/PromoMovie.vue";
-import InitialBg from "./components/InitialBg.vue";
-import Account from "./components/Account.vue";
 
 export default {
   name: "App",
   components: {
-    InitialBg,
-    LoginPage,
-    Account,
     HeaderComp,
     NavbarLeft,
     List,
@@ -81,8 +68,6 @@ export default {
   },
   computed: {
     ...mapState([
-      "loginDone",
-      "accountDone",
       "favouriteMovies",
       "favouriteSeries",
       "movies",

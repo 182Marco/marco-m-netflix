@@ -1,17 +1,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
-// moduli
-import accessData from './modules/accessData.js';
 
 Vue.use(Vuex);
 
 const store = () => {
   return new Vuex.Store({
     state: {
-      // accesso all'app
-      loginDone: false,
-      accountDone: false,
       // colorare nav
       colNav: false,
       transparent: true,
@@ -35,13 +30,6 @@ const store = () => {
     },
     getters: {},
     mutations: {
-      // accesso all'app
-      loginOk(state) {
-        state.loginDone = true;
-      },
-      accountChosen(state) {
-        state.accountDone = true;
-      },
       // riempimento variabili in store x query
       setQuery(state, query) {
         state.query = query;
@@ -128,9 +116,6 @@ const store = () => {
             });
         }
       },
-    },
-    modules: {
-      accessData,
     },
   });
 };
