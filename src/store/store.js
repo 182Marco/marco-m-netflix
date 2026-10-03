@@ -26,8 +26,9 @@ const store = () => {
       favouriteMovies: [],
       favouriteSeries: [],
       // dati api
-      apikey: '5f6d881d6af75a5cb6855a550e2cd3d2',
-      basicUrl: 'https://api.themoviedb.org/3',
+      apikey: process.env.VUE_APP_TMDB_API_KEY || '',
+      basicUrl:
+        process.env.VUE_APP_TMDB_BASE_URL || 'https://api.themoviedb.org/3',
       apiMv: '/movie',
       apiTv: '/tv',
       // bandiere

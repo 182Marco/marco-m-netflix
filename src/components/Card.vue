@@ -138,12 +138,13 @@ export default {
   },
   data() {
     return {
-      BasicUrlMoreDataSingleEL: 'https://api.themoviedb.org/3',
+      BasicUrlMoreDataSingleEL:
+        process.env.VUE_APP_TMDB_BASE_URL || 'https://api.themoviedb.org/3',
       getMovie: '/movie',
       getSeries: '/tv',
       trailerKey: '',
       open: false,
-      apikey: '5f6d881d6af75a5cb6855a550e2cd3d2',
+      apikey: process.env.VUE_APP_TMDB_API_KEY || '',
       showVideo: false,
     };
   },
