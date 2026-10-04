@@ -123,9 +123,7 @@
   border-radius: 7px;
   text-decoration: none;
   cursor: pointer;
-  transition:
-    background 0.3s,
-    color 0.3s;
+  transition: background 0.3s, color 0.3s;
   &:hover {
     background: $brand;
     color: #fff;

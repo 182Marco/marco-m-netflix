@@ -1,33 +1,33 @@
 <div id="app">
-    <div class="appMenu-page" v-show="accountDone">
-      <HeaderComp>
-        <NavbarLeft :links="linksNavLf" />
-      </HeaderComp>
-      <!-- featured movie on jumbo -->
-      <PromoMovie />
-      <List :title="`Movies matching your search`" v-show="movies.length > 0">
-        <Card v-for="el in movies" :key="el.id" :obj="el" />
-      </List>
-      <List :title="`Series matching your search`" v-show="series.length > 0">
-        <Card v-for="el in series" :key="el.id" :obj="el" />
-      </List>
-      <List :title="`Popular movies on Netflix:`">
-        <Card v-for="el in popularMov" :key="el.id" :obj="el" />
-      </List>
-      <List :title="`Popular series on Netflix`">
-        <Card v-for="el in popularSeries" :key="el.id" :obj="el" />
-      </List>
-      <List
-        :title="`Your favourite movie list`"
-        v-show="favouriteMovies.length > 0"
-      >
-        <Card v-for="el in favouriteMovies" :key="`favM_${el.id}`" :obj="el" />
-      </List>
-      <List
-        :title="`Your favourite series list`"
-        v-show="favouriteSeries.length > 0"
-      >
-        <Card v-for="el in favouriteSeries" :key="`favS_${el.id}`" :obj="el" />
-      </List>
-    </div>
+  <div class="appMenu-page" v-show="accountDone">
+    <HeaderComp>
+      <NavbarLeft :links="linksNavLf" />
+    </HeaderComp>
+    <!-- featured movie on jumbo -->
+    <PromoMovie />
+    <List :title="`Movies matching your search`" v-show="movies.length > 0">
+      <Card v-for="el in movies" :key="el.id" :obj="el" />
+    </List>
+    <List :title="`Series matching your search`" v-show="series.length > 0">
+      <Card v-for="el in series" :key="el.id" :obj="el" />
+    </List>
+    <List :title="`Popular movies on Netflix:`">
+      <Card v-for="el in popularMov" :key="el.id" :obj="el" />
+    </List>
+    <List :title="`Popular series on Netflix`">
+      <Card v-for="el in popularSeries" :key="el.id" :obj="el" />
+    </List>
+    <List
+      :title="`Your favourite movie list`"
+      v-show="favouriteMovies.length > 0"
+    >
+      <Card v-for="el in favouriteMovies" :key="`favM_${el.id}`" :obj="el" />
+    </List>
+    <List
+      :title="`Your favourite series list`"
+      v-show="favouriteSeries.length > 0"
+    >
+      <Card v-for="el in favouriteSeries" :key="`favS_${el.id}`" :obj="el" />
+    </List>
   </div>
+</div>

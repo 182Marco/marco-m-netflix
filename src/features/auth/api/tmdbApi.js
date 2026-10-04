@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const API_KEY = process.env.VUE_APP_TMDB_API_KEY || '';
-const BASE_URL = process.env.VUE_APP_TMDB_BASE_URL || 'https://api.themoviedb.org/3';
+const BASE_URL =
+  process.env.VUE_APP_TMDB_BASE_URL || 'https://api.themoviedb.org/3';
 
 export const getPopularTrends = async (type) => {
   try {
