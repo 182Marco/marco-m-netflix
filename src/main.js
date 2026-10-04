@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import App from './App.vue';
+import App from './App';
 // NECESSARIO PER FUNZIONAMENTO DI VUEX
 import store from './store/store.js';
 import Vuex from 'vuex';

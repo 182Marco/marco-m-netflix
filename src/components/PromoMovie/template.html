@@ -1,0 +1,16 @@
+<div class="cont">
+    <VideoComp
+      class="video"
+      v-if="showVideo"
+      :keyFromApi="key"
+      :obj="interstellarObj"
+    />
+    <img
+      class="promo-img tablet"
+      src="@/assets/img/interstellar.webp"
+      alt="interstellar promo"
+    />
+    <button @click="showVideo = !showVideo">
+      <i class="fas fa-play"></i> Play
+    </button>
+  </div>

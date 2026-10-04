@@ -1,0 +1,92 @@
+/* parcials */
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
+
+.bg-in-preview {
+  @media (max-width: 800px) {
+    height: 200px;
+  }
+}
+
+.card {
+  cursor: pointer;
+  min-width: 250px;
+  height: 400px;
+  padding: 0;
+  margin: 0;
+  margin-right: 30px;
+
+  @media (max-width: 800px) {
+    min-width: unset;
+    height: unset;
+  }
+
+  .img-big {
+    @media (max-width: 800px) {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .img-wrap {
+    height: 350px;
+    width: 100%;
+    margin-bottom: 15px;
+    transition: transform 0.3s;
+    &.active {
+      overflow: hidden;
+    }
+    &:not(.active):hover {
+      transform: scale(1.07);
+    }
+
+    @media (max-width: 800px) {
+      height: 100%;
+      width: 100px;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    img {
+      @include width-height(100%, 100%);
+      object-fit: contain;
+      max-width: 233px;
+
+      @media (max-width: 800px) {
+        width: 100%;
+        height: 100%;
+        max-width: 233px;
+      }
+    }
+  }
+  p {
+    margin-top: 10px;
+    margin-bottom: 0;
+    @media (max-width: 800px) {
+      margin-top: 0;
+    }
+  }
+}
+
+// Display only the title and photo until the card is clicked
+.close.x,
+p.name.active,
+.wrap-texts-in-prev {
+  display: none;
+}
+
+.name {
+  color: $white;
+  font-weight: bold;
+  font-size: 1.3rem;
+  @media (max-width: 800px) {
+    font-size: 0.9rem;
+  }
+}
+
+// *****************************************
+// Complete style change
+// When a card is assigned
+// the "active" class
+// *****************************************
+@import '@/scss/cardOpen';

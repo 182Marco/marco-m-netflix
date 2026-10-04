@@ -1,0 +1,12 @@
+<div class="cont">
+    <div class="avatar-wrap">
+      <div v-for="(card, i) in avCards" :key="i" class="avatar-card">
+        <img
+          @click="$store.commit('accountChosen')"
+          :src="require(`@/assets/img/${card.linkImg}.webp`)"
+          :alt="card.nameImg"
+        />
+        <h2 @click="$emit('accountChosen')">{{ card.NameUser }}</h2>
+      </div>
+    </div>
+  </div>

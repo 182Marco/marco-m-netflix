@@ -1,0 +1,31 @@
+<div
+    class="main-cont"
+    :style="{
+      backgroundImage: 'url(' + require('@/assets/img/netflixBg.webp') + ')',
+    }"
+  >
+    <div class="login-box">
+      <div class="txt-box">
+        <!-- testi del login -->
+        <h2>Sign In</h2>
+        <input
+          placeholder="Email"
+          class="mail input"
+          type="mail"
+          @keyup.enter="passDownFocus()"
+          v-model.trim="mailIn"
+        />
+        <input
+          v-model.trim="pswIn"
+          ref="psw"
+          placeholder="Password"
+          class="psw"
+          type="password"
+          @keyup.enter="ceckSignIn(users, mailIn, pswIn)"
+        />
+        <span>(With any mail and psw)</span>
+        <button @click="ceckSignIn(users, mailIn, pswIn)">Sign In</button>
+        <p v-if="er">Mail o Password errati</p>
+      </div>
+    </div>
+  </div>

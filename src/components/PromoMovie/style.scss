@@ -1,47 +1,3 @@
-<template>
-  <div class="cont">
-    <VideoComp
-      class="video"
-      v-if="showVideo"
-      :keyFromApi="key"
-      :obj="interstellarObj"
-    />
-    <img
-      class="promo-img tablet"
-      src="@/assets/img/interstellar.webp"
-      alt="interstellar promo"
-    />
-    <button @click="showVideo = !showVideo">
-      <i class="fas fa-play"></i> Play
-    </button>
-  </div>
-</template>
-
-<script>
-import VideoComp from './VideoComp.vue';
-
-export default {
-  name: 'PromoMovie',
-  props: {},
-  components: {
-    VideoComp,
-  },
-  data() {
-    return {
-      idFilmPromo: '157336',
-      showVideo: false,
-      key: 't3NQUGtQeAo',
-      interstellarObj: {
-        title: 'Interstellar',
-      },
-    };
-  },
-  methods: {},
-};
-</script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
 /* parcials */
 @import '@/scss/var';
 @import '@/scss/reset';
@@ -96,4 +52,3 @@ export default {
   top: 0;
   left: 0;
 }
-</style>

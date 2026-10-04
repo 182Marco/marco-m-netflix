@@ -1,0 +1,44 @@
+/* fonts */
+@import '~@fontsource/montserrat/index.css';
+@import '~@fontsource/montserrat/700.css';
+/* partials */
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
+
+#app {
+  margin: 0;
+  padding: 0;
+  background-color: $main-bg;
+  color: $titleOfGrupsCol;
+}
+
+.appMenu-page {
+  padding: 0 0 200px;
+  @media (max-width: 630px) {
+    padding: 0 0 80px;
+  }
+}
+
+.original-lang {
+  margin-right: 20px;
+}
+
+section {
+  padding: 0 5vw;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+.flag {
+  width: 50px;
+  height: auto;
+  display: block;
+}
+
+img {
+  object-fit: cover;
+}

@@ -1,0 +1,90 @@
+/* parcials */
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
+.main-cont {
+  position: absolute;
+  top: 0;
+  left: 0;
+  @include width-height(100vw, 100vh);
+  @include flex(row, center, center);
+}
+
+.login-box {
+  min-width: 280px;
+  @include width-height(27%, 73%);
+  background-color: rgba(0, 0, 0, 0.5);
+  margin: 0 auto;
+  @include flex(row, center, center);
+
+  @media (max-width: 800px) {
+    height: calc(73% - 40px);
+  }
+
+  .txt-box {
+    @include width-height(70%, 80%);
+    h2 {
+      margin-top: 0;
+      color: $white;
+      font-size: 2rem;
+
+      @media (max-width: 600px) {
+        font-size: 1.5rem;
+      }
+    }
+
+    span {
+      color: #fff;
+      font-size: 0.8rem;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    input,
+    button {
+      border-radius: 3px;
+    }
+    input {
+      @include width-height(calc(100% - 20px), 40px);
+      background-color: $searchBarCol;
+      color: $white;
+      padding-left: 20px;
+      font-size: 1.2rem;
+
+      @media (max-width: 600px) {
+        font-size: 0.9rem;
+      }
+
+      &:focus {
+        border: none;
+      }
+    }
+    input.mail {
+      margin-bottom: 15px;
+    }
+    input.psw {
+      margin-bottom: 40px;
+    }
+    button {
+      cursor: pointer;
+      @include width-height(100%, 40px);
+      font-size: 1.4rem;
+      font-weight: bold;
+      background-color: $brand;
+      color: $white;
+      border: 1px solid $brand;
+      transition: box-shadow 0.2s;
+      &:hover {
+        border: 0;
+        box-shadow: 0 0 1px 1px $brand;
+      }
+
+      @media (max-width: 800px) {
+        font-size: 1rem;
+      }
+    }
+    p {
+      color: red;
+    }
+  }
+}

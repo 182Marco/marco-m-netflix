@@ -1,0 +1,111 @@
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
+
+.lang-selector {
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  width: 75px;
+  height: 100%;
+
+  background: $searchBarCol;
+
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: $white;
+  font-size: 0.8rem;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  user-select: none;
+
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: lighten($searchBarCol, 5%);
+  }
+}
+
+.lang-current {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: $white;
+}
+
+.lang-arrow {
+  margin-left: 6px;
+
+  width: 0;
+  height: 0;
+
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid $white;
+
+  transition: transform 0.2s ease;
+
+  &.open {
+    transform: rotate(180deg);
+  }
+}
+
+.lang-dropdown {
+  position: absolute;
+
+  top: calc(100% + 6px);
+  right: 0;
+
+  width: 80px;
+
+  background: $searchBarCol;
+
+  border-radius: 6px;
+
+  overflow: hidden;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+
+  z-index: 999;
+}
+
+.lang-option {
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 10px;
+
+  color: $white;
+
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: $btnCol;
+    color: white;
+  }
+
+  &.active {
+    background: $brand;
+    color: white;
+    font-weight: 700;
+  }
+}
+
+.lang-flag {
+  width: 18px;
+  height: 18px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-right: 8px;
+  flex-shrink: 0;
+}

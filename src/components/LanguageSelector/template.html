@@ -1,0 +1,22 @@
+<div ref="root" class="lang-selector" @click="toggle">
+    <div class="lang-current">
+      <span>
+        {{ currentOption.label }}
+      </span>
+    </div>
+    <div class="lang-arrow" :class="{ open }"></div>
+    <div v-if="open" class="lang-dropdown">
+      <div
+        v-for="option in options"
+        :key="option.value"
+        class="lang-option"
+        :class="{ active: value === option.value }"
+        @click.stop="select(option.value)"
+      >
+        <img :src="option.flag" :alt="option.label" class="lang-flag" />
+        <span>
+          {{ option.label }}
+        </span>
+      </div>
+    </div>
+  </div>
