@@ -3,6 +3,8 @@
 @import '@/scss/reset';
 @import '@/scss/mixins';
 
+$height-input-search: 36px;
+
 nav,
 ul {
   @include flex(row, flex-end, center);
@@ -41,11 +43,11 @@ ul {
         right: calc(100% + 20px);
         top: 50%;
         transform: translateY(-50%);
-        height: 26px;
+        height: $height-input-search;
         input {
-          height: 26px;
-          padding: 0 65px 0 8px;
-          font-size: 1rem;
+          height: $height-input-search;
+          padding: 0 65px 0 39px;
+          font-size: 1.1rem;
           background-color: $searchBarCol;
           color: $white;
           border-radius: 5px;
@@ -81,5 +83,20 @@ ul {
         }
       }
     }
+  }
+}
+
+.ia-chat-btn {
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 26px;
+  cursor: pointer;
+  background-color: transparent;
+
+  &:hover {
+    transform: translateY(-50%) scale(1.1);
+    transition: all 0.2s ease-in-out;
   }
 }
