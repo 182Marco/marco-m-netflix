@@ -4,17 +4,13 @@ import HeaderComp from '@/components/HeaderComp';
 import NavbarLeft from '@/components/NavbarLeft';
 import List from '@/components/List';
 import Card from '@/components/Card';
-import LoginPage from '@/components/LoginPage';
 import PromoMovie from '@/components/PromoMovie';
 import InitialBg from '@/components/InitialBg';
-import Account from '@/components/Account';
 
 export default {
   name: 'App',
   components: {
     InitialBg,
-    LoginPage,
-    Account,
     HeaderComp,
     NavbarLeft,
     List,
