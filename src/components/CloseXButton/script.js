@@ -5,6 +5,10 @@ export default {
       type: String,
       default: null,
     },
+    buttonClass: {
+      type: String,
+      default: '',
+    },
     hoverColor: {
       type: String,
       default: '#fff',
