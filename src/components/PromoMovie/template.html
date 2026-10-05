@@ -6,6 +6,7 @@
     :obj="interstellarObj"
   />
   <img
+    v-if="$store.state.showPromo"
     class="promo-img tablet"
     src="@/assets/img/interstellar.webp"
     alt="interstellar promo"

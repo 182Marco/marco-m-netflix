@@ -5,6 +5,6 @@
       <img class="mobile" src="@/assets/img/netflix.png" alt="logo" />
       <slot></slot>
     </div>
-    <NavbarRight />
+    <NavbarRight @open-ai-chat="$emit('open-ai-chat')" />
   </div>
 </header>

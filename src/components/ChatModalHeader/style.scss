@@ -1,0 +1,47 @@
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
+
+.chat-modal-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 88px;
+  z-index: 1201;
+  background: rgba(8, 12, 18, 0.95);
+  backdrop-filter: blur(4px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+
+  .header-inner-wrap {
+    @include width-height(92vw, 100%);
+    @include flex(row, space-between, center);
+    margin: 0 auto;
+  }
+
+  .header-left {
+    @include flex(row, flex-start, center);
+
+    .settings-ico {
+      height: 29px;
+      width: auto;
+      filter: brightness(0) saturate(100%) invert(51%);
+      transition: filter 0.3s ease-in-out;
+      cursor: pointer;
+      &:hover {
+        filter: brightness(0) invert(1);
+      }
+    }
+
+    .netflix-scout-logo {
+      margin-left: 37px;
+      height: 44px;
+      width: auto;
+      object-fit: contain;
+    }
+  }
+
+  .header-right {
+    @include flex(row, flex-end, center);
+  }
+}

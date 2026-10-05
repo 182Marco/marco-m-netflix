@@ -1,0 +1,26 @@
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
+
+.x-close-btn {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  cursor: pointer;
+
+  .x.close {
+    color: var(--x-close-color, $titleOfGrupsCol);
+    font-weight: 600;
+    transition: color 0.2s ease-in-out;
+  }
+
+  &:hover .x.close {
+    color: var(--x-close-hover-color, $white);
+  }
+
+  &:focus {
+    outline: none;
+  }
+}

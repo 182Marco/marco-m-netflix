@@ -1,9 +1,12 @@
 <div v-if="renderVideo" class="wrap">
-  <i
-    class="x close fas fa-times"
+  <CloseXButton
     v-show="showXclose"
+    class="video-close-btn"
+    color="#fff"
+    hoverColor="#fff"
+    size="2rem"
     @click="renderVideo = !renderVideo"
-  ></i>
+  />
   <iframe
     :src="`https://www.youtube.com/embed/${keyFromApi}${playWhenCreated}`"
     :title="obj.title ? obj.title : obj.name"

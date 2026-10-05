@@ -94,9 +94,9 @@ ul {
   height: 26px;
   cursor: pointer;
   background-color: transparent;
+  transition: all 0.2s ease-in-out;
 
   &:hover {
-    transform: translateY(-50%) scale(1.1);
-    transition: all 0.2s ease-in-out;
+    transform: translateY(-50%) scale(1.15);
   }
 }

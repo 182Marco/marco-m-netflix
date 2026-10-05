@@ -50,11 +50,12 @@
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-top: 5px solid $white;
+  transform: rotate(-90deg);
 
   transition: transform 0.2s ease;
 
   &.open {
-    transform: rotate(180deg);
+    transform: rotate(0);
   }
 }
 

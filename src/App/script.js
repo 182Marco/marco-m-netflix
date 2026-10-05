@@ -5,17 +5,16 @@ import NavbarLeft from '@/components/NavbarLeft';
 import List from '@/components/List';
 import Card from '@/components/Card';
 import PromoMovie from '@/components/PromoMovie';
-import InitialBg from '@/components/InitialBg';
 
 export default {
   name: 'App',
   components: {
-    InitialBg,
     HeaderComp,
     NavbarLeft,
     List,
     Card,
     PromoMovie,
+    ChatModal: () => import('@/components/ChatModal'),
   },
   created() {
     window.addEventListener('scroll', this.handleScroll);
@@ -29,12 +28,11 @@ export default {
       popularSeries: [],
       imgSize: 'w780',
       linksNavLf: ['Home', 'TV Series', 'Movies', 'New & Popular', 'My List'],
+      showChatModal: false,
     };
   },
   computed: {
     ...mapState([
-      'loginDone',
-      'accountDone',
       'favouriteMovies',
       'favouriteSeries',
       'movies',
@@ -44,6 +42,14 @@ export default {
     ]),
   },
   methods: {
+    openAiChat() {
+      this.showChatModal = true;
+      document.body.style.overflow = 'hidden';
+    },
+    closeAiChat() {
+      this.showChatModal = false;
+      document.body.style.overflow = '';
+    },
     async getTrends(type) {
       try {
         const response = await getPopularTrends(type);
@@ -68,5 +74,8 @@ export default {
         console.error('Error fetching data:', error);
       }
     },
+  },
+  beforeDestroy() {
+    document.body.style.overflow = '';
   },
 };

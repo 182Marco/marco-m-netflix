@@ -7,6 +7,15 @@ export default {
   components: {
     LanguageSelector,
   },
+  mounted() {
+    const preload = () => import('@/components/ChatModal');
+
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(preload);
+    } else {
+      setTimeout(preload, 2000);
+    }
+  },
   props: {},
   data() {
     return {
@@ -36,7 +45,6 @@ export default {
   methods: {
     ...mapMutations(['toggleColNav', 'setQueryLang']),
     ...mapActions(['changeColNav']),
-    // ***
     putFocus() {
       this.showSearch = !this.showSearch;
       setTimeout(() => this.$refs.input.focus(), 10);

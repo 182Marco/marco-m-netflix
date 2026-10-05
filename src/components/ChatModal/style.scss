@@ -1,0 +1,222 @@
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
+
+.chat-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1200;
+  background: radial-gradient(
+      110% 90% at 15% 5%,
+      rgba(48, 64, 85, 0.35) 0%,
+      rgba(20, 28, 41, 0.95) 40%,
+      rgba(20, 27, 38, 0.98) 100%
+    ),
+    #141b27;
+  color: $white;
+}
+
+.chat-main {
+  position: fixed;
+  top: 88px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.messages-scroll {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 86px;
+  overflow-y: auto;
+  padding: 20px 4vw 24px;
+}
+
+.message-row {
+  display: flex;
+  margin-bottom: 14px;
+
+  &.is-user {
+    justify-content: flex-end;
+  }
+
+  &.is-assistant,
+  &.is-agent-process {
+    justify-content: flex-start;
+  }
+}
+
+.message-bubble,
+.agent-process-bubble {
+  position: relative;
+  max-width: min(78vw, 720px);
+  border-radius: 14px;
+  padding: 26px 16px 0;
+}
+
+.message-time {
+  position: absolute;
+  top: 9px;
+  right: 14px;
+  font-size: 11px;
+  color: rgba(214, 224, 236, 0.62);
+}
+
+.message-text {
+  font-size: 14px;
+  margin: 0;
+  color: $white;
+  line-height: 1.45;
+}
+
+.is-user .message-bubble {
+  background-color: #0d6fff;
+}
+
+.is-assistant .message-bubble {
+  background-color: rgb(4, 107, 4);
+}
+
+.agent-process-bubble {
+  background-color: #28303a;
+}
+
+.accordion-trigger {
+  @include flex(row, space-between, center);
+  @include width-height(100%, auto);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  padding-right: 12px;
+
+  .agent-title {
+    color: rgba(238, 245, 255, 0.9);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .chevron {
+    cursor: pointer;
+    width: 16px;
+    height: auto;
+    opacity: 0.55;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out,
+      filter 0.3s ease-out;
+    filter: brightness(0) saturate(100%) invert(72%);
+
+    &.rotate {
+        transform: rotate(90deg);
+    }
+}
+
+&:hover .chevron {
+    opacity: 1;
+    filter: grayscale(1) brightness(1.5);
+    filter: brightness(0) invert(1);
+  }
+}
+
+.agent-content {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  overflow-y: auto;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+
+  &.show-accordion {
+    max-height: 230px;
+    opacity: 1;
+    padding-bottom:10px;
+  }
+}
+
+.agent-text {
+  font-size: 11px;
+  margin: 12px 0 0;
+  color: rgba(219, 231, 244, 0.82);
+  line-height: 1.5;
+  font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+  white-space: pre-wrap;
+}
+
+.chat-input-fixed {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 76px;
+  border-top: 1px solid rgba(63, 68, 75, 0.9);
+  background: black;
+
+  .chat-input-wrap {
+    @include width-height(92vw, 100%);
+    @include flex(row, space-between, center);
+    margin: 0 auto;
+    gap: 15px;
+  }
+}
+
+.chat-input {
+  flex: 1;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
+  background: #11161d;
+  background-image: radial-gradient(110% 90% at 15% 5%, rgba(48, 64, 85, 0.35) 0%, rgba(20, 28, 41, 0.95) 40%, rgba(20, 27, 38, 0.98) 100%), initial;
+  color: $white;
+  padding: 0 14px;
+
+  &:focus {
+    outline: none;
+    border-color: rgba(129, 181, 255, 0.9);
+  }
+}
+
+.send-btn {
+  @include flex(row, center, center);
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  
+  
+  img {
+      height: 32px;
+      width: auto;
+      opacity: 0.8;
+      filter: brightness(70%) saturate(100%) invert(64%) sepia(98%) saturate(3500%)
+        hue-rotate(202deg) brightness(101%) contrast(105%);
+      transition: all 0.3s ease-in-out;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+
+    &:focus {
+        outline: none;
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  .message-bubble,
+  .agent-process-bubble {
+    max-width: 92%;
+  }
+
+  .messages-scroll {
+    padding-left: 6vw;
+    padding-right: 6vw;
+  }
+}

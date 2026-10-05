@@ -1,7 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-// moduli
-import accessData from './modules/accessData.js';
 import { searchMovies, searchSeries } from '../features/auth/api/tmdbApi';
 
 Vue.use(Vuex);
@@ -9,13 +7,11 @@ Vue.use(Vuex);
 const store = () => {
   return new Vuex.Store({
     state: {
-      // accesso all'app
-      loginDone: true,
-      accountDone: true,
       // colorare nav
       colNav: false,
       transparent: true,
       fillBlack: false,
+      showPromo: true,
       // dati per tipo di query
       query: '',
       language: 'en-US',
@@ -36,16 +32,10 @@ const store = () => {
     },
     getters: {},
     mutations: {
-      // accesso all'app
-      loginOk(state) {
-        state.loginDone = true;
-      },
-      accountChosen(state) {
-        state.accountDone = true;
-      },
       // riempimento variabili in store x query
       setQuery(state, query) {
         state.query = query;
+        state.showPromo = !query;
       },
       setLanguage(state, language) {
         state.language = language;
@@ -130,9 +120,6 @@ const store = () => {
           }
         }
       },
-    },
-    modules: {
-      accessData,
     },
   });
 };

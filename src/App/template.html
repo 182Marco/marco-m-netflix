@@ -1,11 +1,11 @@
 <div id="app">
-  <div class="appMenu-page" v-show="accountDone">
-    <HeaderComp>
+  <div class="appMenu-page">
+    <HeaderComp @open-ai-chat="openAiChat">
       <NavbarLeft :links="linksNavLf" />
     </HeaderComp>
     <!-- featured movie on jumbo -->
     <PromoMovie />
-    <List :title="`Movies matching your search`" v-show="movies.length > 0">
+    <List :title="`Movies matching your search`" v-show="movies.length > 0" class="matchingGrupFirst">
       <Card v-for="el in movies" :key="el.id" :obj="el" />
     </List>
     <List :title="`Series matching your search`" v-show="series.length > 0">
@@ -30,4 +30,8 @@
       <Card v-for="el in favouriteSeries" :key="`favS_${el.id}`" :obj="el" />
     </List>
   </div>
+
+  <transition name="fade-chat-modal">
+    <ChatModal v-if="showChatModal" @close="closeAiChat" />
+  </transition>
 </div>

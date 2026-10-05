@@ -1,8 +1,13 @@
+import CloseXButton from '@/components/CloseXButton';
+
 export default {
   name: 'VideoComp',
   props: {
     keyFromApi: String,
     obj: Object,
+  },
+  components: {
+    CloseXButton,
   },
   data() {
     return {
