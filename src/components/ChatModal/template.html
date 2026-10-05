@@ -16,12 +16,14 @@
 
         <div v-else class="agent-process-bubble">
           <span class="message-time">{{ message.timestamp }}</span>
+
           <button
             type="button"
             class="accordion-trigger"
             @click="toggleProcess(message.id)"
           >
             <span class="agent-title">{{ message.title }}</span>
+
             <img
               src="@/assets/img/chevron.svg"
               alt="Toggle details"
@@ -29,7 +31,12 @@
               :class="{ rotate: message.isOpen }"
             />
           </button>
-          <div class="agent-content" :class="{ 'show-accordion': message.isOpen }">
+
+          <div
+            :ref="`agentContent-${message.id}`"
+            class="agent-content"
+            :class="{ 'show-accordion': message.isOpen }"
+          >
             <p class="agent-text">{{ message.text }}</p>
           </div>
         </div>
@@ -45,6 +52,7 @@
           placeholder="Type your message"
           @keyup.enter.prevent="sendMessage"
         />
+
         <button type="button" class="send-btn" @click="sendMessage">
           <img src="@/assets/img/send.svg" alt="Send" />
         </button>

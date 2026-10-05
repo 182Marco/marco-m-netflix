@@ -124,29 +124,6 @@
   }
 }
 
-.agent-content {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  overflow-y: auto;
-  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
-
-  &.show-accordion {
-    max-height: 230px;
-    opacity: 1;
-  }
-}
-
-.agent-text {
-  font-size: 11px;
-  margin: 12px 0 0;
-  color: rgba(219, 231, 244, 0.82);
-  line-height: 1.5;
-  font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono',
-    'Courier New', monospace;
-  white-space: pre-wrap;
-}
-
 .chat-input-fixed {
   position: absolute;
   left: 0;
@@ -199,7 +176,7 @@
 
       &:hover {
         opacity: 1;
-        transform: scale(1.2);
+        transform: scale(1.1);
     }
 
     &:focus {
@@ -218,4 +195,49 @@
     padding-left: 6vw;
     padding-right: 6vw;
   }
+}
+
+.agent-content {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+
+  &.show-accordion {
+    max-height: 230px;
+    opacity: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  // Chrome / Edge / Firefox
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.38);
+  }
+}
+
+.agent-text {
+  font-size: 11px;
+  margin: 12px 0 0;
+  color: rgba(219, 231, 244, 0.82);
+  line-height: 1.5;
+  font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+  white-space: pre-wrap;
 }
