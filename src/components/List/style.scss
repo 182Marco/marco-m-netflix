@@ -5,14 +5,12 @@
 
 .cont {
   display: flex;
-  width: 92vw;
-  margin: 0 auto;
 
   @media (max-width: 800px) {
     margin-left: 25px;
   }
   &.cards {
-    margin-top: 50px;
+    margin-top: 12px;
     overflow-x: auto;
     overflow-y: hidden;
     flex-wrap: nowrap;

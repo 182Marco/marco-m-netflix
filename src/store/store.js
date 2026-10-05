@@ -36,6 +36,11 @@ const store = () => {
       setQuery(state, query) {
         state.query = query;
         state.showPromo = !query;
+
+        if (!query) {
+          state.movies = [];
+          state.series = [];
+        }
       },
       setLanguage(state, language) {
         state.language = language;
@@ -88,36 +93,39 @@ const store = () => {
       },
       // chiamata axios quando si fa ricerca
       async getAllData({ state, commit }) {
-        if (state.query !== '') {
-          try {
-            // chiamata per i film
-            const moviesResponse = await searchMovies({
-              query: state.query,
-              language: state.language,
-            });
-            moviesResponse.data.result = [
-              ...moviesResponse.data.results.map((e) => ({
-                ...e,
-                favourite: false,
-              })),
-            ];
-            commit('setSearchedMovies', moviesResponse.data.result);
+        if (!state.query) {
+          commit('setQuery', '');
+          return;
+        }
 
-            // chimata per le serie
-            const seriesResponse = await searchSeries({
-              query: state.query,
-              language: state.language,
-            });
-            seriesResponse.data.result = [
-              ...seriesResponse.data.results.map((e) => ({
-                ...e,
-                favourite: false,
-              })),
-            ];
-            commit('setSearchedSeries', seriesResponse.data.result);
-          } catch (error) {
-            console.error('Error fetching search data:', error);
-          }
+        try {
+          // chiamata per i film
+          const moviesResponse = await searchMovies({
+            query: state.query,
+            language: state.language,
+          });
+          moviesResponse.data.result = [
+            ...moviesResponse.data.results.map((e) => ({
+              ...e,
+              favourite: false,
+            })),
+          ];
+          commit('setSearchedMovies', moviesResponse.data.result);
+
+          // chimata per le serie
+          const seriesResponse = await searchSeries({
+            query: state.query,
+            language: state.language,
+          });
+          seriesResponse.data.result = [
+            ...seriesResponse.data.results.map((e) => ({
+              ...e,
+              favourite: false,
+            })),
+          ];
+          commit('setSearchedSeries', seriesResponse.data.result);
+        } catch (error) {
+          console.error('Error fetching search data:', error);
         }
       },
     },

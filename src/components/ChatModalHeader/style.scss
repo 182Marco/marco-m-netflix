@@ -17,6 +17,7 @@
     @include width-height(92vw, 100%);
     @include flex(row, space-between, center);
     margin: 0 auto;
+    position: relative;
   }
 
   .header-left {
@@ -40,8 +41,5 @@
       object-fit: contain;
     }
   }
-
-  .header-right {
-    @include flex(row, flex-end, center);
-  }
 }
+

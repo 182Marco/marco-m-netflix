@@ -54,5 +54,8 @@ export default {
       console.warn(this.query);
       console.log(this.language);
     },
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
   },
 };

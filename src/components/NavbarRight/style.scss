@@ -5,6 +5,21 @@
 
 $height-input-search: 36px;
 
+.ia-chat-btn {
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 26px;
+  cursor: pointer;
+  background-color: transparent;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-50%) scale(1.15);
+  }
+}
+
 nav,
 ul {
   @include flex(row, flex-end, center);
@@ -83,20 +98,5 @@ ul {
         }
       }
     }
-  }
-}
-
-.ia-chat-btn {
-  position: absolute;
-  left: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 26px;
-  cursor: pointer;
-  background-color: transparent;
-  transition: all 0.2s ease-in-out;
-
-  &:hover {
-    transform: translateY(-50%) scale(1.15);
   }
 }

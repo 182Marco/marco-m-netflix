@@ -50,3 +50,11 @@
   top: 0;
   left: 0;
 }
+
+.x-close-btn.video-close-btn {
+  position: fixed;
+  top: 5%;
+  left: 5%;
+  cursor: pointer;
+  z-index: 100;
+}

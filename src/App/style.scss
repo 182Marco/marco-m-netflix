@@ -14,7 +14,7 @@
 }
 
 .appMenu-page {
-  padding: 0 0 200px;
+  padding: 0 0 85px;
   @media (max-width: 630px) {
     padding: 0 0 80px;
   }
@@ -53,6 +53,12 @@ img {
   opacity: 0;
 }
 
+.main-content {
+  width: 92vw;
+  margin: 0 auto;
+}
+
 .matchingGrupFirst {
   padding-top: 92px;
 }
+
