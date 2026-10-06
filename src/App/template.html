@@ -34,6 +34,6 @@
 </div>
 
   <transition name="fade-chat-modal">
-    <ChatModal v-show="showChatModal" @close="closeAiChat" />
+    <ChatModal v-if="showChatModal" @close="closeAiChat" />
   </transition>
 </div>

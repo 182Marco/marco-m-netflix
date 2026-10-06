@@ -7,6 +7,7 @@ $height-input-search: 36px;
 
 .ia-chat-btn {
   position: absolute;
+  z-index: 3;
   left: 6px;
   top: 50%;
   transform: translateY(-50%);
@@ -60,6 +61,8 @@ ul {
         transform: translateY(-50%);
         height: $height-input-search;
         input {
+          position: relative;
+          z-index: 1;
           height: $height-input-search;
           padding: 0 65px 0 39px;
           font-size: 1.1rem;

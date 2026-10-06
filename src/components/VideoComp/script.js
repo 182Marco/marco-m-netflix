@@ -2,6 +2,7 @@ import CloseXButton from '@/components/CloseXButton';
 
 export default {
   name: 'VideoComp',
+  emits: ['close'],
   props: {
     keyFromApi: String,
     obj: Object,
@@ -21,5 +22,11 @@ export default {
     // The close icon (X) is rendered before the video loads,
     // so we delay its appearance by 700ms to avoid overlapping with the preview's close icon.
     setTimeout(() => (this.showXclose = true), 700);
+  },
+  methods: {
+    closeVideo() {
+      this.renderVideo = false;
+      this.$emit('close');
+    },
   },
 };

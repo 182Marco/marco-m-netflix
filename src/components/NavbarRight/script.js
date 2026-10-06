@@ -4,13 +4,14 @@ import LanguageSelector from '@/components/LanguageSelector';
 
 export default {
   name: 'NavbarRight',
+  emits: ['open-ai-chat'],
   components: {
     LanguageSelector,
   },
   mounted() {
     const preload = () => import('@/components/ChatModal');
 
-    if (window.requestIdleCallback) {
+    if (typeof window !== 'undefined' && window.requestIdleCallback) {
       window.requestIdleCallback(preload);
     } else {
       setTimeout(preload, 2000);
@@ -55,7 +56,9 @@ export default {
       console.log(this.language);
     },
     scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     },
   },
 };

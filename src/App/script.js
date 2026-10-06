@@ -5,6 +5,7 @@ import NavbarLeft from '@/components/NavbarLeft';
 import List from '@/components/List';
 import Card from '@/components/Card';
 import PromoMovie from '@/components/PromoMovie';
+import ChatModal from '@/components/ChatModal';
 
 export default {
   name: 'App',
@@ -14,9 +15,9 @@ export default {
     List,
     Card,
     PromoMovie,
-    ChatModal: () => import('@/components/ChatModal'),
+    ChatModal,
   },
-  created() {
+  mounted() {
     window.addEventListener('scroll', this.handleScroll);
     this.getTrends('movie');
     this.getTrends('tv');
@@ -44,11 +45,17 @@ export default {
   methods: {
     openAiChat() {
       this.showChatModal = true;
-      document.body.style.overflow = 'hidden';
+
+      if (typeof document !== 'undefined') {
+        document.body.style.overflow = 'hidden';
+      }
     },
     closeAiChat() {
       this.showChatModal = false;
-      document.body.style.overflow = '';
+
+      if (typeof document !== 'undefined') {
+        document.body.style.overflow = '';
+      }
     },
     async getTrends(type) {
       try {
@@ -75,7 +82,11 @@ export default {
       }
     },
   },
-  beforeDestroy() {
-    document.body.style.overflow = '';
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = '';
+    }
   },
 };

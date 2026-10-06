@@ -2,7 +2,7 @@ export default {
   name: 'LanguageSelector',
 
   props: {
-    value: {
+    modelValue: {
       type: String,
       required: true,
     },
@@ -28,23 +28,27 @@ export default {
   computed: {
     currentOption() {
       return (
-        this.options.find((x) => x.value === this.value) || this.options[0]
+        this.options.find((x) => x.value === this.modelValue) || this.options[0]
       );
     },
 
     currentLabel() {
-      const found = this.options.find((x) => x.value === this.value);
+      const found = this.options.find((x) => x.value === this.modelValue);
 
       return found ? found.label : 'IT';
     },
   },
 
   mounted() {
-    document.addEventListener('click', this.handleOutside);
+    if (typeof document !== 'undefined') {
+      document.addEventListener('click', this.handleOutside);
+    }
   },
 
-  beforeDestroy() {
-    document.removeEventListener('click', this.handleOutside);
+  beforeUnmount() {
+    if (typeof document !== 'undefined') {
+      document.removeEventListener('click', this.handleOutside);
+    }
   },
 
   methods: {
@@ -53,7 +57,7 @@ export default {
     },
 
     select(value) {
-      this.$emit('input', value);
+      this.$emit('update:modelValue', value);
       this.open = false;
     },
 

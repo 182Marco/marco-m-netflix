@@ -8,7 +8,7 @@
       v-for="option in options"
       :key="option.value"
       class="lang-option"
-      :class="{ active: value === option.value }"
+      :class="{ active: modelValue === option.value }"
       @click.stop="select(option.value)"
     >
       <img :src="option.flag" :alt="option.label" class="lang-flag" />

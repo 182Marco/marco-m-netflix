@@ -10,26 +10,35 @@
   line-height: 1;
   cursor: pointer;
 
-  &.header-modal-close {
-    .x.close {
-      position: static;
-    }
-  }
-
   .x.close {
-    color: var(--x-close-color, $titleOfGrupsCol);
+    color: grey;
     font-weight: 600;
     transition: color 0.2s ease-in-out;
     position: fixed;
     top: 20px;
     left: 12px;
+    transition: all 0.2s ease-in-out;
   }
 
   &:hover .x.close {
     color: var(--x-close-hover-color, $white);
+    transform: scale(1.1);
   }
 
   &:focus {
     outline: none;
+  }
+
+  &.header-modal-close {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+
+    .x.close {
+      position: static;
+      top: auto;
+      left: auto;
+    }
   }
 }

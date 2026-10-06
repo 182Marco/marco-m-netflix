@@ -4,6 +4,7 @@
     v-if="showVideo"
     :keyFromApi="key"
     :obj="interstellarObj"
+    @close="showVideo = false"
   />
   <img
     v-if="$store.state.showPromo"

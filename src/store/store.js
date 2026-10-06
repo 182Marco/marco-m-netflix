@@ -1,11 +1,7 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createStore } from 'vuex';
 import { searchMovies, searchSeries } from '../features/auth/api/tmdbApi';
 
-Vue.use(Vuex);
-
-const store = () => {
-  return new Vuex.Store({
+const store = createStore({
     state: {
       // colorare nav
       colNav: false,
@@ -129,7 +125,6 @@ const store = () => {
         }
       },
     },
-  });
-};
+});
 
 export default store;

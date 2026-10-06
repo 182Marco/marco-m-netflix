@@ -15,6 +15,13 @@
   align-items: center;
 }
 
+.video-close-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 110;
+}
+
 .x.close {
   font-size: 2rem;
   color: white;

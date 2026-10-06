@@ -1,5 +1,6 @@
 export default {
   name: 'CloseXButton',
+  emits: ['click'],
   props: {
     color: {
       type: String,
