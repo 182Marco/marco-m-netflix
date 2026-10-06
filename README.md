@@ -6,12 +6,7 @@ The project reproduces the main browsing experience of a streaming platform, inc
 
 ## Features
 
-The application starts with a simulated login. You can access it using:
-
-* **Email:** `marcomilza@gmail.com`
-* **Password:** `xxx`
-
-After login, the main screen provides:
+The main screen provides:
 
 * Search bar
 * Featured title with an **Interstellar** background
@@ -67,7 +62,12 @@ The migration includes:
 * Browser `window` / `document` usage aligned with the Vue 3 application lifecycle
 * ESLint configured for browser globals
 
-The application currently uses the **Vue 3 Options API**, rather than the Composition API. The migration was therefore focused on moving the existing architecture to Vue 3 while preserving the application's behaviour rather than rewriting the application from scratch.
+The original components intentionally retain the Vue2 syntax and coding style from when I first created them during my early developer training. ❤️
+
+I decided to preserve them as a historical record of my development journey, allowing me to look back and clearly see how my skills and coding style have evolved over time. It also avoids introducing unnecessary risks by refactoring stable, working components purely for the sake of modernization.
+
+The new AI features I am currently developing, however, will be implemented using the newer Vue3 syntax and development practices.
+
 
 ## Node.js
 
