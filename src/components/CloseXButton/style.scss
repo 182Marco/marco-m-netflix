@@ -32,13 +32,14 @@
   &.header-modal-close {
     position: absolute;
     right: 0;
-    top: 12px;
+    top: 22px;
     transform: none;
 
     .x.close {
       position: static;
       top: auto;
       left: auto;
+      font-size: 1.2rem;
     }
   }
 }
