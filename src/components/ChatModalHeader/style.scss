@@ -8,7 +8,7 @@
   z-index: 1201;
   background: #151E26;
   backdrop-filter: blur(4px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  background-color: #18232E;
 
   .header-inner-wrap {
     @include width-height(92vw, 100%);

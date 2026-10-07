@@ -124,7 +124,7 @@
 .chat-input-fixed {
   height: 76px;
   border-top: 1px solid rgba(63, 68, 75, 0.9);
-  background-color: #151E26;
+  background-color: #18232E;
 
   .chat-input-wrap {
     @include width-height(92vw, 100%);
@@ -140,7 +140,7 @@
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 18px;
   background: #11161d;
-  background-image: radial-gradient(110% 90% at 15% 5%, rgba(48, 64, 85, 0.35) 0%, rgba(20, 28, 41, 0.95) 40%, rgba(20, 27, 38, 0.98) 100%), initial;
+  background-color: #263544;
   color: $white;
   padding: 0 14px;
 
