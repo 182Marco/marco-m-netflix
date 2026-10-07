@@ -27,6 +27,7 @@
   user-select: none;
 
   transition: background 0.2s ease;
+  z-index: 1;
 
   &:hover {
     background: lighten($searchBarCol, 5%);
