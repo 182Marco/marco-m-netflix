@@ -1,5 +1,5 @@
 <div class="chat-modal">
-  <ChatModalHeader @close="$emit('close')" />
+  <ChatModalHeader @close="$emit('close')" @reset-chat="resetChat" />
 
   <div class="chat-main">
     <div ref="messagesContainer" class="messages-scroll">

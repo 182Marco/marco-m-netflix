@@ -62,6 +62,11 @@ export default {
   },
 
   methods: {
+    resetChat() {
+      this.messages = [];
+      this.nextId = 1;
+    },
+
     getTimestamp() {
       const now = new Date();
       const hh = `${now.getHours()}`.padStart(2, '0');

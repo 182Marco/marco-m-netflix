@@ -9,5 +9,8 @@
       />
     </div>
     <CloseXButton button-class="header-modal-close" @click="$emit('close')" />
+    <button type="button" class="new-chat-btn" @click="$emit('reset-chat')">
+      new chat
+    </button>
   </div>
 </header>

@@ -20,6 +20,25 @@
     position: relative;
   }
 
+  .new-chat-btn {
+    position: absolute;
+    right: 0;
+    bottom: 10px;
+    border: 0;
+    border-radius: 999px;
+    background: #618dff;
+    color: $white;
+    padding: 4px 12px 6px;
+    font-size: 12px;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
   .header-left {
     @include flex(row, flex-start, center);
 

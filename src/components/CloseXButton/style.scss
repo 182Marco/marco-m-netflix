@@ -32,8 +32,8 @@
   &.header-modal-close {
     position: absolute;
     right: 0;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 12px;
+    transform: none;
 
     .x.close {
       position: static;
