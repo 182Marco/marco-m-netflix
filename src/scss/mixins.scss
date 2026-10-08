@@ -103,6 +103,31 @@
   }
 }
 
+@mixin chat-btn() {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: #eee;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+
+  &:hover {
+    color: $white;
+    transform: scale(1.04);
+  }
+
+  &:focus-visible {
+    outline: 1px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 3px;
+  }
+}
+
 // stilizzazione di default dei btn
 @mixin btn(
   $margin: 1vw,

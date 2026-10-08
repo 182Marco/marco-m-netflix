@@ -1,15 +1,10 @@
-import CloseXButton from '@/components/CloseXButton';
-
 export default {
   name: 'ChatModalHeader',
   emits: ['close', 'reset-chat', 'toggle-settings'],
   props: {
-    showSettingsTrigger: {
+    settingsOpen: {
       type: Boolean,
-      default: true,
+      default: false,
     },
-  },
-  components: {
-    CloseXButton,
   },
 };

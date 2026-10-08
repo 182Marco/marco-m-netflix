@@ -9,10 +9,10 @@
     </div>
     <div class="nav-right">
       <button
-        v-if="showSettingsTrigger"
         type="button"
         class="settings-btn"
-        aria-label="Open settings"
+        :aria-label="settingsOpen ? 'Close settings' : 'Open settings'"
+        :aria-pressed="settingsOpen ? 'true' : 'false'"
         @click="$emit('toggle-settings')"
       >
         settings

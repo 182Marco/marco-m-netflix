@@ -1,4 +1,5 @@
 import ChatModalHeader from '@/components/ChatModalHeader';
+import SettingsDrawer from '@/components/SettingsDrawer';
 
 const assistantReply =
   "I'm listening, but please clarify what you'd like to achieve.";
@@ -39,6 +40,7 @@ export default {
 
   components: {
     ChatModalHeader,
+    SettingsDrawer,
   },
 
   data() {
@@ -46,11 +48,7 @@ export default {
       currentMessage: '',
       nextId: 1,
       messages: [],
-      settingsDrawerMounted: false,
-      settingsDrawerOpen: false,
-      settingsDrawerClosing: false,
-      settingsDrawerTimer: null,
-      settingsAnimationMs: 250,
+      isSettingsDrawerOpen: false,
     };
   },
 
@@ -67,13 +65,9 @@ export default {
     this.syncScrollAfterRender();
   },
 
-  beforeUnmount() {
-    this.clearSettingsDrawerTimer();
-  },
-
   methods: {
     handleModalClose() {
-      this.resetSettingsDrawer(true);
+      this.isSettingsDrawerOpen = false;
       this.$emit('close');
     },
 
@@ -82,54 +76,8 @@ export default {
       this.nextId = 1;
     },
 
-    openSettingsDrawer() {
-      if (this.settingsDrawerMounted && !this.settingsDrawerClosing) {
-        return;
-      }
-
-      this.clearSettingsDrawerTimer();
-      this.settingsDrawerMounted = true;
-      this.settingsDrawerClosing = false;
-
-      this.$nextTick(() => {
-        this.settingsDrawerOpen = true;
-      });
-    },
-
-    closeSettingsDrawer() {
-      if (!this.settingsDrawerMounted || this.settingsDrawerClosing) {
-        return;
-      }
-
-      this.settingsDrawerOpen = false;
-      this.settingsDrawerClosing = true;
-      this.settingsDrawerTimer = setTimeout(() => {
-        this.settingsDrawerMounted = false;
-        this.settingsDrawerClosing = false;
-        this.settingsDrawerTimer = null;
-      }, this.settingsAnimationMs);
-    },
-
-    clearSettingsDrawerTimer() {
-      if (!this.settingsDrawerTimer) {
-        return;
-      }
-
-      clearTimeout(this.settingsDrawerTimer);
-      this.settingsDrawerTimer = null;
-    },
-
-    resetSettingsDrawer(immediate = false) {
-      this.clearSettingsDrawerTimer();
-
-      if (immediate) {
-        this.settingsDrawerOpen = false;
-        this.settingsDrawerClosing = false;
-        this.settingsDrawerMounted = false;
-        return;
-      }
-
-      this.closeSettingsDrawer();
+    toggleSettingsDrawer() {
+      this.isSettingsDrawerOpen = !this.isSettingsDrawerOpen;
     },
 
     getTimestamp() {

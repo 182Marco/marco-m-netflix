@@ -1,0 +1,32 @@
+<transition name="settings-drawer-slide">
+  <aside
+    v-if="open"
+    class="settings-drawer"
+    role="dialog"
+    aria-label="Settings drawer"
+  >
+    <header class="settings-drawer-header">
+      <button
+        type="button"
+        class="settings-btn"
+        aria-label="Default settings"
+        @click="$emit('default-click')"
+      >
+        Default
+      </button>
+
+      <button
+        type="button"
+        class="settings-btn"
+        aria-label="Apply settings"
+        @click="$emit('toggle')"
+      >
+        Apply
+      </button>
+    </header>
+
+    <div class="settings-drawer-content">
+      <slot />
+    </div>
+  </aside>
+</transition>

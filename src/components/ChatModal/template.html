@@ -1,26 +1,17 @@
 <div class="chat-modal">
   <ChatModalHeader
-    :show-settings-trigger="!settingsDrawerMounted"
+    :settings-open="isSettingsDrawerOpen"
     @close="handleModalClose"
     @reset-chat="resetChat"
-    @toggle-settings="openSettingsDrawer"
+    @toggle-settings="toggleSettingsDrawer"
   />
 
-  <div class="chat-layout" :class="{ 'has-settings': settingsDrawerMounted }">
-    <aside
-      v-if="settingsDrawerMounted"
-      class="settings-drawer"
-      :class="{ 'is-open': settingsDrawerOpen, 'is-closing': settingsDrawerClosing }"
-    >
-      <button
-        type="button"
-        class="settings-btn settings-btn-drawer"
-        aria-label="Close settings"
-        @click="closeSettingsDrawer"
-      >
-        <img src="@/assets/img/settings.svg" alt="Settings" class="settings-ico" />
-      </button>
-    </aside>
+  <div class="chat-layout" :class="{ 'has-settings': isSettingsDrawerOpen }">
+    <SettingsDrawer
+      class="chat-settings-drawer"
+      :open="isSettingsDrawerOpen"
+      @toggle="toggleSettingsDrawer"
+    />
 
     <div class="chat-main">
       <div ref="messagesContainer" class="messages-scroll">
