@@ -75,6 +75,10 @@
   top: 23px;
   color: $titleOfGrupsCol;
   font-weight: 600;
+  @media (max-width: 800px) {
+    left: 10px;
+  }
+
   &:hover {
     color: $white;
   }
@@ -181,6 +185,7 @@
   }
 
   button.btn.play {
+    position: relative;
     cursor: pointer;
     @include flex(row, center, center);
     @include width-height(43px, 43px);
@@ -196,14 +201,10 @@
 
       i.fa-play {
         font-size: 0.7rem;
-        position: relative;
-
-        &::before {
           position: absolute;
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-        }
       }
     }
     &:hover {
@@ -215,8 +216,6 @@
     }
     cursor: pointer;
     .fa-play {
-      margin-top: 2px;
-      padding-left: 4px;
       font-size: 1.3rem;
       cursor: pointer;
     }

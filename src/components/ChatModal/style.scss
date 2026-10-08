@@ -25,6 +25,62 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  min-width: 0;
+}
+
+.chat-layout {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.settings-drawer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #0D151D;
+  border-right: 1px solid #253342;
+  z-index: 5;
+  animation-duration: 0.25s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+
+  &.is-open {
+    animation-name: settings-slide-in;
+  }
+
+  &.is-closing {
+    animation-name: settings-slide-out;
+  }
+}
+
+.settings-btn {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+
+  .settings-ico {
+    height: 29px;
+    width: auto;
+    filter: brightness(0) saturate(100%) invert(51%);
+    transition: filter 0.3s ease-in-out;
+
+    &:hover {
+      filter: brightness(0) invert(1);
+    }
+  }
+}
+
+.settings-btn-drawer {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 6px 8px;
 }
 
 .messages-scroll {
@@ -53,15 +109,20 @@
   position: relative;
   max-width: min(78vw, 720px);
   border-radius: 14px;
-  padding: 26px 16px 12px;
+  padding: 16px 12px;
+}
+
+.agent-process-bubble {
+  background-color: #28303a;
+  padding: 12px 9px;
 }
 
 .message-time {
   position: absolute;
-  top: 9px;
-  right: 14px;
+  top: 4px;
+  right: 8px;
   font-size: 11px;
-  color: rgba(214, 224, 236, 0.62);
+  color: rgba(214, 224, 236, 0.82);
 }
 
 .message-text {
@@ -79,10 +140,6 @@
   background-color: rgb(4, 107, 4);
 }
 
-.agent-process-bubble {
-  background-color: #28303a;
-}
-
 .accordion-trigger {
   @include flex(row, space-between, center);
   @include width-height(100%, auto);
@@ -95,7 +152,7 @@
 
   .agent-title {
     color: rgba(238, 245, 255, 0.9);
-    font-size: 0.95rem;
+    font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.01em;
   }
@@ -181,7 +238,7 @@
 @media (max-width: 700px) {
   .message-bubble,
   .agent-process-bubble {
-    max-width: 92%;
+    width: $widthInnerHeader;
   }
 
   .messages-scroll {
@@ -233,4 +290,40 @@
   font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono',
     'Courier New', monospace;
   white-space: pre-wrap;
+}
+
+@keyframes settings-slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes settings-slide-out {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@media (min-width: 1024px) {
+  .chat-layout.has-settings {
+    .chat-main {
+      flex: 0 0 61.8%;
+      max-width: 61.8%;
+    }
+
+    .settings-drawer {
+      position: relative;
+      width: 38.2%;
+      flex: 0 0 38.2%;
+      height: 100vh;
+    }
+  }
 }

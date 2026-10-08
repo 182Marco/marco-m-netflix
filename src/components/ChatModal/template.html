@@ -1,62 +1,83 @@
 <div class="chat-modal">
-  <ChatModalHeader @close="$emit('close')" @reset-chat="resetChat" />
+  <ChatModalHeader
+    :show-settings-trigger="!settingsDrawerMounted"
+    @close="handleModalClose"
+    @reset-chat="resetChat"
+    @toggle-settings="openSettingsDrawer"
+  />
 
-  <div class="chat-main">
-    <div ref="messagesContainer" class="messages-scroll">
-      <div
-        v-for="message in messages"
-        :key="message.id"
-        class="message-row"
-        :class="`is-${message.role}`"
+  <div class="chat-layout" :class="{ 'has-settings': settingsDrawerMounted }">
+    <aside
+      v-if="settingsDrawerMounted"
+      class="settings-drawer"
+      :class="{ 'is-open': settingsDrawerOpen, 'is-closing': settingsDrawerClosing }"
+    >
+      <button
+        type="button"
+        class="settings-btn settings-btn-drawer"
+        aria-label="Close settings"
+        @click="closeSettingsDrawer"
       >
-        <div v-if="message.role !== 'agent-process'" class="message-bubble">
-          <span class="message-time">{{ message.timestamp }}</span>
-          <p class="message-text">{{ message.text }}</p>
-        </div>
+        <img src="@/assets/img/settings.svg" alt="Settings" class="settings-ico" />
+      </button>
+    </aside>
 
-        <div v-else class="agent-process-bubble">
-          <span class="message-time">{{ message.timestamp }}</span>
+    <div class="chat-main">
+      <div ref="messagesContainer" class="messages-scroll">
+        <div
+          v-for="message in messages"
+          :key="message.id"
+          class="message-row"
+          :class="`is-${message.role}`"
+        >
+          <div v-if="message.role !== 'agent-process'" class="message-bubble">
+            <span class="message-time">{{ message.timestamp }}</span>
+            <p class="message-text">{{ message.text }}</p>
+          </div>
 
-          <button
-            type="button"
-            class="accordion-trigger"
-            @click="toggleProcess(message.id)"
-          >
-            <span class="agent-title">{{ message.title }}</span>
+          <div v-else class="agent-process-bubble">
 
-            <img
-              src="@/assets/img/chevron.svg"
-              alt="Toggle details"
-              class="chevron"
-              :class="{ rotate: message.isOpen }"
-            />
-          </button>
+            <button
+              type="button"
+              class="accordion-trigger"
+              @click="toggleProcess(message.id)"
+            >
+              <span class="agent-title">{{ message.title }}</span>
 
-          <div
-            :ref="`agentContent-${message.id}`"
-            class="agent-content"
-            :class="{ 'show-accordion': message.isOpen }"
-          >
-            <p class="agent-text">{{ message.text }}</p>
+              <img
+                src="@/assets/img/chevron.svg"
+                alt="Toggle details"
+                class="chevron"
+                :class="{ rotate: message.isOpen }"
+              />
+            </button>
+
+            <div
+              :ref="`agentContent-${message.id}`"
+              class="agent-content"
+              :class="{ 'show-accordion': message.isOpen }"
+            >
+              <p class="agent-text">{{ message.text }}</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="chat-input-fixed">
-      <div class="chat-input-wrap">
-        <input
-          id="chatInput"
-          v-model.trim="currentMessage"
-          type="text"
-          class="chat-input"
-          placeholder="Type your message"
-          @keyup.enter.prevent="sendMessage"
-        />
+      <div class="chat-input-fixed">
+        <div class="chat-input-wrap">
+          <input
+            id="chatInput"
+            v-model.trim="currentMessage"
+            type="text"
+            class="chat-input"
+            placeholder="Type your message"
+            @keyup.enter.prevent="sendMessage"
+          />
 
-        <button type="button" class="send-btn" @click="sendMessage">
-          <img src="@/assets/img/send.svg" alt="Send" />
-        </button>
+          <button type="button" class="send-btn" @click="sendMessage">
+            <img src="@/assets/img/send.svg" alt="Send" />
+          </button>
+        </div>
       </div>
     </div>
   </div>

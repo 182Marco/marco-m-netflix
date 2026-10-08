@@ -1,16 +1,26 @@
 <header class="chat-modal-header">
-  <div class="header-inner-wrap">
-    <div class="header-left">
-      <img src="@/assets/img/settings.svg" alt="Settings" class="settings-ico" />
+  <nav>
+    <div class="nav-left">
       <img
         src="@/assets/img/NetflixScout.png"
         alt="Netflix Scout"
         class="netflix-scout-logo"
       />
     </div>
-    <CloseXButton button-class="header-modal-close" @click="$emit('close')" />
-    <button type="button" class="new-chat-btn" @click="$emit('reset-chat')">
-      new chat
-    </button>
-  </div>
+    <div class="nav-right">
+      <button
+        v-if="showSettingsTrigger"
+        type="button"
+        class="settings-btn"
+        aria-label="Open settings"
+        @click="$emit('toggle-settings')"
+      >
+        settings
+      </button>
+      <button type="button" @click="$emit('reset-chat')">
+        new chat
+      </button>
+      <button @click="$emit('close')">close bot</button>
+    </div>
+  </nav>
 </header>

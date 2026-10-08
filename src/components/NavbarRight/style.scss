@@ -69,11 +69,11 @@ ul {
           background-color: $searchBarCol;
           color: $white;
           border-radius: 5px;
+          @media (max-width: 500px) {
+            width: 141px;
+          }
           &:focus {
             border: none;
-          }
-          @media (max-width: 350px) {
-            width: 150px;
           }
         }
         &::before {
