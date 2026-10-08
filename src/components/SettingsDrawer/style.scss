@@ -54,13 +54,37 @@
 
 .settings-drawer-slide-enter-active,
 .settings-drawer-slide-leave-active {
-  transition: transform 0.25s ease-out, opacity 0.25s ease-out;
+  animation-duration: 0.25s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
 }
 
-.settings-drawer-slide-enter-from,
-.settings-drawer-slide-leave-to {
-  transform: translateX(-100%);
-  opacity: 0;
+.settings-drawer-slide-enter-active {
+  animation-name: settings-slide-in;
+}
+
+.settings-drawer-slide-leave-active {
+  animation-name: settings-slide-out;
+}
+
+@keyframes settings-slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes settings-slide-out {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
 }
 
 @media (max-width: 500px) {

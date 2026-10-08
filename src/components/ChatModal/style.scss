@@ -141,15 +141,13 @@
   background-color: #18232E;
 
   .chat-input-wrap {
-    @include width-height(92vw, 100%);
+    height: 100%;
     @include flex(row, space-between, center);
     margin: 0 auto;
-    gap: 15px;
   }
 }
 
 .chat-input {
-  flex: 1;
   height: 36px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 18px;
@@ -157,6 +155,8 @@
   background-color: #263544;
   color: $white;
   padding: 0 14px;
+  margin-left: 15px;
+  width: 100%;
 
   &:focus {
     outline: none;
@@ -169,6 +169,7 @@
   border: 0;
   background: transparent;
   padding: 0;
+  margin: 0 15px;
   cursor: pointer;
   
   
