@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mappa del progetto</title>
+<style>
+  :root {
+    --bg: #f6f6f7;
+    --panel: #ffffff;
+    --side: #efeff1;
+    --line: #dcdce0;
+    --txt: #1c1c21;
+    --muted: #62626b;
+    --brand: #e63631;
+    --brand-soft: #fde8e7;
+    --ok: #1f8a4c;
+    --ok-soft: #e1f4e8;
+    --warn: #a86400;
+    --warn-soft: #fdf0d9;
+    --info: #2a62c9;
+    --info-soft: #e4ecfb;
+    --code: #f0f0f3;
+    --sel: #e3e3e8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141414; --panel: #1c1c1f; --side: #181819; --line: #333338;
+      --txt: #ececf0; --muted: #9a9aa5; --brand: #ff5a54; --brand-soft: #3a1b1a;
+      --ok: #4cc27f; --ok-soft: #14301f; --warn: #f0b04a; --warn-soft: #382a10;
+      --info: #7aa5ff; --info-soft: #172542; --code: #26262a; --sel: #2c2c31;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #141414; --panel: #1c1c1f; --side: #181819; --line: #333338;
+    --txt: #ececf0; --muted: #9a9aa5; --brand: #ff5a54; --brand-soft: #3a1b1a;
+    --ok: #4cc27f; --ok-soft: #14301f; --warn: #f0b04a; --warn-soft: #382a10;
+    --info: #7aa5ff; --info-soft: #172542; --code: #26262a; --sel: #2c2c31;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--txt);
+    font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex; flex-direction: column;
+  }
+  code { background: var(--code); padding: 1px 6px; border-radius: 4px; font: 0.88em ui-monospace, Menlo, monospace; }
+
+  /* top bar */
+  .top { display: flex; align-items: center; gap: 16px; padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .top h1 { font-size: 16px; margin: 0; }
+  .top h1 span { color: var(--brand); }
+  .tabs { display: flex; gap: 4px; }
+  .tab { border: 0; background: transparent; color: var(--muted); padding: 8px 14px; border-radius: 8px; font: inherit; font-weight: 600; cursor: pointer; }
+  .tab:hover { background: var(--sel); }
+  .tab[aria-selected="true"] { background: var(--brand-soft); color: var(--brand); }
+  .spacer { flex: 1; }
+  .theme { border: 1px solid var(--line); background: var(--panel); color: var(--txt); border-radius: 8px; padding: 6px 10px; cursor: pointer; font: inherit; }
+
+  .view { display: none; flex: 1; min-height: 0; }
+  .view.on { display: flex; }
+
+  /* ---------- FLOW TAB ---------- */
+  #flow { overflow: auto; flex-direction: column; align-items: center; padding: 24px 16px 48px; }
+  .wrap { width: 100%; max-width: 1040px; }
+  .wrap h2 { margin: 36px 0 4px; font-size: 20px; }
+  .wrap h2:first-child { margin-top: 0; }
+  .wrap p.lead { margin: 0 0 14px; color: var(--muted); }
+  .badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 2px 8px; border-radius: 99px; vertical-align: middle; margin-left: 8px; }
+  .badge.now { background: var(--ok-soft); color: var(--ok); }
+  .badge.soon { background: var(--warn-soft); color: var(--warn); }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; overflow-x: auto; }
+  .card svg { display: block; min-width: 760px; width: 100%; height: auto; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 10px 2px 0; font-size: 13px; color: var(--muted); }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; margin-top: 14px; }
+  .step { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 14px; }
+  .step b { color: var(--brand); }
+
+  /* svg theme classes */
+  svg text { fill: var(--txt); font: 600 13px -apple-system, "Segoe UI", sans-serif; }
+  svg text.sub { fill: var(--muted); font-weight: 400; font-size: 11.5px; }
+  svg text.lbl { font-weight: 500; font-size: 11.5px; fill: var(--muted); }
+  svg .n-ui rect { fill: var(--info-soft); stroke: var(--info); }
+  svg .n-store rect { fill: var(--warn-soft); stroke: var(--warn); }
+  svg .n-ext rect { fill: var(--ok-soft); stroke: var(--ok); }
+  svg .n-bot rect { fill: var(--brand-soft); stroke: var(--brand); }
+  svg .n-user rect { fill: var(--panel); stroke: var(--txt); }
+  svg .n-fake rect { fill: var(--panel); stroke: var(--muted); stroke-dasharray: 5 4; }
+  svg .box rect { stroke-width: 1.5; }
+  svg .edge { stroke: var(--muted); stroke-width: 1.6; fill: none; }
+  svg .edge.dash { stroke-dasharray: 6 4; }
+  svg .edge.red { stroke: var(--brand); }
+  svg .band { fill: var(--code); opacity: .55; }
+  svg .life { stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 4 4; }
+  svg .msgbg { fill: var(--panel); }
+  svg marker path { fill: var(--muted); }
+  svg marker.red path { fill: var(--brand); }
+  svg .num circle { fill: var(--brand); }
+  svg .num text { fill: #fff; font-size: 11px; font-weight: 700; }
+
+  /* ---------- FILES TAB ---------- */
+  #files { min-height: 0; }
+  .side { width: 300px; flex: none; background: var(--side); border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; }
+  .side .head { padding: 10px 14px; font-size: 11px; letter-spacing: .08em; color: var(--muted); font-weight: 700; }
+  .tree { overflow: auto; padding: 0 0 24px; flex: 1; font-size: 13.5px; user-select: none; }
+  .row { display: flex; align-items: center; gap: 6px; padding: 3px 10px 3px calc(10px + var(--d) * 14px); cursor: pointer; white-space: nowrap; border: 0; background: transparent; width: 100%; color: var(--txt); font: inherit; text-align: left; }
+  .row:hover { background: var(--sel); }
+  .row.sel { background: var(--brand-soft); color: var(--brand); font-weight: 600; }
+  .row .chev { width: 12px; flex: none; color: var(--muted); font-size: 10px; text-align: center; }
+  .row .ico { flex: none; font-size: 9px; font-weight: 800; width: 20px; text-align: center; border-radius: 3px; padding: 1px 0; color: #fff; }
+  .row .fold { flex: none; width: 20px; text-align: center; }
+  .row .nm { overflow: hidden; text-overflow: ellipsis; }
+  .ico.vue { background: #3fa877; } .ico.js { background: #c9a400; } .ico.html { background: #d9582b; }
+  .ico.scss { background: #cc6699; } .ico.json { background: #8a8a3a; } .ico.img { background: #8a5fd1; }
+  .ico.md { background: #4a7fc9; } .ico.cfg { background: #777; } .ico.sh { background: #4a9b4a; } .ico.other { background: #888; }
+
+  .main { flex: 1; min-width: 0; overflow: auto; }
+  .crumbs { padding: 10px 28px; font-size: 12.5px; color: var(--muted); border-bottom: 1px solid var(--line); background: var(--panel); position: sticky; top: 0; z-index: 2; }
+  .crumbs b { color: var(--txt); }
+  .doc { max-width: 820px; margin: 0 auto; padding: 28px 28px 64px; }
+  .doc h2 { margin: 0 0 4px; font-size: 26px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .kind { font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 2px 9px; border-radius: 99px; background: var(--info-soft); color: var(--info); }
+  .kind.folder { background: var(--warn-soft); color: var(--warn); }
+  .path { color: var(--muted); font: 12.5px ui-monospace, Menlo, monospace; margin-bottom: 18px; }
+  .tldr { background: var(--brand-soft); border-left: 4px solid var(--brand); border-radius: 8px; padding: 12px 16px; font-size: 16px; margin-bottom: 8px; }
+  .doc h3 { margin: 26px 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
+  .doc ul { margin: 0; padding: 0; list-style: none; }
+  .doc li.pt { position: relative; padding: 6px 0 6px 26px; border-bottom: 1px dashed var(--line); }
+  .doc li.pt:last-child { border-bottom: 0; }
+  .doc li.pt::before { content: ""; position: absolute; left: 6px; top: 14px; width: 8px; height: 8px; border-radius: 50%; background: var(--brand); }
+  .ex { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; }
+  .ex .t { font-size: 12px; font-weight: 700; color: var(--ok); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+  pre.code { background: var(--code); border-radius: 8px; padding: 10px 14px; overflow: auto; font: 12.5px/1.5 ui-monospace, Menlo, monospace; margin: 8px 0 0; }
+  .chain { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .chip { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 5px 11px; font-size: 13px; }
+  .chip.me { background: var(--brand-soft); border-color: var(--brand); color: var(--brand); font-weight: 600; }
+  .chain .ar { color: var(--muted); }
+  .kids { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+  .kid { text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; cursor: pointer; font: inherit; color: var(--txt); }
+  .kid:hover { border-color: var(--brand); }
+  .kid b { display: block; font-size: 13.5px; }
+  .kid span { font-size: 12.5px; color: var(--muted); }
+  .tip { background: var(--warn-soft); border-radius: 8px; padding: 10px 14px; color: var(--txt); }
+
+  @media (max-width: 760px) {
+    #files { flex-direction: column; }
+    .side { width: 100%; height: 38vh; border-right: 0; border-bottom: 1px solid var(--line); }
+    .doc { padding: 20px 16px 48px; }
+    .crumbs { padding: 8px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <h1><span>●</span> Mappa del progetto · Netflix + Chat AI</h1>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="t-flow" aria-selected="true" data-view="flow">Flusso dell'app</button>
+    <button class="tab" role="tab" id="t-files" aria-selected="false" data-view="files">Cartelle e file</button>
+  </div>
+  <div class="spacer"></div>
+  <button class="theme" id="theme" title="Cambia tema">Tema</button>
+</div>
+
+<!-- ========== TAB 1: FLUSSO ========== -->
+<section class="view on" id="flow">
+  <div class="wrap">
+
+    <h2>1. Come lavora l'app oggi <span class="badge now">funziona</span></h2>
+    <p class="lead">Tutta l'app gira nel browser. L'unico servizio esterno è TMDB (database pubblico di film). La chat esiste già come interfaccia, ma le risposte sono finte.</p>
+    <div class="card"><svg id="d-now" viewBox="0 0 900 500" role="img" aria-label="Diagramma del flusso attuale"></svg></div>
+    <div class="legend">
+      <span><i style="background:var(--info-soft);border:1.5px solid var(--info)"></i>Componente Vue</span>
+      <span><i style="background:var(--warn-soft);border:1.5px solid var(--warn)"></i>Dati / chiamate API nel codice</span>
+      <span><i style="background:var(--ok-soft);border:1.5px solid var(--ok)"></i>Servizio esterno</span>
+      <span><i style="border:1.5px dashed var(--muted)"></i>Simulato</span>
+    </div>
+    <div class="steps">
+      <div class="step"><b>A · All'avvio.</b> <code>App</code> chiede a TMDB i film e le serie popolari e li mostra in due righe di <code>Card</code>.</div>
+      <div class="step"><b>B · Ricerca.</b> Ogni lettera digitata aggiorna lo store, che chiede a TMDB film e serie con quel titolo.</div>
+      <div class="step"><b>C · Card.</b> Click su un poster: anteprima grande. Da lì puoi guardare il trailer o salvare tra i preferiti.</div>
+      <div class="step"><b>D · Chat.</b> L'icona AI apre la chat. Oggi risponde sempre con la stessa frase e un "processo" di esempio.</div>
+    </div>
+
+    <h2>2. Come lavorerà con la chat collegata al bot <span class="badge soon">pianificato</span></h2>
+    <p class="lead">La chat non parlerà mai direttamente con TMDB, database o modello AI. Parla con un <b>bot backend</b> (un servizio a parte) che tiene le chiavi segrete e decide quali strumenti usare.</p>
+    <div class="card"><svg id="d-future" viewBox="0 0 980 470" role="img" aria-label="Diagramma del flusso futuro con bot"></svg></div>
+    <div class="legend">
+      <span><i style="background:var(--brand-soft);border:1.5px solid var(--brand)"></i>Bot backend (nuovo)</span>
+      <span><i style="background:var(--ok-soft);border:1.5px solid var(--ok)"></i>Strumenti usati dal bot</span>
+      <span><i style="background:var(--warn-soft);border:1.5px solid var(--warn)"></i>Nuovo file nel frontend</span>
+      <span>Linea tratteggiata = risposta in streaming</span>
+    </div>
+
+    <h2>3. Cosa succede quando scrivi un messaggio <span class="badge soon">pianificato</span></h2>
+    <p class="lead">Una domanda, passo dopo passo. L'utente vede il "processo dell'agente" riempirsi mentre il bot lavora, poi arriva la risposta.</p>
+    <div class="card"><svg id="d-seq" viewBox="0 0 960 640" role="img" aria-label="Sequenza di una domanda alla chat"></svg></div>
+    <div class="steps">
+      <div class="step"><b>Perché lo streaming?</b> Il bot può impiegare diversi secondi. Mostrando i passaggi man mano l'utente capisce che sta lavorando.</div>
+      <div class="step"><b>Dove si aggancia nel codice.</b> <code>sendMessage()</code> in <code>ChatModal</code> chiamerà il nuovo <code>chatApi.js</code>. Il metodo <code>appendToLatestProcess()</code> esiste già per ricevere i pezzi.</div>
+      <div class="step"><b>Sicurezza.</b> Nel browser non ci sono chiavi di LLM o database: stanno solo sul backend.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TAB 2: FILE ========== -->
+<section class="view" id="files">
+  <aside class="side">
+    <div class="head">ESPLORA RISORSE · marco-m-netflix</div>
+    <div class="tree" id="tree" role="tree"></div>
+  </aside>
+  <div class="main" id="main">
+    <div class="crumbs" id="crumbs"></div>
+    <div class="doc" id="doc"></div>
+  </div>
+</section>
+
+<script>
+/* ======================= DIAGRAMMI ======================= */
+const NS = 'http://www.w3.org/2000/svg';
+function svgEl(parent, tag, attrs, text) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (text !== undefined) e.textContent = text;
+  parent.appendChild(e);
+  return e;
+}
+function defs(svg) {
+  const d = svgEl(svg, 'defs', {});
+  d.innerHTML =
+    '<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z"/></marker>' +
+    '<marker id="ahr" class="red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z"/></marker>';
+}
+function box(svg, x, y, w, h, title, sub, cls) {
+  const g = svgEl(svg, 'g', { class: 'box ' + cls });
+  svgEl(g, 'rect', { x, y, width: w, height: h, rx: 10 });
+  if (sub) {
+    svgEl(g, 'text', { x: x + w / 2, y: y + h / 2 - 3, 'text-anchor': 'middle' }, title);
+    svgEl(g, 'text', { x: x + w / 2, y: y + h / 2 + 14, 'text-anchor': 'middle', class: 'sub' }, sub);
+  } else {
+    svgEl(g, 'text', { x: x + w / 2, y: y + h / 2 + 4, 'text-anchor': 'middle' }, title);
+  }
+}
+function edge(svg, x1, y1, x2, y2, label, o) {
+  o = o || {};
+  const cls = 'edge' + (o.dash ? ' dash' : '') + (o.red ? ' red' : '');
+  svgEl(svg, 'path', { d: o.d || `M${x1} ${y1} L${x2} ${y2}`, class: cls, 'marker-end': `url(#${o.red ? 'ahr' : 'ah'})` });
+  if (label) {
+    const lx = o.lx !== undefined ? o.lx : (x1 + x2) / 2;
+    const ly = o.ly !== undefined ? o.ly : (y1 + y2) / 2 - 6;
+    const t = svgEl(svg, 'text', { x: lx, y: ly, 'text-anchor': 'middle', class: 'lbl' }, label);
+  }
+}
+function band(svg, x, y, w, h, title) {
+  svgEl(svg, 'rect', { x, y, width: w, height: h, rx: 14, class: 'band' });
+  svgEl(svg, 'text', { x: x + 14, y: y + 20, class: 'sub' }, title);
+}
+
+/* ---- Oggi ---- */
+(function () {
+  const s = document.getElementById('d-now'); defs(s);
+  band(s, 170, 8, 520, 420, 'BROWSER · app Vue');
+  box(s, 10, 190, 120, 60, 'Utente', 'scrive, clicca', 'n-user');
+  box(s, 200, 40, 150, 64, 'App', 'carica le liste', 'n-ui');
+  box(s, 200, 190, 150, 64, 'NavbarRight', 'barra di ricerca', 'n-ui');
+  box(s, 200, 330, 150, 64, 'List + Card', 'mostrano i poster', 'n-ui');
+  box(s, 480, 40, 160, 64, 'tmdbApi.js', 'tutte le chiamate', 'n-store');
+  box(s, 480, 190, 160, 64, 'Store (Vuex)', 'query, film, preferiti', 'n-store');
+  box(s, 740, 40, 150, 64, 'TMDB API', 'database film', 'n-ext');
+  box(s, 200, 440, 150, 52, 'ChatModal', 'interfaccia chat', 'n-ui');
+  box(s, 480, 440, 200, 52, 'Risposta finta', 'testo fisso', 'n-fake');
+
+  edge(s, 130, 220, 200, 220, 'scrive', { lx: 165, ly: 238 });
+  edge(s, 350, 222, 480, 222, 'setQuery', { lx: 415, ly: 214 });
+  edge(s, 560, 190, 560, 104, 'getAllData', { lx: 598, ly: 150 });
+  edge(s, 350, 72, 480, 72, 'popolari', { lx: 415, ly: 64 });
+  edge(s, 640, 72, 740, 72, 'GET', { lx: 690, ly: 64 });
+  edge(s, 500, 254, 350, 340, 'movies / series', { lx: 460, ly: 306 });
+  edge(s, 90, 250, 220, 442, 'clic sull\'icona AI', { lx: 96, ly: 360 });
+  edge(s, 350, 466, 480, 466, 'invio', { lx: 415, ly: 458, dash: true });
+  edge(s, 740, 90, 640, 90, 'JSON', { lx: 690, ly: 108, dash: true });
+  edge(s, 210, 104, 210, 330, 'liste', { d: 'M205 104 C 160 170, 160 290, 205 330', lx: 150, ly: 150 });
+  // number badges
+  [[200, 40, 'A'], [200, 190, 'B'], [200, 330, 'C'], [200, 440, 'D']].forEach(function (b) {
+    const g = svgEl(s, 'g', { class: 'num' });
+    svgEl(g, 'circle', { cx: b[0] - 2, cy: b[1] + 2, r: 10 });
+    svgEl(g, 'text', { x: b[0] - 2, y: b[1] + 6, 'text-anchor': 'middle' }, b[2]);
+  });
+})();
+
+/* ---- Domani ---- */
+(function () {
+  const s = document.getElementById('d-future'); defs(s);
+  band(s, 10, 8, 570, 450, 'BROWSER · app Vue');
+  band(s, 590, 8, 160, 450, 'BACKEND');
+  band(s, 760, 8, 210, 450, 'STRUMENTI');
+  box(s, 24, 180, 100, 60, 'Utente', '', 'n-user');
+  box(s, 160, 40, 150, 56, 'SettingsDrawer', 'opzioni del bot', 'n-ui');
+  box(s, 160, 180, 150, 60, 'ChatModal', 'bolle + processo', 'n-ui');
+  box(s, 400, 180, 160, 60, 'chatApi.js', 'NUOVO · chiama il bot', 'n-store');
+  box(s, 604, 170, 132, 80, 'Bot backend', 'orchestratore LLM', 'n-bot');
+  box(s, 780, 36, 170, 56, 'RAG', 'cerca e riordina testi', 'n-ext');
+  box(s, 780, 130, 170, 56, 'TMDB API', 'dati aggiornati', 'n-ext');
+  box(s, 780, 224, 170, 56, 'Database SQL', 'recensioni, voti', 'n-ext');
+  box(s, 780, 318, 170, 56, 'Modello LLM', 'scrive la risposta', 'n-ext');
+
+  edge(s, 124, 210, 160, 210, '', {});
+  edge(s, 235, 96, 235, 180, 'impostazioni', { lx: 280, ly: 142 });
+  edge(s, 310, 200, 400, 200, 'messaggio', { lx: 355, ly: 192 });
+  edge(s, 560, 200, 604, 200, 'POST', { red: true, lx: 582, ly: 188 });
+  // tools
+  edge(s, 736, 190, 780, 64, '', { red: true });
+  edge(s, 736, 200, 780, 158, '', { red: true });
+  edge(s, 736, 220, 780, 252, '', { red: true });
+  edge(s, 736, 232, 780, 346, '', { red: true });
+  // stream back
+  edge(s, 604, 240, 560, 240, '', { dash: true, red: true });
+  edge(s, 400, 228, 310, 228, 'stream di pezzi', { dash: true, red: true, lx: 355, ly: 252 });
+  svgEl(s, 'text', { x: 580, y: 268, 'text-anchor': 'middle', class: 'lbl' }, 'risposta');
+  edge(s, 235, 240, 235, 330, '', { d: 'M200 240 L200 330', dash: true, red: true });
+  box(s, 100, 330, 270, 90, 'Cosa vede l\'utente', 'Processo agente (si riempie) + risposta finale', 'n-fake');
+  // note
+  svgEl(s, 'text', { x: 24, y: 450, class: 'sub' }, 'Resta invariato: navigazione, ricerca e card continuano a parlare direttamente con TMDB.');
+})();
+
+/* ---- Sequenza ---- */
+(function () {
+  const s = document.getElementById('d-seq'); defs(s);
+  const actors = [
+    ['Utente', 80, 'n-user'], ['ChatModal', 240, 'n-ui'], ['chatApi.js', 410, 'n-store'],
+    ['Bot backend', 600, 'n-bot'], ['Strumenti', 770, 'n-ext'], ['LLM', 905, 'n-ext']
+  ];
+  const X = {};
+  actors.forEach(function (a) {
+    X[a[0]] = a[1];
+    box(s, a[1] - 55, 8, 110, 36, a[0], '', a[2]);
+    svgEl(s, 'line', { x1: a[1], y1: 44, x2: a[1], y2: 625, class: 'life' });
+  });
+  const msgs = [
+    ['Utente', 'ChatModal', 'Scrive "film come Interstellar" e invia', 0],
+    ['ChatModal', 'chatApi.js', 'sendMessage() · mostra subito la bolla utente', 0],
+    ['chatApi.js', 'Bot backend', 'POST /chat (messaggio + impostazioni)', 0, true],
+    ['Bot backend', 'Strumenti', 'Cerca testi simili (RAG) e li riordina', 0],
+    ['Strumenti', 'Bot backend', 'Top 3 candidati', 1],
+    ['Bot backend', 'chatApi.js', 'stream: passi del processo', 1, true],
+    ['chatApi.js', 'ChatModal', 'appendToLatestProcess(pezzo)', 0],
+    ['Bot backend', 'Strumenti', 'Chiama TMDB / query SQL se mancano dati', 0],
+    ['Bot backend', 'LLM', 'Genera la risposta con i dati trovati', 0],
+    ['LLM', 'Bot backend', 'Testo della risposta', 1],
+    ['Bot backend', 'chatApi.js', 'stream: pezzi della risposta + fine', 1, true],
+    ['ChatModal', 'Utente', 'Bolla assistente compare e scorre in basso', 1]
+  ];
+  let y = 80;
+  msgs.forEach(function (m, i) {
+    const x1 = X[m[0]], x2 = X[m[1]];
+    const dir = x2 > x1 ? 1 : -1;
+    svgEl(s, 'path', { d: `M${x1 + 4 * dir} ${y} L${x2 - 4 * dir} ${y}`, class: 'edge' + (m[3] ? ' dash' : '') + (m[4] ? ' red' : ''), 'marker-end': `url(#${m[4] ? 'ahr' : 'ah'})` });
+        svgEl(s, 'text', { x: Math.min(x1, x2) + 12, y: y - 8, class: 'lbl' }, m[2]);
+    const g = svgEl(s, 'g', { class: 'num' });
+    svgEl(g, 'circle', { cx: Math.min(x1, x2) - 16 > 20 ? Math.min(x1, x2) - 16 : Math.min(x1, x2) + 16, cy: y, r: 9 });
+    svgEl(g, 'text', { x: Math.min(x1, x2) - 16 > 20 ? Math.min(x1, x2) - 16 : Math.min(x1, x2) + 16, y: y + 4, 'text-anchor': 'middle' }, i + 1);
+    y += 46;
+  });
+})();
+
+/* ======================= TABS / TEMA ======================= */
+document.querySelectorAll('.tab').forEach(function (b) {
+  b.addEventListener('click', function () {
+    document.querySelectorAll('.tab').forEach(function (t) { t.setAttribute('aria-selected', t === b); });
+    document.querySelectorAll('.view').forEach(function (v) { v.classList.toggle('on', v.id === b.dataset.view); });
+    try { localStorage.setItem('mappa-tab', b.dataset.view); } catch (e) {}
+  });
+});
+document.getElementById('theme').addEventListener('click', function () {
+  const r = document.documentElement;
+  const dark = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  r.dataset.theme = dark ? 'light' : 'dark';
+});
+
+/* ======================= DATI FILE ======================= */
+/* kind: 'dir' | 'file'. Campi: ico (tipo icona), tl (in breve), pts (cosa fa), ex (esempio),
+   code (esempio di codice), flow (catena di nomi), tip (nota) */
+const N = {};          // path -> nodo
+const ROOT = { name: 'marco-m-netflix', path: '', kind: 'dir', kids: [] };
+N[''] = ROOT;
+
+function add(path, info) {
+  const parts = path.split('/');
+  let cur = ROOT;
+  parts.forEach(function (p, i) {
+    const pth = parts.slice(0, i + 1).join('/');
+    let n = N[pth];
+    if (!n) {
+      n = { name: p, path: pth, kind: i < parts.length - 1 ? 'dir' : (info.kind || 'file'), kids: [] };
+      N[pth] = n; cur.kids.push(n);
+    }
+    cur = n;
+  });
+  Object.assign(cur, info);
+}
+
+/* ---- radice ---- */
+ROOT.tl = 'Il progetto: un clone di Netflix in Vue 3, con una chat AI in arrivo.';
+ROOT.pts = [
+  '<b>src/</b> contiene tutto il codice che scrivi tu: è la cartella dove si lavora.',
+  '<b>public/</b> e <b>dist/</b> servono per la pagina web e per la versione pubblicata.',
+  'I file nella radice (<code>package.json</code>, <code>.env</code>…) sono configurazioni: dicono a strumenti e computer come far partire il progetto.',
+  'Tre file sono documentazione: <code>README.md</code> (per le persone), <code>AGENTS.md</code> (per gli assistenti AI) e questa <code>mappa.html</code>.'
+];
+ROOT.ex = 'Vuoi cambiare il colore della barra in alto? Parti da <code>src/components/HeaderComp/</code>. Vuoi un nuovo endpoint TMDB? <code>src/features/auth/api/tmdbApi.js</code>.';
+ROOT.flow = ['Utente', 'src/components', 'src/store', 'tmdbApi.js', 'TMDB'];
+
+/* ---- helper per i componenti ---- */
+function comp(name, o) {
+  const base = 'src/components/' + name;
+  add(base, { kind: 'dir', ico: 'folder', tl: o.tl, pts: o.pts, ex: o.ex, code: o.code, flow: o.flow, tip: o.tip,
+    sub: o.sub });
+  add(base + '/index.vue', { ico: 'vue', tl: 'Il "collante" del componente: unisce HTML, JavaScript e stile in un unico pezzo.',
+    pts: ['Contiene solo tre righe: importa <code>template.html</code>, <code>script.js</code> e <code>style.scss</code>.',
+      'Gli altri file importano questo con <code>import ' + name + ' from \'@/components/' + name + '\'</code>.',
+      'Lo stile è "scoped": vale solo per questo componente e non rovina il resto della pagina.'],
+    ex: 'Quando scrivi <code>&lt;' + name + ' /&gt;</code> in un template, Vue legge questo file e assembla le tre parti.', flow: ['template.html', 'script.js', 'style.scss', 'index.vue'] });
+  add(base + '/template.html', { ico: 'html', tl: 'Cosa si vede: la struttura HTML di ' + name + '.', pts: o.t,
+    ex: o.tex, flow: ['script.js (dati)', 'template.html', 'schermo'] });
+  add(base + '/script.js', { ico: 'js', tl: 'Come si comporta: dati, eventi e logica di ' + name + '.', pts: o.s,
+    ex: o.sex, code: o.scode, flow: ['evento (clic, scroll…)', 'script.js', 'aggiorna il template'] });
+  add(base + '/style.scss', { ico: 'scss', tl: 'Come appare: colori, spazi e animazioni di ' + name + '.', pts: o.c,
+    ex: 'Se vuoi cambiare l\'aspetto di ' + name + ' senza toccare la logica, modifichi solo questo file.', flow: ['var.scss / mixins.scss', 'style.scss', 'aspetto finale'] });
+}
+
+/* ---- file nella radice ---- */
+add('README.md', { ico: 'md', tl: 'Il biglietto da visita del progetto, per chi lo apre per la prima volta.',
+  pts: ['Spiega cosa fa l\'app, come installarla e come avviarla.', 'Elenca le funzioni: ricerca, preferiti, trailer e la nuova chat AI.', 'Descrive la migrazione da Vue 2 a Vue 3 e il perché del codice "vecchio stile".'],
+  ex: 'Un nuovo collega lo legge e in cinque minuti sa avviare il progetto con <code>npm install</code> e <code>npm run serve</code>.', flow: ['persona nuova', 'README.md', 'app avviata'] });
+add('AGENTS.md', { ico: 'md', tl: 'Il manuale per gli assistenti AI che lavorano sul codice.',
+  pts: ['Comandi, struttura delle cartelle e regole di stile.', 'Avvisa delle trappole: refusi nei nomi, file da non toccare, ciò che è volutamente "vecchio".', 'Descrive come si collegherà la chat al bot.', 'Elenca i controlli da fare prima di dire "ho finito".'],
+  ex: 'Chiedi a un assistente "aggiungi un campo alla chat": leggendo questo file sa già dove mettere il codice e cosa non rompere.', flow: ['assistente AI', 'AGENTS.md', 'modifica corretta'] });
+add('mappa.html', { ico: 'html', tl: 'Questa pagina: la mappa visuale del progetto.',
+  pts: ['Tab "Flusso" con i diagrammi.', 'Tab "Cartelle e file" con le spiegazioni.', 'È un solo file, senza dipendenze: si apre con doppio clic.'],
+  tip: 'Se aggiungi o sposti file, aggiorna anche la sezione dati di questo file (cerca <code>add(</code> nello script).' });
+add('package.json', { ico: 'json', tl: 'La carta d\'identità tecnica: nome, comandi e librerie usate.',
+  pts: ['<b>scripts</b>: i comandi che lanci da terminale.', '<b>dependencies</b>: librerie che servono all\'app (Vue, Vuex, Axios).', '<b>devDependencies</b>: strumenti che servono solo a sviluppare (ESLint, Prettier, Sass).'],
+  code: 'npm run serve    # avvia in sviluppo\nnpm run build    # crea la versione finale in dist/\nnpm run lint     # controlla gli errori di stile',
+  ex: 'Hai clonato il progetto: <code>npm install</code> legge questo file e scarica tutte le librerie.', flow: ['npm install', 'package.json', 'node_modules'] });
+add('package-lock.json', { ico: 'json', tl: 'L\'elenco esatto delle versioni installate, generato da npm.',
+  pts: ['Garantisce che tutti installino le stesse versioni.', 'Non si modifica a mano.'], tip: 'Se vedi migliaia di righe, è normale: è un file automatico.' });
+add('.env', { ico: 'cfg', tl: 'I segreti locali: la tua chiave per TMDB.',
+  pts: ['Non va su Git (è in <code>.gitignore</code>).', 'Le variabili devono iniziare con <code>VUE_APP_</code> per arrivare al browser.'],
+  code: 'VUE_APP_TMDB_API_KEY=la_tua_chiave\nVUE_APP_TMDB_BASE_URL=https://api.themoviedb.org/3',
+  flow: ['.env', 'tmdbApi.js', 'chiamate TMDB'], tip: 'Nel browser qualsiasi chiave è visibile: per questo LLM e database andranno sul backend, non qui.' });
+add('.env.example', { ico: 'cfg', tl: 'Il modello di <code>.env</code>, senza valori segreti.', pts: ['Si copia in <code>.env</code> e si compila.', 'Questo sì che va su Git: mostra quali variabili servono.'] });
+add('.gitignore', { ico: 'cfg', tl: 'Dice a Git quali file ignorare.', pts: ['Tipicamente <code>node_modules</code>, <code>.env</code>, log.'] });
+add('.nvmrc', { ico: 'cfg', tl: 'La versione di Node richiesta: la 22.', pts: ['Con <code>nvm use</code> il computer passa alla versione giusta.'] });
+add('.browserslistrc', { ico: 'cfg', tl: 'Quali browser deve supportare l\'app.', pts: ['Babel usa questa lista per decidere quanto "vecchio" deve essere il JavaScript prodotto.', 'Oggi: più dell\'1% di utenti, ultime 2 versioni, niente browser morti.'] });
+add('.editorconfig', { ico: 'cfg', tl: 'Regole base dell\'editor: rientri, fine riga.', pts: ['Fa comportare allo stesso modo editor diversi.'] });
+add('.prettierrc', { ico: 'cfg', tl: 'Regole di formattazione del codice (Prettier).',
+  pts: ['Apici singoli, punto e virgola, rientro di 2 spazi, righe fino a 80 caratteri.', 'Comando: <code>npm run format</code>.'], flow: ['codice scritto a mano', 'Prettier', 'codice ordinato'] });
+add('.prettierignore', { ico: 'cfg', tl: 'File che Prettier non deve toccare.', pts: ['<code>dist/</code>, <code>node_modules/</code>, file minificati.'] });
+add('.eslintrc.js', { ico: 'js', tl: 'Regole del "correttore" ESLint, che trova errori nel codice.',
+  pts: ['Usa le regole raccomandate per Vue e JavaScript.', 'Si integra con Prettier per non litigare sullo stile.', 'Disattiva la regola sui nomi dei componenti a più parole.'],
+  ex: 'Dichiari una variabile e non la usi: <code>npm run lint</code> ti avvisa.', flow: ['codice', 'ESLint', 'avvisi/errori'] });
+add('babel.config.js', { ico: 'js', tl: 'Traduce il JavaScript moderno per i browser più vecchi.', pts: ['Una sola riga: usa il preset ufficiale di Vue CLI.'] });
+add('vue.config.js', { ico: 'js', tl: 'Configurazione di Vue CLI / webpack.', pts: ['Per ora è vuoto: ci sono solo segnaposto per regole personalizzate.'] });
+add('netlify.toml', { ico: 'cfg', tl: 'Configurazione per pubblicare su Netlify.', pts: ['Imposta la versione di Node della build.'], tip: 'Dice Node 16, ma il progetto oggi richiede Node 22: da aggiornare se usi Netlify.' });
+add('deploy.sh', { ico: 'sh', tl: 'Script per pubblicare il sito su GitHub Pages.',
+  pts: ['Fa la build.', 'Crea un mini-repository dentro <code>dist/</code>.', 'Lo spinge sul ramo <code>gh-pages</code>.'], flow: ['npm run build', 'dist/', 'ramo gh-pages'] });
+add('deploy.yml', { ico: 'cfg', tl: 'Pubblicazione automatica con GitHub Actions.', pts: ['A ogni push su <code>main</code> fa build e pubblica <code>dist/</code>.'], tip: 'Usa Node 16: come per Netlify, va allineato a Node 22.' });
+add('main', { ico: 'other', tl: 'File vuoto nella radice, probabilmente creato per errore.', pts: ['Non è usato da nessuna parte.'], tip: 'Si può eliminare senza conseguenze.' });
+
+/* ---- cartelle di servizio ---- */
+add('.vscode', { kind: 'dir', ico: 'folder', tl: 'Impostazioni di VS Code valide per questo progetto.', pts: ['Così tutti usano lo stesso formattatore.'] });
+add('.vscode/settings.json', { ico: 'json', tl: 'Formatta con Prettier ogni volta che salvi.', pts: ['<code>formatOnSave</code> attivo.', 'ESLint sistema gli errori correggibili al salvataggio.'], flow: ['salvi', 'Prettier + ESLint', 'file in ordine'] });
+add('.vscode/extensions.json', { ico: 'json', tl: 'Estensioni consigliate: Prettier ed ESLint.', pts: ['VS Code te le propone all\'apertura del progetto.'] });
+add('public', { kind: 'dir', ico: 'folder', tl: 'File statici copiati così come sono nel sito finale.', pts: ['Qui c\'è la pagina HTML di base e l\'icona.'] });
+add('public/index.html', { ico: 'html', tl: 'L\'unica vera pagina HTML: un guscio vuoto in cui entra Vue.',
+  pts: ['Contiene <code>&lt;div id="app"&gt;</code>: Vue "monta" l\'app lì dentro.', 'Carica le icone di Font Awesome da internet.', 'Imposta il titolo della scheda: "Netflix Italia - Guarda".'],
+  flow: ['index.html', 'main.js', 'App'], ex: 'Se il browser mostra una pagina bianca, spesso il problema è prima che Vue parta: parti da qui.' });
+add('public/favicon.ico', { ico: 'img', tl: 'L\'iconcina nella scheda del browser.', pts: [] });
+add('dist', { kind: 'dir', ico: 'folder', tl: 'La versione finale del sito, generata da <code>npm run build</code>.',
+  pts: ['Contiene HTML, JavaScript e CSS compressi.', 'È ciò che viene pubblicato online.'], tip: 'Non modificarla a mano: viene riscritta a ogni build.' });
+add('dist/index.html', { ico: 'html', tl: 'Pagina finale generata.', pts: ['Come <code>public/index.html</code> ma con i file compilati già collegati.'] });
+add('dist/css/app.a40db8ea.css', { ico: 'scss', tl: 'Tutti gli stili dell\'app, compressi.', pts: ['Il codice numerico nel nome cambia a ogni modifica, per evitare vecchie copie in cache.'] });
+add('dist/css/chunk-vendors.797a2b25.css', { ico: 'scss', tl: 'Stili delle librerie esterne, compressi.', pts: [] });
+add('dist/js/app.6b3f919b.js', { ico: 'js', tl: 'Il codice dell\'app compilato in un file solo.', pts: ['Illeggibile di proposito: serve alla velocità.', 'Il file <code>.map</code> permette di risalire al codice originale in caso di errori.'] });
+add('dist/js/app.6b3f919b.js.map', { ico: 'json', tl: 'Mappa tra codice compresso e originale.', pts: ['Utile solo per il debug.'] });
+add('dist/js/chunk-vendors.46c0244c.js', { ico: 'js', tl: 'Il codice delle librerie (Vue, Vuex, Axios).', pts: ['Separato dal tuo codice: cambia raramente, quindi il browser lo tiene in cache.'] });
+add('dist/js/chunk-vendors.46c0244c.js.map', { ico: 'json', tl: 'Mappa di debug delle librerie.', pts: [] });
+
+/* ---- src ---- */
+add('src', { kind: 'dir', ico: 'folder', tl: 'Tutto il codice sorgente dell\'app.',
+  pts: ['<b>App/</b> la pagina principale.', '<b>components/</b> i pezzi di interfaccia.', '<b>store/</b> la memoria condivisa.', '<b>features/</b> le chiamate alle API.', '<b>utils/</b>, <b>data/</b>, <b>scss/</b>, <b>assets/</b> aiuti, dati, stili e immagini.'],
+  flow: ['main.js', 'App', 'components', 'store', 'features/api'] });
+add('src/main.js', { ico: 'js', tl: 'Il punto di partenza: crea l\'app Vue e la attacca alla pagina.',
+  pts: ['Crea l\'app con <code>createApp(App)</code>.', 'Registra lo store Vuex.', 'La monta nel <code>&lt;div id="app"&gt;</code>.'],
+  code: 'const app = createApp(App);\napp.use(store);\napp.mount(\'#app\');', flow: ['index.html', 'main.js', 'App', 'tutti i componenti'] });
+
+add('src/App', { kind: 'dir', ico: 'folder', tl: 'Il componente radice: la pagina intera.', pts: ['Tutti gli altri componenti vivono dentro di lui.'], sub: true });
+add('src/App/index.vue', { ico: 'vue', tl: 'Collante di App: unisce template, script e stile.', pts: ['Stesso schema di tutti i componenti.'] });
+add('src/App/template.html', { ico: 'html', tl: 'L\'ossatura della pagina, dall\'alto in basso.',
+  pts: ['<b>HeaderComp</b> con il menu a sinistra (<code>NavbarLeft</code>).', '<b>PromoMovie</b>: la locandina grande di Interstellar.', '<b>Sei righe (List)</b>: film trovati, serie trovate, film popolari, serie popolari, preferiti film, preferiti serie.', '<b>ChatModal</b> in fondo, visibile solo quando serve.'],
+  ex: 'Le righe "trovate" e "preferiti" usano <code>v-show</code>: appaiono solo se la lista ha elementi.', flow: ['Header', 'PromoMovie', 'List × 6', 'ChatModal'] });
+add('src/App/script.js', { ico: 'js', tl: 'Il regista della pagina: carica i dati e apre/chiude la chat.',
+  pts: ['Al caricamento chiede film e serie popolari.', '<code>openAiChat()</code> mostra la chat e blocca lo scroll della pagina sotto.', '<code>closeAiChat()</code> la chiude e sblocca lo scroll.', 'Legge dallo store film/serie cercati e preferiti.'],
+  code: 'mounted() {\n  this.getTrends(\'movie\');\n  this.getTrends(\'tv\');\n}', flow: ['mounted', 'getTrends', 'tmdbApi', 'popularMov / popularSeries'] });
+add('src/App/style.scss', { ico: 'scss', tl: 'Stile della pagina e animazione di comparsa della chat.', pts: ['Sfondo scuro, spaziature del contenuto principale.', 'Transizione "fade" per la finestra chat.'] });
+
+/* componenti */
+add('src/components', { kind: 'dir', ico: 'folder', tl: 'I pezzi di interfaccia, ognuno nella sua cartella.',
+  pts: ['Ogni cartella ha sempre gli stessi 4 file: <code>index.vue</code>, <code>template.html</code>, <code>script.js</code>, <code>style.scss</code>.', 'Parte "film": Card, List, PromoMovie, VideoComp, CloseXButton.', 'Parte "barra": HeaderComp, NavbarLeft, NavbarRight, LanguageSelector.', 'Parte "chat AI": ChatModal, ChatModalHeader, SettingsDrawer.'],
+  ex: 'Vuoi capire "cosa succede se clicco sulla lente?" → apri <code>NavbarRight</code>.' });
+
+comp('Card', {
+  tl: 'Il poster di un film o di una serie, con anteprima grande al clic.',
+  pts: ['Mostra il poster (o un\'immagine di riserva se manca).', 'Al clic si apre l\'anteprima a tutto schermo con titolo, stelle, trama, data e lingua originale.', 'Pulsante Play: scarica il trailer e lo mostra in <code>VideoComp</code>.', 'Aggiunge/toglie il titolo dai preferiti.'],
+  ex: 'Hai cercato "matrix": ogni risultato è una <code>Card</code>. Clic → anteprima → Play → parte il trailer.',
+  flow: ['clic sul poster', 'Card', 'tmdbApi.getTrailerVideos', 'VideoComp'],
+  t: ['Prima parte: anteprima grande (visibile solo quando "aperta").', 'Stelle: voto da 0 a 10 diviso 2 e arrotondato (es. 7,6 → 4 stelle piene).', 'Seconda parte: il poster cliccabile con il nome corto.', 'Se manca il poster usa <code>bigBrand.webp</code>.'],
+  tex: 'Voto 7,6 → <code>Math.ceil(7.6/2)</code> = 4 stelle piene, 1 vuota.',
+  s: ['<code>open</code>: anteprima aperta o no.', '<code>getData(id, isMovie)</code>: scarica la chiave YouTube del trailer.', '<code>clipLongText()</code>: accorcia la trama (60 parole) e il titolo (2 parole) sul poster.', 'Distingue film da serie guardando se esiste <code>title</code> (film) o <code>name</code> (serie).'],
+  sex: 'Una trama di 200 parole viene tagliata a circa 60 e chiusa con "…".',
+  scode: 'obj.title ? "film" : "serie"',
+  c: ['Effetto zoom e ombra dei poster.', 'Anteprima a schermo intero con sfondo sfocato (usa anche <code>scss/cardOpen.scss</code>).', 'Stelle gialle.']
+});
+comp('List', {
+  tl: 'Una riga con un titolo e dentro le Card.',
+  pts: ['Mostra un titolo (es. "Popular movies on Netflix:").', 'Lascia uno "slot" dove App inserisce le Card.'],
+  ex: '<code>&lt;List title="Preferiti"&gt;&lt;Card… /&gt;&lt;/List&gt;</code>', flow: ['App', 'List', 'Card × N'],
+  t: ['Un titolo <code>&lt;h2&gt;</code> e un contenitore con <code>&lt;slot&gt;</code>.'], tex: 'Lo slot è un buco: ciò che metti tra i tag di List finisce lì.',
+  s: ['Riceve una sola prop: <code>title</code>.'], sex: 'Non ha logica: è un contenitore riutilizzabile.', scode: 'props: { title: String }',
+  c: ['Riga orizzontale scorrevole di card.']
+});
+comp('HeaderComp', {
+  tl: 'La barra in alto: logo, menu e icone.',
+  pts: ['Contiene logo, <code>NavbarLeft</code> (link) e <code>NavbarRight</code> (ricerca, AI, profilo).', 'Cambia colore: trasparente in cima, nera dopo uno scroll di qualche centinaio di pixel.', 'Passa verso l\'alto l\'evento "apri chat AI".'],
+  ex: 'Scorri la pagina oltre 400 px su desktop: la barra diventa nera.', flow: ['scroll', 'HeaderComp', 'store (black / goTransparent)', 'colore barra'],
+  t: ['Due loghi: uno per tablet/desktop, uno per mobile.', 'Uno <code>&lt;slot&gt;</code> dove entra il menu di sinistra.'], tex: 'Il menu non è scritto qui: arriva da App tramite lo slot.',
+  s: ['Ascolta lo scroll della finestra.', 'Usa <code>getScrollThreshold(larghezza)</code> per sapere da quanti pixel diventare nera.', 'Rimuove l\'ascolto quando il componente sparisce (<code>beforeUnmount</code>).'],
+  sex: 'Schermo da 1200 px → soglia 400 px. Telefono da 360 px → soglia 160 px.', scode: 'window.scrollY < soglia ? goTransparent() : black()',
+  c: ['Barra fissa in alto, sfumata o nera.']
+});
+comp('NavbarLeft', {
+  tl: 'I link di navigazione a sinistra (Home, TV Series…).',
+  pts: ['Riceve la lista dei link da App e li mostra.', 'I link per ora non portano da nessuna parte (<code>href="#"</code>).'],
+  ex: 'Aggiungere "Kids"? Basta aggiungere la parola nell\'array <code>linksNavLf</code> in App.', flow: ['App.linksNavLf', 'NavbarLeft', 'menu'],
+  t: ['Un elenco <code>&lt;ul&gt;</code> generato con <code>v-for</code>.'], tex: '5 parole nell\'array → 5 voci di menu.',
+  s: ['Solo una prop: <code>links</code>.'], sex: 'Nessuna logica propria.', scode: 'props: { links: Array }', c: ['Link bianchi che diventano più chiari al passaggio del mouse.']
+});
+comp('NavbarRight', {
+  tl: 'La parte destra della barra: ricerca, chat AI, lingua, profilo.',
+  pts: ['Lente: apre/chiude il campo di ricerca.', 'Mentre scrivi, a ogni tasto lancia la ricerca su TMDB.', 'Icona AI: apre la chat.', 'Contiene il selettore di lingua.', 'In background precarica il codice della chat così si apre subito.'],
+  ex: 'Scrivi "spid": a ogni lettera lo store chiama TMDB e le righe "Movies/Series matching your search" si aggiornano.',
+  flow: ['tasto premuto', 'setQuery', 'getAllData', 'TMDB', 'List con risultati'], tip: 'C\'è una funzione <code>sengaPosto()</code> che stampa in console: è un resto di sviluppo.',
+  t: ['Input di ricerca (visibile solo dopo il clic sulla lente).', 'Icona <code>logoIA.svg</code> per la chat.', 'Selettore lingua.', 'Icone regalo, campanella e foto profilo (solo tablet/desktop).'],
+  tex: '<code>v-model.trim="query"</code> toglie gli spazi inutili mentre scrivi.',
+  s: ['<code>query</code> e <code>language</code> sono collegati allo store.', '<code>putFocus()</code> apre la ricerca e mette il cursore nel campo.', '<code>mounted()</code> usa <code>requestIdleCallback</code> per precaricare ChatModal quando il browser è libero.'],
+  sex: 'Il click sulla lente cambia anche il colore della barra (<code>changeColNav</code>).',
+  scode: 'const preload = () => import(\'@/components/ChatModal\');',
+  c: ['Campo di ricerca che si allarga.', 'Icona AI con effetto al passaggio del mouse.']
+});
+comp('PromoMovie', {
+  tl: 'La grande locandina in cima: Interstellar con il tasto Play.',
+  pts: ['Mostra un\'immagine fissa (<code>interstellar.webp</code>).', 'Il pulsante Play apre il trailer in <code>VideoComp</code>.', 'Sparisce quando cerchi qualcosa (per lasciare spazio ai risultati).'],
+  ex: 'Scrivi una ricerca: la locandina sparisce. Svuota il campo: torna.', flow: ['store.showPromo', 'PromoMovie', 'VideoComp'],
+  t: ['Immagine visibile solo se <code>showPromo</code> è vero.', 'Tasto Play che attiva/disattiva il video.'], tex: 'L\'immagine ha la classe <code>tablet</code>: non c\'è su telefono.',
+  s: ['ID TMDB del film (<code>157336</code>) e chiave del video YouTube sono scritti nel codice.', '<code>showVideo</code> decide se mostrare il lettore.'], sex: 'Per cambiare film in evidenza cambi id, chiave e immagine.', scode: 'idFilmPromo: \'157336\'', c: ['Immagine a tutta larghezza con sfumatura in basso.']
+});
+comp('VideoComp', {
+  tl: 'Il lettore dei trailer (YouTube) con il tasto di chiusura.',
+  pts: ['Mostra un video YouTube con partenza automatica.', 'La X di chiusura compare dopo 0,7 secondi per non sovrapporsi a quella dell\'anteprima.', 'Disattiva i video "correlati" a fine trailer.'],
+  ex: 'Dal poster di Matrix: Play → <code>VideoComp</code> riceve la chiave YouTube → parte il trailer.', flow: ['Card / PromoMovie', 'VideoComp', 'YouTube'],
+  t: ['Un <code>&lt;iframe&gt;</code> verso <code>youtube.com/embed/…</code>.', 'Un <code>CloseXButton</code> sopra il video.'], tex: 'Se la chiave è vuota, YouTube mostra un video non disponibile.',
+  s: ['Riceve <code>keyFromApi</code> (la chiave) e <code>obj</code> (titolo).', 'Emette l\'evento <code>close</code> quando chiudi.'], sex: 'Il titolo dell\'iframe usa <code>title</code> o <code>name</code>.', scode: '`https://www.youtube.com/embed/${key}?autoplay=1`', c: ['Video a schermo intero sopra al resto.']
+});
+comp('CloseXButton', {
+  tl: 'Un pulsante "X" riutilizzabile.',
+  pts: ['Colore, colore al passaggio e dimensione configurabili.', 'Ha l\'etichetta di accessibilità "Close".'],
+  ex: '<code>&lt;CloseXButton color="#fff" size="2rem" @click="…" /&gt;</code>', flow: ['VideoComp', 'CloseXButton'],
+  t: ['Un <code>&lt;button&gt;</code> con l\'icona Font Awesome <code>fa-times</code>.'], tex: 'Il clic viene "rilanciato" al genitore con <code>$emit(\'click\')</code>.',
+  s: ['Prop: <code>color</code>, <code>hoverColor</code>, <code>size</code>, <code>buttonClass</code>, <code>ariaLabel</code>.', 'Passa i colori al CSS tramite variabili.'], sex: 'Con <code>size="2rem"</code> l\'icona diventa il doppio del normale.', scode: '\'--x-close-color\': this.color || \'#7f7f7f\'', c: ['Colori letti dalle variabili CSS impostate dallo script.']
+});
+comp('LanguageSelector', {
+  tl: 'Il menu a tendina IT / EN con bandierine.',
+  pts: ['Mostra la lingua attuale e, al clic, le opzioni.', 'Si chiude se clicchi fuori.', 'Cambia la lingua usata per le ricerche su TMDB.'],
+  ex: 'Scegli IT: cerchi "matrix" e le trame arrivano in italiano.', flow: ['clic su IT', 'LanguageSelector', 'store.language', 'ricerca TMDB'],
+  t: ['Etichetta corrente, freccia e lista di opzioni con bandiera.'], tex: 'La lista è visibile solo se <code>open</code> è vero.',
+  s: ['Usa <code>v-model</code> alla Vue 3: riceve <code>modelValue</code>, emette <code>update:modelValue</code>.', 'Ascolta i clic sul documento per chiudersi fuori.', 'Rimuove l\'ascolto in <code>beforeUnmount</code>.'], sex: 'Per aggiungere il francese: nuova voce in <code>options</code> + una bandiera in assets.', scode: 'this.$emit(\'update:modelValue\', value);', c: ['Tendina scura sotto la barra di ricerca.']
+});
+
+comp('ChatModal', {
+  tl: 'La finestra della chat AI "Netflix Scout".',
+  pts: ['Mostra i messaggi: bolle dell\'utente, dell\'assistente e il pannello "Agent Process".', 'Campo di testo in basso: Invio o pulsante per inviare.', 'Gestisce apertura dei settings, "new chat" e chiusura.', 'Scorre da sola fino all\'ultimo messaggio.', '<b>Oggi le risposte sono finte.</b> Qui si collegherà il bot.'],
+  ex: 'Scrivi "ciao" → compaiono 3 elementi: la tua bolla, un processo di esempio (apribile) e la risposta fissa.',
+  flow: ['utente scrive', 'ChatModal.sendMessage', '(futuro) chatApi → bot', 'bolle + processo'],
+  tip: 'Per collegare il bot si modifica soprattutto <code>sendMessage()</code>; <code>appendToLatestProcess()</code> è già pronto per ricevere il testo a pezzi.',
+  t: ['<code>ChatModalHeader</code> in alto, poi <code>SettingsDrawer</code> a lato e l\'area messaggi.', 'Ogni messaggio ha un <b>ruolo</b>: <code>user</code>, <code>assistant</code> o <code>agent-process</code>.', 'Il processo è un accordion: titolo + freccia, testo che si apre e chiude.', 'In basso, campo di input fisso con tasto invio.'],
+  tex: 'La classe <code>is-user</code> mette la bolla a destra, <code>is-assistant</code> a sinistra.',
+  s: ['<code>messages</code>: l\'elenco di tutta la conversazione.', '<code>sendMessage()</code>: aggiunge utente + processo + risposta.', '<code>toggleProcess(id)</code>: apre/chiude un processo.', '<code>appendToLatestProcess(chunk)</code>: aggiunge testo all\'ultimo processo (per lo streaming).', '<code>resetChat()</code>: svuota la chat.', 'Scroll automatico dopo ogni cambiamento.'],
+  sex: 'Un messaggio è un oggetto semplice con id, ruolo, testo e orario.',
+  scode: '{ id: 1, role: \'user\', text: \'ciao\', timestamp: \'14:32\' }',
+  c: ['Finestra a tutto schermo scura.', 'Bolle con colori diversi per utente e assistente.', 'Animazione di apertura/chiusura dell\'accordion.', 'Area input fissa in basso.']
+});
+comp('ChatModalHeader', {
+  tl: 'La barra in alto della chat con i tre pulsanti.',
+  pts: ['Logo Netflix Scout a sinistra.', '<b>settings</b>: apre/chiude il pannello laterale.', '<b>new chat</b>: cancella la conversazione.', '<b>close bot</b>: chiude la chat.'],
+  ex: 'Clic su "new chat" → emette <code>reset-chat</code> → ChatModal svuota <code>messages</code>.', flow: ['clic', 'ChatModalHeader', 'evento verso ChatModal'],
+  t: ['Una <code>&lt;nav&gt;</code> con logo e tre pulsanti.', 'Il pulsante settings ha <code>aria-pressed</code> per gli screen reader.'], tex: 'Il testo del pulsante cambia solo l\'etichetta accessibile (Open/Close settings).',
+  s: ['Dichiara gli eventi: <code>close</code>, <code>reset-chat</code>, <code>toggle-settings</code>.', 'Prop <code>settingsOpen</code> per sapere lo stato.'], sex: 'Non decide nulla: avvisa solo il genitore.', scode: 'emits: [\'close\', \'reset-chat\', \'toggle-settings\']', c: ['Barra scura con pulsanti semplici.']
+});
+comp('SettingsDrawer', {
+  tl: 'Il pannello che scorre dal lato con le impostazioni del bot.',
+  pts: ['Ha i pulsanti <b>Default</b> e <b>Apply</b>.', 'Il contenuto è uno <code>&lt;slot&gt;</code>: oggi vuoto, pronto per ospitare le opzioni.', 'Compare/scompare con animazione di scivolamento.'],
+  ex: 'In futuro: scegliere modello, "creatività", fonti da usare; Apply le invia con ogni messaggio.', flow: ['settings', 'SettingsDrawer', '(futuro) chatApi', 'bot'],
+  tip: 'Il clic su Default emette <code>default-click</code>, ma nessuno lo ascolta ancora.',
+  t: ['<code>&lt;aside&gt;</code> con ruolo "dialog".', 'Testata con i due pulsanti e corpo con lo slot.'], tex: 'La transizione si chiama <code>settings-drawer-slide</code>.',
+  s: ['Prop <code>open</code> controlla se è visibile.', 'Eventi: <code>toggle</code> (Apply) e <code>default-click</code>.'], sex: 'Apply oggi chiude semplicemente il pannello.', scode: 'emits: [\'toggle\', \'default-click\']', c: ['Pannello laterale scuro; la chat si restringe per fargli posto.']
+});
+
+/* store, api, utils, data, scss, assets */
+add('src/store', { kind: 'dir', ico: 'folder', tl: 'La memoria condivisa dell\'app (Vuex).', pts: ['Qui vivono i dati che servono a più componenti.'] });
+add('src/store/store.js', { ico: 'js', tl: 'Lo store Vuex: dove stanno ricerca, preferiti, lingua e colore della barra.',
+  pts: ['<b>state</b>: query, lingua, film e serie cercati, preferiti, colori della barra, <code>showPromo</code>.', '<b>mutations</b>: modi "ufficiali" di cambiare lo stato (es. <code>setQuery</code>).', '<b>actions</b>: operazioni asincrone, come <code>getAllData</code> che chiama TMDB.', 'Se la ricerca è vuota, svuota i risultati e rimostra la locandina.'],
+  ex: 'Scrivi "bat": <code>setQuery("bat")</code> → <code>getAllData</code> → cerca film e serie → <code>setSearchedMovies</code> → le righe si riempiono.',
+  code: 'this.$store.commit(\'setQuery\', \'bat\');\nthis.$store.dispatch(\'getAllData\');',
+  flow: ['NavbarRight', 'setQuery', 'getAllData', 'tmdbApi', 'movies / series', 'App'], tip: 'I nomi <code>pushFavuriteObj</code>/<code>removeFavuriteObj</code> hanno un refuso storico: rinominandoli bisogna aggiornare Card.' });
+add('src/store/modules', { kind: 'dir', ico: 'folder', tl: 'Cartella prevista per dividere lo store in moduli.', pts: ['Per ora contiene file vuoti (<code>movie.js</code>, <code>navbar.js</code>).'] });
+add('src/store/modules/movie.js', { ico: 'js', tl: 'Modulo store per i film (vuoto).', pts: ['Segnaposto per una futura divisione dello store.'] });
+add('src/store/modules/navbar.js', { ico: 'js', tl: 'Modulo store per la barra (vuoto).', pts: ['Segnaposto: oggi la logica della barra è in <code>store.js</code>.'] });
+
+add('src/features', { kind: 'dir', ico: 'folder', tl: 'Codice organizzato per funzionalità.', pts: ['Oggi contiene solo le chiamate API. Qui nascerà anche il file della chat.'] });
+add('src/features/auth', { kind: 'dir', ico: 'folder', tl: 'Cartella storica (il nome non descrive il contenuto).', pts: ['Contiene la sottocartella <code>api/</code>.'] });
+add('src/features/auth/api', { kind: 'dir', ico: 'folder', tl: 'Tutte le chiamate di rete.', pts: ['Regola del progetto: i componenti non chiamano Axios direttamente.'] });
+add('src/features/auth/api/tmdbApi.js', { ico: 'js', tl: 'Le chiamate a TMDB, tutte in un unico posto.',
+  pts: ['<code>getPopularTrends(type)</code>: film o serie popolari.', '<code>getTrailerVideos({id, isMovie})</code>: video del titolo.', '<code>searchMovies</code> e <code>searchSeries</code>: ricerca per titolo.', 'Legge chiave e URL base dal file <code>.env</code>.'],
+  ex: 'Cerchi "alien" in italiano: viene chiamato <code>…/search/movie?query=alien&amp;language=it-IT</code>.',
+  code: 'export const searchMovies = async ({ query, language }) =>\n  axios.get(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}&language=${language}`);',
+  flow: ['store / App / Card', 'tmdbApi.js', 'TMDB'], tip: 'Qui accanto nascerà il file per parlare con il bot della chat.' });
+
+add('src/utils', { kind: 'dir', ico: 'folder', tl: 'Piccole funzioni di aiuto, senza interfaccia.', pts: ['Si importano tutte da <code>@/utils</code>.'] });
+add('src/utils/index.js', { ico: 'js', tl: 'Il "banco" delle utility: le ri-esporta tutte.', pts: ['Permette di scrivere <code>import * as U from \'@/utils\'</code>.'] });
+add('src/utils/clipLongText.js', { ico: 'js', tl: 'Accorcia i testi lunghi e aggiunge "…".',
+  pts: ['Se il testo è breve lo lascia com\'è.', 'Altrimenti tiene le prime N parole (60 se non indicato).', 'Se può, finisce alla prima virgola o punto dopo il taglio.'], ex: 'Titolo "The Lord of the Rings" con N=2 → "The Lord ...".', flow: ['Card', 'clipLongText', 'testo corto'] });
+add('src/utils/getScrollThresholdNav.js', { ico: 'js', tl: 'Dice dopo quanti pixel di scroll la barra diventa nera.',
+  pts: ['Schermo largo → soglia alta (400).', 'Telefono → soglia bassa (160).'], ex: 'Larghezza 700 px → 310 px.', flow: ['HeaderComp', 'getScrollThreshold', 'pixel'] });
+add('src/data', { kind: 'dir', ico: 'folder', tl: 'Dati statici.', pts: ['Per ora c\'è solo <code>flags.js</code>.'] });
+add('src/data/flags.js', { ico: 'js', tl: 'File dati per le bandiere (attualmente vuoto).', pts: ['Le bandiere usate dallo store sono definite in <code>store.js</code> (<code>flags: [\'en\', \'it\']</code>).'] });
+
+add('src/scss', { kind: 'dir', ico: 'folder', tl: 'Stili e strumenti condivisi.', pts: ['I componenti importano da qui colori e mixin.'] });
+add('src/scss/var.scss', { ico: 'scss', tl: 'La tavolozza: colori, font e misure.', pts: ['<code>$brand</code> è il rosso Netflix.', '<code>$main-bg</code> lo sfondo scuro.', 'Il font è Montserrat.'], ex: 'Cambi <code>$brand</code> e il rosso cambia ovunque.', code: '$brand: #e63631;\n$main-bg: #141414;', flow: ['var.scss', 'style.scss dei componenti'] });
+add('src/scss/mixins.scss', { ico: 'scss', tl: 'Ricette di stile riutilizzabili.', pts: ['<code>flex</code>: centra gli elementi in una riga.', '<code>media-desk-first</code>: stili per schermi diversi.', '<code>btn</code>, <code>input</code>, <code>chat-btn</code>: aspetto dei controlli.', '<code>equilateral-triangle</code>: frecce fatte in CSS.'], code: '@include flex(row, space-between, center);' });
+add('src/scss/reset.scss', { ico: 'scss', tl: 'Azzera gli stili predefiniti del browser.', pts: ['Toglie margini e rientri automatici per partire "puliti".'] });
+add('src/scss/cardOpen.scss', { ico: 'scss', tl: 'Gli stili dell\'anteprima aperta delle Card.', pts: ['Anteprima fissa a schermo intero con sfondo nero.', 'Condiviso perché lo usa solo Card ma è molto lungo.'] });
+
+add('src/assets', { kind: 'dir', ico: 'folder', tl: 'Immagini e icone.', pts: [] });
+add('src/assets/img', { kind: 'dir', ico: 'folder', tl: 'Tutte le immagini del progetto.',
+  pts: ['<code>brand.svg</code>, <code>netflix.png</code>: loghi.', '<code>interstellar.webp</code>: locandina grande.', '<code>bigBrand.webp</code>: immagine di riserva per poster mancanti.', '<code>it.png</code>, <code>en.png</code>: bandiere.', '<code>logoIA.svg</code>, <code>NetflixScout.png</code>, <code>send.svg</code>, <code>chevron.svg</code>: chat AI.', '<code>marcoMilza.webp</code>: foto profilo.'] });
+['brand.svg', 'netflix.png', 'interstellar.webp', 'bigBrand.webp', 'it.png', 'en.png', 'logoIA.svg', 'NetflixScout.png', 'send.svg', 'chevron.svg', 'marcoMilza.webp'].forEach(function (f) {
+  const m = {
+    'brand.svg': 'Logo grande della barra (tablet/desktop).', 'netflix.png': 'Logo piccolo per mobile.', 'interstellar.webp': 'Locandina di Interstellar in <code>PromoMovie</code>.',
+    'bigBrand.webp': 'Immagine di riserva quando un titolo non ha poster.', 'it.png': 'Bandiera italiana.', 'en.png': 'Bandiera inglese.', 'logoIA.svg': 'Icona che apre la chat AI.',
+    'NetflixScout.png': 'Logo del bot nell\'intestazione della chat.', 'send.svg': 'Icona del pulsante invia.', 'chevron.svg': 'Freccia dell\'accordion "Agent Process".', 'marcoMilza.webp': 'Foto profilo in alto a destra.'
+  };
+  add('src/assets/img/' + f, { ico: 'img', tl: m[f], pts: [] });
+});
+
+/* ======================= RENDER ALBERO ======================= */
+const treeEl = document.getElementById('tree');
+const open = new Set(['', 'src', 'src/components']);
+let selected = '';
+
+function sortKids(n) {
+  return n.kids.slice().sort(function (a, b) {
+    if (a.kind !== b.kind) return a.kind === 'dir' ? -1 : 1;
+    return a.name.localeCompare(b.name);
+  });
+}
+function icoLabel(n) {
+  const m = { vue: 'V', js: 'JS', html: '<>', scss: 'S', json: '{}', img: 'IMG', md: 'MD', cfg: '⚙', sh: '$', other: '·' };
+  return m[n.ico] || '·';
+}
+function renderTree() {
+  treeEl.innerHTML = '';
+  (function walk(n, d) {
+    const row = document.createElement('button');
+    row.className = 'row' + (n.path === selected ? ' sel' : '');
+    row.style.setProperty('--d', d);
+    row.setAttribute('role', 'treeitem');
+    const isDir = n.kind === 'dir';
+    const isOpen = open.has(n.path);
+    row.innerHTML = (isDir ? '<span class="chev">' + (isOpen ? '▼' : '▶') + '</span><span class="fold">' + (isOpen ? '📂' : '📁') + '</span>'
+      : '<span class="chev"></span><span class="ico ' + (n.ico || 'other') + '">' + icoLabel(n) + '</span>') + '<span class="nm"></span>';
+    row.querySelector('.nm').textContent = n.name;
+    row.addEventListener('click', function () {
+      if (isDir) { if (isOpen && selected === n.path) open.delete(n.path); else open.add(n.path); }
+      select(n.path);
+    });
+    treeEl.appendChild(row);
+    if (isDir && isOpen) sortKids(n).forEach(function (k) { walk(k, d + 1); });
+  })(ROOT, 0);
+}
+
+/* ======================= RENDER SPIEGAZIONE ======================= */
+function esc(s) { return s; } // il contenuto è scritto da noi, con tag consentiti
+
+function explain(n) {
+  const crumbs = document.getElementById('crumbs');
+  const parts = n.path ? n.path.split('/') : [];
+  crumbs.innerHTML = ['marco-m-netflix'].concat(parts).map(function (p, i, a) { return i === a.length - 1 ? '<b>' + p + '</b>' : p; }).join(' › ');
+  const doc = document.getElementById('doc');
+  const isDir = n.kind === 'dir';
+  let h = '<h2>' + n.name + ' <span class="kind ' + (isDir ? 'folder' : '') + '">' + (isDir ? 'cartella' : 'file') + '</span></h2>';
+  h += '<div class="path">' + (n.path || '/') + '</div>';
+  h += '<div class="tldr"><b>In breve · </b>' + (n.tl || 'Nessuna descrizione.') + '</div>';
+  if (n.pts && n.pts.length) {
+    h += '<h3>Cosa fa</h3><ul>' + n.pts.map(function (p) { return '<li class="pt">' + p + '</li>'; }).join('') + '</ul>';
+  }
+  if (n.ex || n.code) {
+    h += '<h3>Esempio</h3><div class="ex"><div class="t">Esempio pratico</div>' + (n.ex || '') +
+      (n.code ? '<pre class="code">' + n.code.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</pre>' : '') + '</div>';
+  }
+  if (n.flow) {
+    h += '<h3>Come si collega</h3><div class="chain">' + n.flow.map(function (f, i) {
+      const me = f.toLowerCase().indexOf(n.name.toLowerCase().replace(/\..*$/, '')) !== -1;
+      return (i ? '<span class="ar">→</span>' : '') + '<span class="chip' + (me ? ' me' : '') + '">' + f + '</span>';
+    }).join('') + '</div>';
+  }
+  if (n.tip) h += '<h3>Da sapere</h3><div class="tip">' + n.tip + '</div>';
+  if (isDir && n.kids.length) {
+    h += '<h3>Contiene (' + n.kids.length + ')</h3><div class="kids">' + sortKids(n).map(function (k) {
+      return '<button class="kid" data-p="' + k.path + '"><b>' + (k.kind === 'dir' ? '📁 ' : '') + k.name + '</b><span>' + (k.tl || '').replace(/<[^>]+>/g, '') + '</span></button>';
+    }).join('') + '</div>';
+  }
+  doc.innerHTML = h;
+  doc.querySelectorAll('.kid').forEach(function (b) {
+    b.addEventListener('click', function () {
+      const p = b.dataset.p;
+      let a = p.split('/'); a.pop();
+      for (let i = 1; i <= a.length; i++) open.add(a.slice(0, i).join('/'));
+      if (N[p].kind === 'dir') open.add(p);
+      select(p);
+    });
+  });
+  document.getElementById('main').scrollTop = 0;
+}
+function select(p) {
+  selected = p;
+  renderTree();
+  explain(N[p]);
+  try { sessionStorage.setItem('mappa-sel', p); } catch (e) {}
+}
+
+(function init() {
+  let p = '';
+  try {
+    const t = localStorage.getItem('mappa-tab');
+    if (t === 'files') document.getElementById('t-files').click();
+    const s = sessionStorage.getItem('mappa-sel');
+    if (s && N[s]) { p = s; const a = s.split('/'); for (let i = 1; i < a.length; i++) open.add(a.slice(0, i).join('/')); }
+  } catch (e) {}
+  select(p);
+})();
+</script>
+</body>
+</html>
