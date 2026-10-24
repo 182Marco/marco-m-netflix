@@ -6,30 +6,49 @@ The project reproduces the main browsing experience of a streaming platform, inc
 
 ## Features
 
-The main screen provides:
+**Browsing (TMDB data)**
 
-* Search bar
-* Featured title with an **Interstellar** background
-* List of popular movies
-* List of popular TV shows
-* Movie and TV show browsing
-* Search by title
-* Detailed content pages
-* Favourites management
-* Star ratings
-* Trailer playback
+* Featured title with an **Interstellar** background and trailer
+* Lists of popular movies and popular TV shows
+* Live search by title (movies and series together, as you type)
+* Interface language selector (IT / EN) that also changes the search language
+* Card preview with poster, star rating (1-5), synopsis, release date and original language flag
+* Trailer playback (YouTube embed)
+* Favourites lists for movies and series (add / remove from the card)
+* Header that changes colour on scroll
 
-Users can select movies or TV shows by clicking on their posters. The search bar allows users to search for titles by entering a sequence of letters.
+**AI chat assistant — "Netflix Scout"** *(new)*
 
-Search and content data are retrieved through requests to a public REST API. The backend service, including its database and data processing, is external to the project and is not under the application's control.
+* Chat window opened from the AI icon next to the search bar
+* Message list with user and assistant bubbles and timestamps
+* Collapsible **Agent Process** panel that shows the steps the bot takes (document retrieval, reranking, API calls, SQL)
+* Settings drawer that slides in from the side (Default / Apply buttons, ready to host bot options)
+* "New chat" button to clear the conversation, "close bot" to go back to the site
+* Auto-scroll to the latest message; page scroll is locked while the chat is open
+* The chat component is preloaded in idle time so it opens instantly
+
+> **Status:** the chat interface is complete, but replies are still **simulated**. The next step is to connect it to a backend bot through HTTP calls (streaming the agent process and the answer).
+
+Search and content data are retrieved through requests to the public TMDB REST API. The backend service, including its database and data processing, is external to the project and is not under the application's control.
 
 From a title's detail page, users can view information such as the cover image and plot synopsis. The original intention was to provide access to the content itself, but for copyright reasons this functionality has been replaced with trailer playback.
+
+## Interactive Map
+
+Open [`mappa.html`](./mappa.html) in a browser for a visual guide to the project:
+
+* **Flusso** tab — flow diagram of how the app works today and how it will work with the chat connected to the backend bot
+* **Cartelle e file** tab — a VS Code-style file tree; click any file or folder to read a plain-language explanation with examples
+
+## For AI agents
+
+See [`AGENTS.md`](./AGENTS.md) for conventions, commands and gotchas.
 
 ## Technical Overview
 
 This is a **front-end-only application**.
 
-The application communicates with a public REST API to retrieve movie and TV show data. There is no custom backend, database or server-side data processing implemented in this repository.
+The application communicates with a public REST API to retrieve movie and TV show data. There is no custom backend, database or server-side data processing implemented in this repository. The AI chat is designed to talk to an external bot backend (not part of this repo) once connected.
 
 The application state is managed through **Vuex**.
 
@@ -96,6 +115,15 @@ The project previously used Node 16, but this is no longer supported by the curr
 
 The legacy OpenSSL flag has been removed from the project scripts.
 
+## Environment Variables
+
+Copy `.env.example` to `.env` and set:
+
+```text
+VUE_APP_TMDB_API_KEY=<your TMDB API key>
+VUE_APP_TMDB_BASE_URL=https://api.themoviedb.org/3
+```
+
 ## Project Setup
 
 Install the dependencies:
@@ -132,19 +160,19 @@ npm run lint
 
 ## Project Structure
 
-The application follows a component-based Vue architecture.
+The application follows a component-based Vue architecture. Each component lives in its own folder with `index.vue`, `template.html`, `script.js` and `style.scss`.
 
-The main areas of the project include:
-
-* `src/components/` — reusable Vue components
-* `src/views/` — application views and larger UI sections
-* `src/store/` — Vuex state management
-* `src/assets/` — static assets
-* `src/scss/` — global SCSS styles and variables
-* `src/App/` — root application logic and styling
 * `src/main.js` — Vue application bootstrap
+* `src/App/` — root component: loads popular lists and opens/closes the chat
+* `src/components/` — UI components (`Card`, `List`, `HeaderComp`, `NavbarLeft`, `NavbarRight`, `PromoMovie`, `VideoComp`, `LanguageSelector`, `CloseXButton`, and the chat: `ChatModal`, `ChatModalHeader`, `SettingsDrawer`)
+* `src/store/` — Vuex state (search, favourites, language, navbar colour)
+* `src/features/auth/api/` — all TMDB API calls (`tmdbApi.js`)
+* `src/utils/` — small helpers (text clipping, scroll thresholds)
+* `src/data/` — static data (flags)
+* `src/scss/` — global SCSS variables, mixins, reset
+* `src/assets/img/` — images and icons
 
-The exact organization reflects the original structure of the project and has been preserved where possible during the Vue 3 migration.
+The exact organization reflects the original structure of the project and has been preserved where possible during the Vue 3 migration. A file-by-file explanation is available in [`mappa.html`](./mappa.html).
 
 ## Development Notes
 
