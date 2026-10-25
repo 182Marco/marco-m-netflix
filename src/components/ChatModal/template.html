@@ -92,6 +92,19 @@
                     {{ line }}
                   </p>
                   <p
+                    v-for="(link, linkIndex) in entry.links"
+                    :key="`${link.url}-${linkIndex}`"
+                    class="agent-text agent-step-line"
+                  >
+                    <a
+                      class="agent-step-link"
+                      :href="link.url"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >{{ link.label }}</a
+                    >
+                  </p>
+                  <p
                     v-for="source in entry.attributions"
                     :key="source"
                     class="agent-text agent-step-line agent-source"

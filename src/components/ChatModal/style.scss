@@ -374,6 +374,15 @@
   word-break: break-word;
 }
 
+.agent-step-link {
+  color: inherit;
+  text-decoration: underline;
+
+  &:hover {
+    color: rgba(238, 245, 255, 0.95);
+  }
+}
+
 .agent-source {
   font-style: italic;
 }

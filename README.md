@@ -21,7 +21,7 @@ The project reproduces the main browsing experience of a streaming platform, inc
 
 * Chat window opened from the AI icon next to the search bar
 * Real-time answers streamed from the NetflixScout backend (Server-Sent Events), rendered as Markdown
-* Collapsible **Agent Process** panel that shows the bot's progress and steps live (retrieval, reranking, API calls, SQL), with data-source attributions
+* Collapsible **Agent Process** panel that shows the bot's progress and steps live (retrieval, reranking, API calls, SQL), with data-source attributions; Wikipedia sources are shown with clickable page and licence links (CC BY-SA)
 * **Results window** above the input with the films and series the answer presents (reuses `Card` at 70% size; YouTube videos get a small tile). Results accumulate across turns without duplicates; it can be hidden and reopened
 * Settings drawer that slides in from the side (Default / Apply buttons, ready to host bot options)
 * Every opening of the chat, and the "New chat" button, starts a new conversation and clears the results; "close bot" ends the session
