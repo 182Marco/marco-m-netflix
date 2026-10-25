@@ -1,0 +1,34 @@
+<section class="movie-results" aria-label="Movie results">
+  <transition name="results-collapse">
+    <div v-show="open" class="results-window">
+      <header class="results-header">
+        <h3 class="results-title">Results</h3>
+        <div class="results-close">
+          <CloseXButton
+            button-class="header-modal-close"
+            aria-label="Hide results"
+            @click="$emit('close')"
+          />
+        </div>
+      </header>
+
+      <List>
+        <template v-for="item in items" :key="item.key">
+          <Card v-if="isCard(item)" :obj="item" compact />
+          <VideoResultTile v-else :item="item" />
+        </template>
+      </List>
+    </div>
+  </transition>
+
+  <button
+    v-show="!open"
+    type="button"
+    class="results-reopen"
+    aria-label="Show results"
+    @click="$emit('open')"
+  >
+    <img src="@/assets/img/chevron.svg" alt="" class="chevron" />
+    <span>Results ({{ items.length }})</span>
+  </button>
+</section>

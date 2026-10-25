@@ -1,0 +1,84 @@
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
+
+// Height follows the content. No transform/filter on the ancestors of the
+// cards: the full-screen card preview is position: fixed.
+.movie-results {
+  position: relative;
+  flex: 0 0 auto;
+  padding: 0; // App/style.scss gives every <section> a horizontal padding
+  border-top: 1px solid rgba(63, 68, 75, 0.9);
+  background-color: #18232e;
+}
+
+.results-window {
+  max-height: 50vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 0 4vw 8px;
+}
+
+.results-header {
+  position: relative;
+  height: 34px;
+}
+
+.results-title {
+  margin: 0;
+  line-height: 34px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(238, 245, 255, 0.9);
+}
+
+// CloseXButton positions its icon absolutely: anchor it to the top right
+.results-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 34px;
+
+  :deep(.x-close-btn.header-modal-close) {
+    top: 8px;
+    right: 0;
+  }
+}
+
+.results-reopen {
+  @include flex(row, flex-start, center);
+  gap: 8px;
+  height: 32px;
+  padding: 0 4vw;
+  border: 0;
+  background: transparent;
+  color: rgba(238, 245, 255, 0.9);
+  font-size: 0.8rem;
+  cursor: pointer;
+
+  .chevron {
+    width: 14px;
+    height: auto;
+    transform: rotate(-90deg);
+    filter: brightness(0) invert(1);
+    opacity: 0.7;
+  }
+
+  &:hover .chevron {
+    opacity: 1;
+  }
+}
+
+.results-collapse-enter-active,
+.results-collapse-leave-active {
+  transition: max-height 0.25s ease, opacity 0.25s ease;
+  overflow: hidden;
+}
+
+.results-collapse-enter-from,
+.results-collapse-leave-to {
+  max-height: 0;
+  opacity: 0;
+}

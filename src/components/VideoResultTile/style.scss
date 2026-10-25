@@ -1,0 +1,56 @@
+@import '@/scss/var';
+@import '@/scss/reset';
+@import '@/scss/mixins';
+
+// same footprint as a compact Card (175px wide, 280px tall)
+.video-tile {
+  display: block;
+  flex: 0 0 auto;
+  width: 175px;
+  height: 280px;
+  margin-right: 21px;
+  color: $white;
+  text-decoration: none;
+  overflow: hidden;
+
+  &:hover .video-thumb {
+    transform: scale(1.04);
+  }
+}
+
+.video-thumb {
+  width: 163px;
+  height: 122px;
+  margin-bottom: 10px;
+  background: #0b0f14;
+  transition: transform 0.3s;
+
+  img {
+    @include width-height(100%, 100%);
+    object-fit: cover;
+  }
+}
+
+.video-title {
+  margin: 0;
+  font-size: 0.91rem;
+  font-weight: bold;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.video-meta {
+  margin: 6px 0 0;
+  font-size: 0.75rem;
+  color: rgba(219, 231, 244, 0.7);
+}
+
+.video-source {
+  margin: 4px 0 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: $brand;
+}

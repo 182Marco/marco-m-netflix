@@ -1,0 +1,20 @@
+<a
+  class="video-tile"
+  :href="url"
+  target="_blank"
+  rel="noopener noreferrer"
+  :title="item.title"
+>
+  <div class="video-thumb">
+    <img
+      v-if="item.poster_url"
+      :src="item.poster_url"
+      :alt="`${item.title} thumbnail`"
+    />
+  </div>
+  <p class="video-title">{{ item.title }}</p>
+  <p class="video-meta">
+    {{ item.channel }}<span v-if="published"> · {{ published }}</span>
+  </p>
+  <p class="video-source">YouTube</p>
+</a>
