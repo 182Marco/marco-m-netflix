@@ -1,38 +1,13 @@
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 import ChatModalHeader from '@/components/ChatModalHeader';
 import SettingsDrawer from '@/components/SettingsDrawer';
+import MovieResultsPanel from '@/components/MovieResultsPanel';
+import { MAX_MESSAGE_CHARS } from '@/features/chat/config';
+import { renderMarkdown } from '@/features/chat/messages/markdown';
+import { levelIcon } from '@/features/chat/messages/render';
 
-const assistantReply =
-  "I'm listening, but please clarify what you'd like to achieve.";
-
-const agentProcessLorem =
-  '- I search through the document chunks.\n' +
-  '- I retrieve those 10 text segments likely to contain the answer.\n' +
-  '--- The Shawshank Redemption ---\n' +
-  '--- The Godfather ---\n' +
-  '--- The Dark Knight ---\n' +
-  '--- Pulp Fiction ---\n' +
-  '--- Forrest Gump ---\n' +
-  '--- Interstellar ---\n' +
-  '--- The Matrix ---\n' +
-  '--- Gladiator ---\n' +
-  '--- Parasite ---\n' +
-  '--- Whiplash ---\n' +
-  '- I rerank them to identify the most promising ones and present the top 3 to the LLM.\n' +
-  '- Based on those top 3, I ask the LLM to generate a coherent response.\n' +
-  '--- The Shawshank Redemption ---\n' +
-  '--- Interstellar ---\n' +
-  '--- Whiplash ---\n' +
-  '- The orchestrator LLM realizes that information needed to answer your question is missing, so it makes an API call to https://api.themoviedb.org/3.\n' +
-  '- There is a discrepancy between the API data and the previous information, so I run an SQL query against the database.\n' +
-  'SELECT m.title, AVG(r.score) AS avg_score\n' +
-  'FROM movies m\n' +
-  'JOIN reviews r ON r.movie_id = m.id\n' +
-  'WHERE m.year BETWEEN 2000 AND 2025\n' +
-  '  AND m.rating >= 7.5\n' +
-  'GROUP BY m.id, m.title\n' +
-  'HAVING COUNT(r.id) > 50\n' +
-  'ORDER BY avg_score DESC\n' +
-  'LIMIT 10;';
+// distance from the bottom under which new content keeps the chat pinned
+const STICK_THRESHOLD = 80;
 
 export default {
   name: 'ChatModal',
@@ -41,15 +16,27 @@ export default {
   components: {
     ChatModalHeader,
     SettingsDrawer,
+    MovieResultsPanel,
   },
 
   data() {
     return {
       currentMessage: '',
-      nextId: 1,
-      messages: [],
       isSettingsDrawerOpen: false,
+      maxMessageChars: MAX_MESSAGE_CHARS,
+      forceStick: false,
     };
+  },
+
+  computed: {
+    ...mapState('chat', [
+      'messages',
+      'notice',
+      'failedTurn',
+      'movies',
+      'moviesPanelVisible',
+    ]),
+    ...mapGetters('chat', ['isBusy']),
   },
 
   watch: {
@@ -59,6 +46,11 @@ export default {
         this.syncScrollAfterRender();
       },
     },
+    isBusy(busy) {
+      if (!busy) {
+        this.focusInput();
+      }
+    },
   },
 
   mounted() {
@@ -66,89 +58,64 @@ export default {
   },
 
   methods: {
+    ...mapActions('chat', ['send', 'retry', 'startNewChat']),
+    ...mapMutations('chat', [
+      'toggleProcess',
+      'clearNotice',
+      'setMoviesPanelVisible',
+    ]),
+
+    renderMarkdown,
+    levelIcon,
+
     handleModalClose() {
       this.isSettingsDrawerOpen = false;
       this.$emit('close');
     },
 
     resetChat() {
-      this.messages = [];
-      this.nextId = 1;
+      this.currentMessage = '';
+      this.startNewChat();
     },
 
     toggleSettingsDrawer() {
       this.isSettingsDrawerOpen = !this.isSettingsDrawerOpen;
     },
 
-    getTimestamp() {
-      const now = new Date();
-      const hh = `${now.getHours()}`.padStart(2, '0');
-      const mm = `${now.getMinutes()}`.padStart(2, '0');
-
-      return `${hh}:${mm}`;
-    },
-
-    createMessage(role, text, extra = {}) {
-      const message = {
-        id: this.nextId,
-        role,
-        text,
-        timestamp: this.getTimestamp(),
-        ...extra,
-      };
-
-      this.nextId += 1;
-
-      return message;
-    },
-
     sendMessage() {
-      if (!this.currentMessage) {
+      if (!this.currentMessage || this.isBusy) {
         return;
       }
 
-      this.messages.push(this.createMessage('user', this.currentMessage));
-
-      this.messages.push(
-        this.createMessage('agent-process', agentProcessLorem, {
-          title: 'Agent Process',
-          isOpen: true,
-        }),
-      );
-
-      this.messages.push(this.createMessage('assistant', assistantReply));
-
+      this.forceStick = true;
+      this.send(this.currentMessage);
       this.currentMessage = '';
     },
 
-    toggleProcess(messageId) {
-      const target = this.messages.find(msg => msg.id === messageId);
-
-      if (!target) {
-        return;
-      }
-
-      target.isOpen = !target.isOpen;
-    },
-
-    appendToLatestProcess(chunk) {
-      const target = [...this.messages]
-        .reverse()
-        .find(msg => msg.role === 'agent-process');
-
-      if (!target) {
-        return;
-      }
-
-      target.text += chunk;
-    },
-
-    syncScrollAfterRender() {
+    focusInput() {
       this.$nextTick(() => {
-        setTimeout(() => {
+        if (this.$refs.input) {
+          this.$refs.input.focus();
+        }
+      });
+    },
+
+    // keep pinned to the bottom only if the user is already there (or just sent)
+    syncScrollAfterRender() {
+      const container = this.$refs.messagesContainer;
+      const nearBottom =
+        !container ||
+        container.scrollHeight - container.scrollTop - container.clientHeight <
+          STICK_THRESHOLD;
+      const stick = nearBottom || this.forceStick;
+
+      this.forceStick = false;
+
+      this.$nextTick(() => {
+        if (stick) {
           this.scrollToBottom();
-          this.scrollAllOpenProcessesToBottom();
-        }, 0);
+        }
+        this.scrollAllOpenProcessesToBottom();
       });
     },
 
@@ -179,7 +146,9 @@ export default {
 
       const element = Array.isArray(container) ? container[0] : container;
 
-      element.scrollTop = element.scrollHeight;
+      if (element) {
+        element.scrollTop = element.scrollHeight;
+      }
     },
   },
 };

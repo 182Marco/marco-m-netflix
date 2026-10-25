@@ -23,11 +23,35 @@
         >
           <div v-if="message.role !== 'agent-process'" class="message-bubble">
             <span class="message-time">{{ message.timestamp }}</span>
-            <p class="message-text">{{ message.text }}</p>
+
+            <p v-if="message.role === 'user'" class="message-text">
+              {{ message.text }}
+            </p>
+            <div
+              v-else-if="message.text"
+              class="message-text message-markdown"
+              v-html="renderMarkdown(message.text)"
+            ></div>
+            <!-- waiting for the first answer_delta -->
+            <div
+              v-else
+              class="typing-dots"
+              role="status"
+              aria-label="The assistant is working"
+            >
+              <span></span><span></span><span></span>
+            </div>
+
+            <p
+              v-for="source in message.attributions"
+              :key="source"
+              class="message-attribution"
+            >
+              {{ source }}
+            </p>
           </div>
 
           <div v-else class="agent-process-bubble">
-
             <button
               type="button"
               class="accordion-trigger"
@@ -48,24 +72,93 @@
               class="agent-content"
               :class="{ 'show-accordion': message.isOpen }"
             >
-              <p class="agent-text">{{ message.text }}</p>
+              <template v-for="(entry, index) in message.entries" :key="index">
+                <p
+                  v-if="entry.kind === 'story'"
+                  class="agent-text agent-story"
+                  :class="`is-${entry.level}`"
+                >
+                  <span class="agent-icon">{{ levelIcon(entry.level) }}</span>
+                  {{ entry.text }}
+                </p>
+
+                <div v-else class="agent-step">
+                  <p class="agent-text agent-step-title">{{ entry.title }}</p>
+                  <p
+                    v-for="(line, lineIndex) in entry.lines"
+                    :key="lineIndex"
+                    class="agent-text agent-step-line"
+                  >
+                    {{ line }}
+                  </p>
+                  <p
+                    v-for="source in entry.attributions"
+                    :key="source"
+                    class="agent-text agent-step-line agent-source"
+                  >
+                    {{ source }}
+                  </p>
+                </div>
+              </template>
             </div>
           </div>
         </div>
+      </div>
+
+      <MovieResultsPanel
+        v-if="movies.length > 0"
+        :items="movies"
+        :open="moviesPanelVisible"
+        @close="setMoviesPanelVisible(false)"
+        @open="setMoviesPanelVisible(true)"
+      />
+
+      <div
+        v-if="notice"
+        class="chat-notice"
+        :class="`is-${notice.tone}`"
+        role="alert"
+      >
+        <span class="chat-notice-text">{{ notice.message }}</span>
+        <button
+          v-if="failedTurn"
+          type="button"
+          class="chat-notice-btn"
+          @click="retry"
+        >
+          Retry
+        </button>
+        <button
+          v-if="notice.tone !== 'info'"
+          type="button"
+          class="chat-notice-btn"
+          aria-label="Dismiss"
+          @click="clearNotice"
+        >
+          ✕
+        </button>
       </div>
 
       <div class="chat-input-fixed">
         <div class="chat-input-wrap">
           <input
             id="chatInput"
+            ref="input"
             v-model.trim="currentMessage"
             type="text"
             class="chat-input"
             placeholder="Type your message"
+            :maxlength="maxMessageChars"
+            :disabled="isBusy"
             @keyup.enter.prevent="sendMessage"
           />
 
-          <button type="button" class="send-btn" @click="sendMessage">
+          <button
+            type="button"
+            class="send-btn"
+            :disabled="isBusy"
+            @click="sendMessage"
+          >
             <img src="@/assets/img/send.svg" alt="Send" />
           </button>
         </div>

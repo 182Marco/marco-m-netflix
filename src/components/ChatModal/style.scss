@@ -40,6 +40,7 @@
 
 .messages-scroll {
   flex-grow: 1;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 20px 4vw 24px;
@@ -264,4 +265,148 @@
       height: 100vh;
     }
   }
+}
+
+// assistant text is rendered from Markdown via v-html (not scoped by default)
+.message-markdown {
+  :deep(p) {
+    margin: 0 0 8px;
+  }
+
+  :deep(p:last-child),
+  :deep(ul:last-child),
+  :deep(ol:last-child) {
+    margin-bottom: 0;
+  }
+
+  :deep(ul),
+  :deep(ol) {
+    margin: 0 0 8px;
+    padding-left: 20px;
+  }
+
+  :deep(code) {
+    font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 0 4px;
+    border-radius: 4px;
+  }
+
+  :deep(a) {
+    color: #cfe3ff;
+    text-decoration: underline;
+  }
+}
+
+.message-attribution {
+  margin: 8px 0 0;
+  font-size: 11px;
+  color: rgba(214, 224, 236, 0.82);
+}
+
+// waiting state before the first answer_delta
+.typing-dots {
+  @include flex(row, flex-start, center);
+  gap: 5px;
+  height: 20px;
+
+  span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    animation: typing-bounce 1.2s infinite ease-in-out;
+
+    &:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+  }
+}
+
+@keyframes typing-bounce {
+  0%,
+  60%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+
+  30% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+}
+
+// reasoning entries
+.agent-story,
+.agent-step-title {
+  margin-top: 8px;
+}
+
+.agent-story {
+  &.is-ok .agent-icon {
+    color: #5fd38d;
+  }
+
+  &.is-warn .agent-icon {
+    color: #f6bc44;
+  }
+}
+
+.agent-icon {
+  display: inline-block;
+  width: 12px;
+  text-align: center;
+}
+
+.agent-step-title {
+  font-weight: 600;
+  color: rgba(238, 245, 255, 0.95);
+}
+
+.agent-step-line {
+  margin-top: 3px;
+  padding-left: 12px;
+  word-break: break-word;
+}
+
+.agent-source {
+  font-style: italic;
+}
+
+.chat-notice {
+  @include flex(row, flex-start, center);
+  gap: 10px;
+  padding: 8px 4vw;
+  font-size: 13px;
+  background-color: #3a2326;
+  color: #ffd6d6;
+
+  &.is-info {
+    background-color: #223244;
+    color: #d6e6ff;
+  }
+}
+
+.chat-notice-text {
+  flex: 1;
+}
+
+.chat-notice-btn {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  padding: 2px 10px;
+  cursor: pointer;
+}
+
+.chat-input:disabled,
+.send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
