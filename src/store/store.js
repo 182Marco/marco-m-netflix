@@ -1,7 +1,9 @@
 import { createStore } from 'vuex';
 import { searchMovies, searchSeries } from '../features/auth/api/tmdbApi';
+import chat from './modules/chat';
 
 const store = createStore({
+    modules: { chat },
     state: {
       // colorare nav
       colNav: false,
