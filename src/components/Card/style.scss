@@ -84,6 +84,36 @@ p.name.active,
   }
 }
 
+// Compact variant (chat results window): 70% of the Home size,
+// same proportions (card 250x400 -> 175x280, poster 233x350 -> 163x245)
+@media (min-width: 801px) {
+  .bg-in-preview.compact:not(.active) {
+    .card {
+      min-width: 175px;
+      height: 280px;
+      margin-right: 21px;
+    }
+
+    .img-wrap {
+      height: 245px;
+      margin-bottom: 10px;
+
+      img {
+        max-width: 163px;
+      }
+    }
+
+    .name {
+      font-size: 0.91rem;
+    }
+  }
+}
+
+// the preview opened from the chat must sit above the chat header (z-index 1201)
+.bg-in-preview.compact.active {
+  z-index: 1300;
+}
+
 // *****************************************
 // Complete style change
 // When a card is assigned

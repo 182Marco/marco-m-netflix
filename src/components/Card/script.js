@@ -7,6 +7,11 @@ export default {
   name: 'Card',
   props: {
     obj: Object,
+    // smaller poster (chat results window)
+    compact: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: {
     VideoComp,
