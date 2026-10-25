@@ -198,7 +198,7 @@
     <div class="card"><svg id="d-seq" viewBox="0 0 960 640" role="img" aria-label="Sequenza di una domanda alla chat"></svg></div>
     <div class="steps">
       <div class="step"><b>Perché lo streaming?</b> Il bot può impiegare diversi secondi. Mostrando i passaggi man mano l'utente capisce che sta lavorando.</div>
-      <div class="step"><b>Dove si aggancia nel codice.</b> <code>sendMessage()</code> in <code>ChatModal</code> chiamerà il nuovo <code>chatApi.js</code>. Il metodo <code>appendToLatestProcess()</code> esiste già per ricevere i pezzi.</div>
+      <div class="step"><b>Dove si aggancia nel codice.</b> <code>sendMessage()</code> in <code>ChatModal</code> invia l'azione <code>chat/send</code> dello store, che usa <code>chatApi.js</code> (fetch + SSE). Gli eventi diventano righe del processo, testo della risposta e lista film.</div>
       <div class="step"><b>Sicurezza.</b> Nel browser non ci sono chiavi di LLM o database: stanno solo sul backend.</div>
     </div>
   </div>
@@ -340,11 +340,11 @@ function band(svg, x, y, w, h, title) {
   const msgs = [
     ['Utente', 'ChatModal', 'Scrive "film come Interstellar" e invia', 0],
     ['ChatModal', 'chatApi.js', 'sendMessage() · mostra subito la bolla utente', 0],
-    ['chatApi.js', 'Bot backend', 'POST /chat (messaggio + impostazioni)', 0, true],
+    ['chatApi.js', 'Bot backend', 'POST /conversations/{id}/messages (SSE)', 0, true],
     ['Bot backend', 'Strumenti', 'Cerca testi simili (RAG) e li riordina', 0],
     ['Strumenti', 'Bot backend', 'Top 3 candidati', 1],
     ['Bot backend', 'chatApi.js', 'stream: passi del processo', 1, true],
-    ['chatApi.js', 'ChatModal', 'appendToLatestProcess(pezzo)', 0],
+    ['chatApi.js', 'ChatModal', 'story / step → processo', 0],
     ['Bot backend', 'Strumenti', 'Chiama TMDB / query SQL se mancano dati', 0],
     ['Bot backend', 'LLM', 'Genera la risposta con i dati trovati', 0],
     ['LLM', 'Bot backend', 'Testo della risposta', 1],
@@ -507,7 +507,7 @@ add('src/App/style.scss', { ico: 'scss', tl: 'Stile della pagina e animazione di
 
 /* componenti */
 add('src/components', { kind: 'dir', ico: 'folder', tl: 'I pezzi di interfaccia, ognuno nella sua cartella.',
-  pts: ['Ogni cartella ha sempre gli stessi 4 file: <code>index.vue</code>, <code>template.html</code>, <code>script.js</code>, <code>style.scss</code>.', 'Parte "film": Card, List, PromoMovie, VideoComp, CloseXButton.', 'Parte "barra": HeaderComp, NavbarLeft, NavbarRight, LanguageSelector.', 'Parte "chat AI": ChatModal, ChatModalHeader, SettingsDrawer.'],
+  pts: ['Ogni cartella ha sempre gli stessi 4 file: <code>index.vue</code>, <code>template.html</code>, <code>script.js</code>, <code>style.scss</code>.', 'Parte "film": Card, List, PromoMovie, VideoComp, CloseXButton.', 'Parte "barra": HeaderComp, NavbarLeft, NavbarRight, LanguageSelector.', 'Parte "chat AI": ChatModal, ChatModalHeader, SettingsDrawer, MovieResultsPanel, VideoResultTile.'],
   ex: 'Vuoi capire "cosa succede se clicco sulla lente?" → apri <code>NavbarRight</code>.' });
 
 comp('Card', {
@@ -589,13 +589,13 @@ comp('LanguageSelector', {
 
 comp('ChatModal', {
   tl: 'La finestra della chat AI "Netflix Scout".',
-  pts: ['Mostra i messaggi: bolle dell\'utente, dell\'assistente e il pannello "Agent Process".', 'Campo di testo in basso: Invio o pulsante per inviare.', 'Gestisce apertura dei settings, "new chat" e chiusura.', 'Scorre da sola fino all\'ultimo messaggio.', '<b>Oggi le risposte sono finte.</b> Qui si collegherà il bot.'],
-  ex: 'Scrivi "ciao" → compaiono 3 elementi: la tua bolla, un processo di esempio (apribile) e la risposta fissa.',
-  flow: ['utente scrive', 'ChatModal.sendMessage', '(futuro) chatApi → bot', 'bolle + processo'],
-  tip: 'Per collegare il bot si modifica soprattutto <code>sendMessage()</code>; <code>appendToLatestProcess()</code> è già pronto per ricevere il testo a pezzi.',
+  pts: ['Mostra i messaggi: bolle dell\'utente, dell\'assistente e il pannello "Agent Process".', 'Campo di testo in basso: Invio o pulsante per inviare.', 'Gestisce apertura dei settings, "new chat" e chiusura.', 'Scorre da sola fino all\'ultimo messaggio.', 'Le risposte arrivano in streaming dal bot (eventi <code>answer_delta</code>) e vengono mostrate come Markdown.'],
+  ex: 'Scrivi "ciao" → compaiono la tua bolla, il processo dell\'agente che si riempie e la risposta che cresce mentre arriva.',
+  flow: ['utente scrive', 'ChatModal.sendMessage', 'store chat → chatApi → bot', 'bolle + processo + film'],
+  tip: 'La logica non sta nel componente: stato in <code>store/modules/chat.js</code>, rete in <code>features/chat/api</code>.',
   t: ['<code>ChatModalHeader</code> in alto, poi <code>SettingsDrawer</code> a lato e l\'area messaggi.', 'Ogni messaggio ha un <b>ruolo</b>: <code>user</code>, <code>assistant</code> o <code>agent-process</code>.', 'Il processo è un accordion: titolo + freccia, testo che si apre e chiude.', 'In basso, campo di input fisso con tasto invio.'],
   tex: 'La classe <code>is-user</code> mette la bolla a destra, <code>is-assistant</code> a sinistra.',
-  s: ['<code>messages</code>: l\'elenco di tutta la conversazione.', '<code>sendMessage()</code>: aggiunge utente + processo + risposta.', '<code>toggleProcess(id)</code>: apre/chiude un processo.', '<code>appendToLatestProcess(chunk)</code>: aggiunge testo all\'ultimo processo (per lo streaming).', '<code>resetChat()</code>: svuota la chat.', 'Scroll automatico dopo ogni cambiamento.'],
+  s: ['<code>messages</code>, <code>movies</code>, <code>notice</code>: letti dallo store, non copiati.', '<code>sendMessage()</code>: invia l\'azione <code>chat/send</code>.', '<code>toggleProcess(id)</code>: apre/chiude un processo.', '<code>resetChat()</code>: nuova conversazione (azzera anche i film).', 'Scroll automatico solo se sei già in fondo.', 'Input bloccato mentre il bot lavora; banner con Retry in caso di errore.'],
   sex: 'Un messaggio è un oggetto semplice con id, ruolo, testo e orario.',
   scode: '{ id: 1, role: \'user\', text: \'ciao\', timestamp: \'14:32\' }',
   c: ['Finestra a tutto schermo scura.', 'Bolle con colori diversi per utente e assistente.', 'Animazione di apertura/chiusura dell\'accordion.', 'Area input fissa in basso.']
@@ -624,17 +624,25 @@ add('src/store/store.js', { ico: 'js', tl: 'Lo store Vuex: dove stanno ricerca, 
   code: 'this.$store.commit(\'setQuery\', \'bat\');\nthis.$store.dispatch(\'getAllData\');',
   flow: ['NavbarRight', 'setQuery', 'getAllData', 'tmdbApi', 'movies / series', 'App'], tip: 'I nomi <code>pushFavuriteObj</code>/<code>removeFavuriteObj</code> hanno un refuso storico: rinominandoli bisogna aggiornare Card.' });
 add('src/store/modules', { kind: 'dir', ico: 'folder', tl: 'Cartella prevista per dividere lo store in moduli.', pts: ['Per ora contiene file vuoti (<code>movie.js</code>, <code>navbar.js</code>).'] });
+add('src/store/modules/chat.js', { ico: 'js', tl: 'Il modulo Vuex della chat: conversazione, messaggi, lista film.',
+  pts: ['Azioni sottili: <code>startNewChat</code>, <code>endChat</code>, <code>send</code>, <code>retry</code>.', 'Ogni richiesta asincrona controlla <code>sessionId</code>: se la chat è stata chiusa o ricreata, il risultato viene scartato.', 'Le transizioni di stato sono funzioni pure in <code>features/chat/state/turnReducer.js</code>.'],
+  ex: 'Chiudi la chat mentre il bot risponde → lo stream viene interrotto e gli eventi in ritardo non toccano la chat successiva.', flow: ['ChatModal', 'chat/send', 'chatApi', 'eventi SSE', 'turnReducer', 'messages / movies'] });
 add('src/store/modules/movie.js', { ico: 'js', tl: 'Modulo store per i film (vuoto).', pts: ['Segnaposto per una futura divisione dello store.'] });
 add('src/store/modules/navbar.js', { ico: 'js', tl: 'Modulo store per la barra (vuoto).', pts: ['Segnaposto: oggi la logica della barra è in <code>store.js</code>.'] });
 
-add('src/features', { kind: 'dir', ico: 'folder', tl: 'Codice organizzato per funzionalità.', pts: ['Oggi contiene solo le chiamate API. Qui nascerà anche il file della chat.'] });
+add('src/features', { kind: 'dir', ico: 'folder', tl: 'Codice organizzato per funzionalità.', pts: ['Le chiamate API (<code>auth/api</code>) e il client della chat (<code>chat/</code>).'] });
 add('src/features/auth', { kind: 'dir', ico: 'folder', tl: 'Cartella storica (il nome non descrive il contenuto).', pts: ['Contiene la sottocartella <code>api/</code>.'] });
 add('src/features/auth/api', { kind: 'dir', ico: 'folder', tl: 'Tutte le chiamate di rete.', pts: ['Regola del progetto: i componenti non chiamano Axios direttamente.'] });
+add('src/features/chat', { kind: 'dir', ico: 'folder', tl: 'Il client della chat, diviso per responsabilità.',
+  pts: ['<b>api/chatApi.js</b>: fetch verso il backend e lettura dello stream.', '<b>sse/parseSse.js</b>: da testo a eventi, anche con pezzi spezzati.', '<b>events/</b>: evento del backend → intento per lo stato; messaggi di errore.', '<b>state/turnReducer.js</b>: transizioni di stato pure.', '<b>messages/</b>: forma dei messaggi, righe del processo, Markdown sicuro.', '<b>movies/mergeMovies.js</b>: lista film unica, senza duplicati.', '<b>session/reconcile.js</b>: cosa fare dopo una disconnessione.'],
+  ex: 'Il contratto del backend è in <code>web_api/FRONTEND_API.md</code> (progetto NetflixScout).' });
+add('src/components/MovieResultsPanel', { kind: 'dir', ico: 'folder', tl: 'La finestra dei film sopra l\'input della chat.', pts: ['Riusa <code>List</code> e <code>Card</code> (versione compatta, 70%).', 'La X la nasconde, il chevron in basso a sinistra la riapre: la lista non si cancella.', 'I video YouTube usano <code>VideoResultTile</code>.'] });
+add('src/components/VideoResultTile', { kind: 'dir', ico: 'folder', tl: 'Tessera minima per i video YouTube dei risultati.', pts: ['<code>Card</code> non è adatta ai video: qui miniatura, titolo, canale e link, con la fonte YouTube.'] });
 add('src/features/auth/api/tmdbApi.js', { ico: 'js', tl: 'Le chiamate a TMDB, tutte in un unico posto.',
   pts: ['<code>getPopularTrends(type)</code>: film o serie popolari.', '<code>getTrailerVideos({id, isMovie})</code>: video del titolo.', '<code>searchMovies</code> e <code>searchSeries</code>: ricerca per titolo.', 'Legge chiave e URL base dal file <code>.env</code>.'],
   ex: 'Cerchi "alien" in italiano: viene chiamato <code>…/search/movie?query=alien&amp;language=it-IT</code>.',
   code: 'export const searchMovies = async ({ query, language }) =>\n  axios.get(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}&language=${language}`);',
-  flow: ['store / App / Card', 'tmdbApi.js', 'TMDB'], tip: 'Qui accanto nascerà il file per parlare con il bot della chat.' });
+  flow: ['store / App / Card', 'tmdbApi.js', 'TMDB'], tip: 'Il client del bot della chat è in <code>features/chat/api/chatApi.js</code>.' });
 
 add('src/utils', { kind: 'dir', ico: 'folder', tl: 'Piccole funzioni di aiuto, senza interfaccia.', pts: ['Si importano tutte da <code>@/utils</code>.'] });
 add('src/utils/index.js', { ico: 'js', tl: 'Il "banco" delle utility: le ri-esporta tutte.', pts: ['Permette di scrivere <code>import * as U from \'@/utils\'</code>.'] });
