@@ -404,6 +404,7 @@ function add(path, info) {
 ROOT.tl = 'Il progetto: un clone di Netflix in Vue 3, con una chat AI in arrivo.';
 ROOT.pts = [
   '<b>src/</b> contiene tutto il codice che scrivi tu: è la cartella dove si lavora.',
+  '<b>locales/</b> contiene tutti i testi dell\'interfaccia in 5 lingue (fuori da src).',
   '<b>public/</b> e <b>dist/</b> servono per la pagina web e per la versione pubblicata.',
   'I file nella radice (<code>package.json</code>, <code>.env</code>…) sono configurazioni: dicono a strumenti e computer come far partire il progetto.',
   'Tre file sono documentazione: <code>README.md</code> (per le persone), <code>AGENTS.md</code> (per gli assistenti AI) e questa <code>mappa.html</code>.'
@@ -461,7 +462,12 @@ add('.eslintrc.js', { ico: 'js', tl: 'Regole del "correttore" ESLint, che trova 
   pts: ['Usa le regole raccomandate per Vue e JavaScript.', 'Si integra con Prettier per non litigare sullo stile.', 'Disattiva la regola sui nomi dei componenti a più parole.'],
   ex: 'Dichiari una variabile e non la usi: <code>npm run lint</code> ti avvisa.', flow: ['codice', 'ESLint', 'avvisi/errori'] });
 add('babel.config.js', { ico: 'js', tl: 'Traduce il JavaScript moderno per i browser più vecchi.', pts: ['Una sola riga: usa il preset ufficiale di Vue CLI.'] });
-add('vue.config.js', { ico: 'js', tl: 'Configurazione di Vue CLI / webpack.', pts: ['Per ora è vuoto: ci sono solo segnaposto per regole personalizzate.'] });
+add('vue.config.js', { ico: 'js', tl: 'Configurazione di Vue CLI / webpack.', pts: ['Definisce l\'alias <code>@locales</code> che punta alla cartella <code>locales/</code>.', 'Il resto sono segnaposto per regole personalizzate.'] });
+add('jsconfig.json', { ico: 'json', tl: 'Dice all\'editor dove portano gli alias <code>@</code> e <code>@locales</code>.', pts: ['Serve solo all\'editor (autocompletamento, "vai alla definizione"), non alla build.'] });
+add('locales', { kind: 'dir', ico: 'folder', tl: 'I testi dell\'interfaccia, fuori da src.', pts: ['Per ora c\'è solo <code>texts.js</code>.'] });
+add('locales/texts.js', { ico: 'js', tl: 'Tutti i testi visibili, per categoria e per lingua.',
+  pts: ['<code>TEXTS</code>: categorie (<code>nav</code>, <code>list</code>, <code>card</code>, <code>chat</code>, <code>settings</code>, <code>errors</code>…) e dentro ogni testo le chiavi <code>en</code>, <code>it</code>, <code>es</code>, <code>de</code>, <code>fr</code>.', '<code>LANGUAGES</code>: codice, tag TMDB (<code>it-IT</code>…) ed etichetta di ogni lingua.', 'Se manca una traduzione si usa l\'inglese.', 'I codici sono quelli ufficiali ISO 639-1: spagnolo <code>es</code>, francese <code>fr</code>.'],
+  ex: 'Nel template scrivi <code>{{ $t(\'card.addFav\') }}</code> e compare "Aggiungi ai preferiti" se la lingua è IT.', code: "addFav: {\n  en: 'Add to favourites list',\n  it: 'Aggiungi ai preferiti',\n  es: 'Añadir a favoritos', ...\n}", flow: ['LanguageSelector', 'store.language', '$t()', 'texts.js'] });
 add('netlify.toml', { ico: 'cfg', tl: 'Configurazione per pubblicare su Netlify.', pts: ['Imposta la versione di Node della build.'], tip: 'Dice Node 16, ma il progetto oggi richiede Node 22: da aggiornare se usi Netlify.' });
 add('deploy.sh', { ico: 'sh', tl: 'Script per pubblicare il sito su GitHub Pages.',
   pts: ['Fa la build.', 'Crea un mini-repository dentro <code>dist/</code>.', 'Lo spinge sul ramo <code>gh-pages</code>.'], flow: ['npm run build', 'dist/', 'ramo gh-pages'] });
@@ -501,7 +507,7 @@ add('src/App/template.html', { ico: 'html', tl: 'L\'ossatura della pagina, dall\
   pts: ['<b>HeaderComp</b> con il menu a sinistra (<code>NavbarLeft</code>).', '<b>PromoMovie</b>: la locandina grande di Interstellar.', '<b>Sei righe (List)</b>: film trovati, serie trovate, film popolari, serie popolari, preferiti film, preferiti serie.', '<b>ChatModal</b> in fondo, visibile solo quando serve.'],
   ex: 'Le righe "trovate" e "preferiti" usano <code>v-show</code>: appaiono solo se la lista ha elementi.', flow: ['Header', 'PromoMovie', 'List × 6', 'ChatModal'] });
 add('src/App/script.js', { ico: 'js', tl: 'Il regista della pagina: carica i dati e apre/chiude la chat.',
-  pts: ['Al caricamento chiede film e serie popolari.', '<code>openAiChat()</code> mostra la chat e blocca lo scroll della pagina sotto.', '<code>closeAiChat()</code> la chiude e sblocca lo scroll.', 'Legge dallo store film/serie cercati e preferiti.'],
+  pts: ['Al caricamento chiede film e serie popolari.', '<code>openAiChat()</code> mostra la chat e blocca lo scroll della pagina sotto.', '<code>closeAiChat()</code> la chiude e sblocca lo scroll.', 'Legge dallo store film/serie cercati e preferiti.', 'Quando cambia la lingua ricarica i popolari e rilancia la ricerca in corso.'],
   code: 'mounted() {\n  this.getTrends(\'movie\');\n  this.getTrends(\'tv\');\n}', flow: ['mounted', 'getTrends', 'tmdbApi', 'popularMov / popularSeries'] });
 add('src/App/style.scss', { ico: 'scss', tl: 'Stile della pagina e animazione di comparsa della chat.', pts: ['Sfondo scuro, spaziature del contenuto principale.', 'Transizione "fade" per la finestra chat.'] });
 
@@ -581,8 +587,8 @@ comp('CloseXButton', {
 });
 comp('LanguageSelector', {
   tl: 'Il menu a tendina IT / EN con bandierine.',
-  pts: ['Mostra la lingua attuale e, al clic, le opzioni.', 'Si chiude se clicchi fuori.', 'Cambia la lingua usata per le ricerche su TMDB.'],
-  ex: 'Scegli IT: cerchi "matrix" e le trame arrivano in italiano.', flow: ['clic su IT', 'LanguageSelector', 'store.language', 'ricerca TMDB'],
+  pts: ['Mostra la lingua attuale e, al clic, le opzioni.', 'Si chiude se clicchi fuori.', 'Offre 5 lingue (EN, IT, ES, DE, FR), ognuna con la sua bandierina, prese da <code>LANGUAGES</code> e <code>FLAGS</code>.', 'Cambia la lingua dell\'intera interfaccia e dei dati TMDB (popolari, ricerca, trailer).'],
+  ex: 'Scegli IT: i testi diventano italiani e le trame di "matrix" arrivano in italiano.', flow: ['clic su IT', 'LanguageSelector', 'store.language', 'ricerca TMDB'],
   t: ['Etichetta corrente, freccia e lista di opzioni con bandiera.'], tex: 'La lista è visibile solo se <code>open</code> è vero.',
   s: ['Usa <code>v-model</code> alla Vue 3: riceve <code>modelValue</code>, emette <code>update:modelValue</code>.', 'Ascolta i clic sul documento per chiudersi fuori.', 'Rimuove l\'ascolto in <code>beforeUnmount</code>.'], sex: 'Per aggiungere il francese: nuova voce in <code>options</code> + una bandiera in assets.', scode: 'this.$emit(\'update:modelValue\', value);', c: ['Tendina scura sotto la barra di ricerca.']
 });
@@ -609,7 +615,7 @@ comp('ChatModalHeader', {
 });
 comp('SettingsForm', {
   tl: 'Il form delle impostazioni, costruito dalla risposta di GET /settings.',
-  pts: ['Interruttore per i campi boolean, segmenti di pari larghezza per i campi choice.', 'Mostra "Loading" finché la configurazione non è pronta e "Retry" se il caricamento fallisce.', 'Etichette in italiano o inglese in base alla lingua scelta.'],
+  pts: ['Interruttore per i campi boolean, segmenti di pari larghezza per i campi choice.', 'Mostra "Loading" finché la configurazione non è pronta e "Retry" se il caricamento fallisce.', 'Testi dell\'interfaccia da <code>locales/texts.js</code>.', 'Etichette di campi e opzioni dal backend, già in 5 lingue (en, it, es, de, fr): <code>localize</code> sceglie quella corrente, altrimenti l\'inglese. Per correggere una traduzione si modifica il backend (<code>preferences/fields.json</code>).', 'Cambiando lingua il form si aggiorna subito, senza nuove richieste; i valori inviati al bot (<code>preferences</code>) restano quelli del backend.'],
   ex: 'Nessuna opzione o default è scritta nel frontend: arriva tutto dal backend.', flow: ['icona bot', 'GET /settings', 'SettingsForm', 'preferences nei messaggi'],
   tip: 'Lo stato vive nello store (<code>chatSettings</code>), non nel componente.',
   t: ['Un <code>&lt;form&gt;</code> con <code>v-for</code> sui campi.', 'Ruoli <code>switch</code> e <code>radiogroup</code> per l\'accessibilità.'], tex: 'Il colore attivo è la variabile SCSS delle bolle dell\'assistente.',
@@ -627,7 +633,7 @@ comp('SettingsDrawer', {
 /* store, api, utils, data, scss, assets */
 add('src/store', { kind: 'dir', ico: 'folder', tl: 'La memoria condivisa dell\'app (Vuex).', pts: ['Qui vivono i dati che servono a più componenti.'] });
 add('src/store/store.js', { ico: 'js', tl: 'Lo store Vuex: dove stanno ricerca, preferiti, lingua e colore della barra.',
-  pts: ['<b>state</b>: query, lingua, film e serie cercati, preferiti, colori della barra, <code>showPromo</code>.', '<b>mutations</b>: modi "ufficiali" di cambiare lo stato (es. <code>setQuery</code>).', '<b>actions</b>: operazioni asincrone, come <code>getAllData</code> che chiama TMDB.', 'Se la ricerca è vuota, svuota i risultati e rimostra la locandina.'],
+  pts: ['<b>state</b>: query, lingua (codice breve, salvata nel browser), film e serie cercati, preferiti, colori della barra, <code>showPromo</code>.', '<b>mutations</b>: modi "ufficiali" di cambiare lo stato (es. <code>setQuery</code>).', '<b>actions</b>: operazioni asincrone, come <code>getAllData</code> che chiama TMDB.', 'Se la ricerca è vuota, svuota i risultati e rimostra la locandina.'],
   ex: 'Scrivi "bat": <code>setQuery("bat")</code> → <code>getAllData</code> → cerca film e serie → <code>setSearchedMovies</code> → le righe si riempiono.',
   code: 'this.$store.commit(\'setQuery\', \'bat\');\nthis.$store.dispatch(\'getAllData\');',
   flow: ['NavbarRight', 'setQuery', 'getAllData', 'tmdbApi', 'movies / series', 'App'], tip: 'I nomi <code>pushFavuriteObj</code>/<code>removeFavuriteObj</code> hanno un refuso storico: rinominandoli bisogna aggiornare Card.' });
@@ -669,11 +675,11 @@ add('src/scss/cardOpen.scss', { ico: 'scss', tl: 'Gli stili dell\'anteprima aper
 
 add('src/assets', { kind: 'dir', ico: 'folder', tl: 'Immagini e icone.', pts: [] });
 add('src/assets/img', { kind: 'dir', ico: 'folder', tl: 'Tutte le immagini del progetto.',
-  pts: ['<code>brand.svg</code>, <code>netflix.png</code>: loghi.', '<code>interstellar.webp</code>: locandina grande.', '<code>bigBrand.webp</code>: immagine di riserva per poster mancanti.', '<code>it.png</code>, <code>en.png</code>: bandiere.', '<code>logoIA.svg</code>, <code>NetflixScout.png</code>, <code>send.svg</code>, <code>chevron.svg</code>: chat AI.', '<code>marcoMilza.webp</code>: foto profilo.'] });
-['brand.svg', 'netflix.png', 'interstellar.webp', 'bigBrand.webp', 'it.png', 'en.png', 'logoIA.svg', 'NetflixScout.png', 'send.svg', 'chevron.svg', 'marcoMilza.webp'].forEach(function (f) {
+  pts: ['<code>brand.svg</code>, <code>netflix.png</code>: loghi.', '<code>interstellar.webp</code>: locandina grande.', '<code>bigBrand.webp</code>: immagine di riserva per poster mancanti.', '<code>gb.svg</code>, <code>it.svg</code>, <code>es.svg</code>, <code>de.svg</code>, <code>fr.svg</code>: bandiere (SVG leggeri).', '<code>logoIA.svg</code>, <code>NetflixScout.png</code>, <code>send.svg</code>, <code>chevron.svg</code>: chat AI.', '<code>marcoMilza.webp</code>: foto profilo.'] });
+['brand.svg', 'netflix.png', 'interstellar.webp', 'bigBrand.webp', 'gb.svg', 'it.svg', 'es.svg', 'de.svg', 'fr.svg', 'logoIA.svg', 'NetflixScout.png', 'send.svg', 'chevron.svg', 'marcoMilza.webp'].forEach(function (f) {
   const m = {
     'brand.svg': 'Logo grande della barra (tablet/desktop).', 'netflix.png': 'Logo piccolo per mobile.', 'interstellar.webp': 'Locandina di Interstellar in <code>PromoMovie</code>.',
-    'bigBrand.webp': 'Immagine di riserva quando un titolo non ha poster.', 'it.png': 'Bandiera italiana.', 'en.png': 'Bandiera inglese.', 'logoIA.svg': 'Icona che apre la chat AI.',
+    'bigBrand.webp': 'Immagine di riserva quando un titolo non ha poster.', 'gb.svg': 'Bandiera inglese (UK).', 'it.svg': 'Bandiera italiana.', 'es.svg': 'Bandiera spagnola.', 'de.svg': 'Bandiera tedesca.', 'fr.svg': 'Bandiera francese.', 'logoIA.svg': 'Icona che apre la chat AI.',
     'NetflixScout.png': 'Logo del bot nell\'intestazione della chat.', 'send.svg': 'Icona del pulsante invia.', 'chevron.svg': 'Freccia dell\'accordion "Agent Process".', 'marcoMilza.webp': 'Foto profilo in alto a destra.'
   };
   add('src/assets/img/' + f, { ico: 'img', tl: m[f], pts: [] });

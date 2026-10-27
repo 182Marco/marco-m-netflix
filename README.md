@@ -11,7 +11,7 @@ The project reproduces the main browsing experience of a streaming platform, inc
 * Featured title with an **Interstellar** background and trailer
 * Lists of popular movies and popular TV shows
 * Live search by title (movies and series together, as you type)
-* Interface language selector (IT / EN) that also changes the search language
+* Interface language selector (EN / IT / ES / DE / FR, with SVG flags): every UI text switches language and the TMDB calls (popular lists, search, trailers) use the matching `language` tag
 * Card preview with poster, star rating (1-5), synopsis, release date and original language flag
 * Trailer playback (YouTube embed)
 * Favourites lists for movies and series (add / remove from the card)
@@ -166,13 +166,14 @@ The application follows a component-based Vue architecture. Each component lives
 * `src/main.js` — Vue application bootstrap
 * `src/App/` — root component: loads popular lists and opens/closes the chat
 * `src/components/` — UI components (`Card`, `List`, `HeaderComp`, `NavbarLeft`, `NavbarRight`, `PromoMovie`, `VideoComp`, `LanguageSelector`, `CloseXButton`, and the chat: `ChatModal`, `ChatModalHeader`, `SettingsDrawer`, `SettingsForm`, `MovieResultsPanel`, `VideoResultTile`)
-* `src/store/` — Vuex state (search, favourites, language, navbar colour) and the `chat` module (`modules/chat.js`)
+* `locales/` — all UI texts in one object (`texts.js`: categories × `en`/`it`/`es`/`de`/`fr`) and the supported-languages list; imported through the `@locales` alias. Use `$t('category.key')` in components; never hardcode visible strings
+* `src/store/` — Vuex state (search, favourites, language code, navbar colour; getters `t` and `tmdbLanguage`) and the `chat` module (`modules/chat.js`)
 * `src/features/chat/` — chat client: HTTP (`api/`), SSE parser (`sse/`), event handling (`events/`), pure state transitions (`state/`), messages and Markdown (`messages/`), film list (`movies/`), reconnection (`session/`)
 * `src/features/auth/api/` — all TMDB API calls (`tmdbApi.js`)
-* `src/utils/` — small helpers (text clipping, scroll thresholds)
-* `src/data/` — static data (flags)
+* `src/utils/` — small helpers (text clipping, scroll thresholds, `translate`)
+* `src/data/` — static data (`flags.js`: SVG flag per language code)
 * `src/scss/` — global SCSS variables, mixins, reset
-* `src/assets/img/` — images and icons
+* `src/assets/img/` — images and icons (flags: `gb`, `it`, `es`, `de`, `fr` `.svg`)
 
 The exact organization reflects the original structure of the project and has been preserved where possible during the Vue 3 migration. A file-by-file explanation is available in [`mappa.html`](./mappa.html).
 
