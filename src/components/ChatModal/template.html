@@ -28,12 +28,13 @@
           <div v-if="message.role !== 'agent-process'" class="message-bubble">
             <span class="message-time">{{ message.timestamp }}</span>
 
-            <p v-if="message.role === 'user'" class="message-text">
+            <p v-if="message.role === 'user'" class="message-text" dir="auto">
               {{ message.text }}
             </p>
             <div
               v-else-if="message.text"
               class="message-text message-markdown"
+              dir="auto"
               v-html="renderMarkdown(message.text)"
             ></div>
             <!-- waiting for the first answer_delta -->
