@@ -1,7 +1,34 @@
 import { createStore } from 'vuex';
 import { searchMovies, searchSeries } from '../features/auth/api/tmdbApi';
+import { translate } from '../utils/translate';
+import { LANGUAGES, DEFAULT_LANGUAGE } from '@locales/texts';
 import chat from './modules/chat';
 import chatSettings from './modules/chatSettings';
+
+// lingua salvata dall'utente (solo se e' una di quelle supportate)
+const loadLanguage = () => {
+  try {
+    const saved =
+      typeof window !== 'undefined' && window.localStorage.getItem('language');
+
+    return LANGUAGES.some((l) => l.code === saved) ? saved : DEFAULT_LANGUAGE;
+  } catch (error) {
+    return DEFAULT_LANGUAGE;
+  }
+};
+
+const applyLanguage = (language) => {
+  try {
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = language;
+    }
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('language', language);
+    }
+  } catch (error) {
+    // storage non disponibile: la lingua vale solo per la sessione
+  }
+};
 
 const store = createStore({
   modules: { chat, chatSettings },
@@ -13,7 +40,8 @@ const store = createStore({
     showPromo: true,
     // dati per tipo di query
     query: '',
-    language: 'en-US',
+    // codice breve (en, it, es, de, fr); il tag TMDB e' nel getter tmdbLanguage
+    language: loadLanguage(),
     // array ricercati
     movies: [],
     series: [],
@@ -26,10 +54,14 @@ const store = createStore({
       process.env.VUE_APP_TMDB_BASE_URL || 'https://api.themoviedb.org/3',
     apiMv: '/movie',
     apiTv: '/tv',
-    // bandiere
-    flags: ['en', 'it'],
   },
-  getters: {},
+  getters: {
+    // tag per il parametro `language` di TMDB (en-US, it-IT, ...)
+    tmdbLanguage: (state) =>
+      (LANGUAGES.find((l) => l.code === state.language) || LANGUAGES[0]).tmdb,
+    // t('categoria.chiave') -> testo nella lingua corrente
+    t: (state) => (path) => translate(path, state.language),
+  },
   mutations: {
     // riempimento variabili in store x query
     setQuery(state, query) {
@@ -43,6 +75,7 @@ const store = createStore({
     },
     setLanguage(state, language) {
       state.language = language;
+      applyLanguage(language);
     },
     // aggiungere ai film favoriti:
     // per distinguere film da serie sfrutto
@@ -91,7 +124,7 @@ const store = createStore({
       state.colNav ? commit('black') : commit('goTransparent');
     },
     // chiamata axios quando si fa ricerca
-    async getAllData({ state, commit }) {
+    async getAllData({ state, getters, commit }) {
       if (!state.query) {
         commit('setQuery', '');
         return;
@@ -101,7 +134,7 @@ const store = createStore({
         // chiamata per i film
         const moviesResponse = await searchMovies({
           query: state.query,
-          language: state.language,
+          language: getters.tmdbLanguage,
         });
         moviesResponse.data.result = [
           ...moviesResponse.data.results.map((e) => ({
@@ -114,7 +147,7 @@ const store = createStore({
         // chimata per le serie
         const seriesResponse = await searchSeries({
           query: state.query,
-          language: state.language,
+          language: getters.tmdbLanguage,
         });
         seriesResponse.data.result = [
           ...seriesResponse.data.results.map((e) => ({
