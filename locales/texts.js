@@ -1,0 +1,450 @@
+// Tutti i testi dell'interfaccia, per categoria e per lingua.
+// Chiavi lingua: ISO 639-1. Per aggiungere una lingua: una voce in LANGUAGES
+// e la stessa chiave in ogni testo (se manca, si usa `en`).
+
+export const DEFAULT_LANGUAGE = 'en';
+
+// `tmdb` e' il tag passato al parametro `language` delle API TMDB
+export const LANGUAGES = [
+  { code: 'en', tmdb: 'en-US', label: 'EN' },
+  { code: 'it', tmdb: 'it-IT', label: 'IT' },
+  { code: 'es', tmdb: 'es-ES', label: 'ES' },
+  { code: 'de', tmdb: 'de-DE', label: 'DE' },
+  { code: 'fr', tmdb: 'fr-FR', label: 'FR' },
+];
+
+export const TEXTS = {
+  nav: {
+    home: {
+      en: 'Home',
+      it: 'Home',
+      es: 'Inicio',
+      de: 'Startseite',
+      fr: 'Accueil',
+    },
+    tvSeries: {
+      en: 'TV Series',
+      it: 'Serie TV',
+      es: 'Series',
+      de: 'Serien',
+      fr: 'Séries',
+    },
+    movies: {
+      en: 'Movies',
+      it: 'Film',
+      es: 'Películas',
+      de: 'Filme',
+      fr: 'Films',
+    },
+    newPopular: {
+      en: 'New & Popular',
+      it: 'Nuovi e popolari',
+      es: 'Novedades populares',
+      de: 'Neu & beliebt',
+      fr: 'Nouveautés populaires',
+    },
+    myList: {
+      en: 'My List',
+      it: 'La mia lista',
+      es: 'Mi lista',
+      de: 'Meine Liste',
+      fr: 'Ma liste',
+    },
+  },
+
+  list: {
+    moviesSearch: {
+      en: 'Movies matching your search',
+      it: 'Film corrispondenti alla tua ricerca',
+      es: 'Películas que coinciden con tu búsqueda',
+      de: 'Filme zu deiner Suche',
+      fr: 'Films correspondant à votre recherche',
+    },
+    seriesSearch: {
+      en: 'Series matching your search',
+      it: 'Serie corrispondenti alla tua ricerca',
+      es: 'Series que coinciden con tu búsqueda',
+      de: 'Serien zu deiner Suche',
+      fr: 'Séries correspondant à votre recherche',
+    },
+    popularMovies: {
+      en: 'Popular movies on Netflix:',
+      it: 'Film popolari su Netflix:',
+      es: 'Películas populares en Netflix:',
+      de: 'Beliebte Filme auf Netflix:',
+      fr: 'Films populaires sur Netflix :',
+    },
+    popularSeries: {
+      en: 'Popular series on Netflix',
+      it: 'Serie popolari su Netflix',
+      es: 'Series populares en Netflix',
+      de: 'Beliebte Serien auf Netflix',
+      fr: 'Séries populaires sur Netflix',
+    },
+    favMovies: {
+      en: 'Your favourite movie list',
+      it: 'La tua lista di film preferiti',
+      es: 'Tu lista de películas favoritas',
+      de: 'Deine Lieblingsfilme',
+      fr: 'Votre liste de films favoris',
+    },
+    favSeries: {
+      en: 'Your favourite series list',
+      it: 'La tua lista di serie preferite',
+      es: 'Tu lista de series favoritas',
+      de: 'Deine Lieblingsserien',
+      fr: 'Votre liste de séries favorites',
+    },
+  },
+
+  header: {
+    logoAlt: { en: 'logo', it: 'logo', es: 'logo', de: 'Logo', fr: 'logo' },
+  },
+
+  navbar: {
+    openAiChat: {
+      en: 'Open AI chat',
+      it: 'Apri la chat AI',
+      es: 'Abrir el chat de IA',
+      de: 'KI-Chat öffnen',
+      fr: 'Ouvrir le chat IA',
+    },
+    searchPlaceholder: {
+      en: 'Search movies and series',
+      it: 'Cerca film e serie',
+      es: 'Buscar películas y series',
+      de: 'Filme und Serien suchen',
+      fr: 'Rechercher films et séries',
+    },
+    authorAlt: {
+      en: "App's author",
+      it: "Autore dell'App",
+      es: 'Autor de la app',
+      de: 'Autor der App',
+      fr: "Auteur de l'application",
+    },
+    language: {
+      en: 'Language',
+      it: 'Lingua',
+      es: 'Idioma',
+      de: 'Sprache',
+      fr: 'Langue',
+    },
+  },
+
+  card: {
+    releaseDate: {
+      en: 'release date:',
+      it: 'data di uscita:',
+      es: 'fecha de estreno:',
+      de: 'Erscheinungsdatum:',
+      fr: 'date de sortie :',
+    },
+    originalLanguage: {
+      en: 'Original language:',
+      it: 'Lingua originale:',
+      es: 'Idioma original:',
+      de: 'Originalsprache:',
+      fr: 'Langue originale :',
+    },
+    flag: {
+      en: 'flag',
+      it: 'bandiera',
+      es: 'bandera',
+      de: 'Flagge',
+      fr: 'drapeau',
+    },
+    play: {
+      en: 'Play',
+      it: 'Riproduci',
+      es: 'Reproducir',
+      de: 'Abspielen',
+      fr: 'Lecture',
+    },
+    addFav: {
+      en: 'Add to favourites list',
+      it: 'Aggiungi ai preferiti',
+      es: 'Añadir a favoritos',
+      de: 'Zu Favoriten hinzufügen',
+      fr: 'Ajouter aux favoris',
+    },
+    removeFav: {
+      en: 'Remove from favourites list',
+      it: 'Rimuovi dai preferiti',
+      es: 'Quitar de favoritos',
+      de: 'Aus Favoriten entfernen',
+      fr: 'Retirer des favoris',
+    },
+    posterAlt: {
+      en: 'poster',
+      it: 'locandina',
+      es: 'póster',
+      de: 'Poster',
+      fr: 'affiche',
+    },
+  },
+
+  promo: {
+    alt: {
+      en: 'Interstellar promo',
+      it: 'Promo di Interstellar',
+      es: 'Promoción de Interstellar',
+      de: 'Interstellar-Werbung',
+      fr: "Promo d'Interstellar",
+    },
+  },
+
+  a11y: {
+    close: {
+      en: 'Close',
+      it: 'Chiudi',
+      es: 'Cerrar',
+      de: 'Schließen',
+      fr: 'Fermer',
+    },
+  },
+
+  chat: {
+    settings: {
+      en: 'settings',
+      it: 'impostazioni',
+      es: 'ajustes',
+      de: 'Einstellungen',
+      fr: 'réglages',
+    },
+    openSettings: {
+      en: 'Open settings',
+      it: 'Apri le impostazioni',
+      es: 'Abrir ajustes',
+      de: 'Einstellungen öffnen',
+      fr: 'Ouvrir les réglages',
+    },
+    closeSettings: {
+      en: 'Close settings',
+      it: 'Chiudi le impostazioni',
+      es: 'Cerrar ajustes',
+      de: 'Einstellungen schließen',
+      fr: 'Fermer les réglages',
+    },
+    newChat: {
+      en: 'new chat',
+      it: 'nuova chat',
+      es: 'nuevo chat',
+      de: 'neuer Chat',
+      fr: 'nouveau chat',
+    },
+    closeBot: {
+      en: 'close bot',
+      it: 'chiudi bot',
+      es: 'cerrar bot',
+      de: 'Bot schließen',
+      fr: 'fermer le bot',
+    },
+    working: {
+      en: 'The assistant is working',
+      it: "L'assistente sta lavorando",
+      es: 'El asistente está trabajando',
+      de: 'Der Assistent arbeitet',
+      fr: "L'assistant travaille",
+    },
+    toggleDetails: {
+      en: 'Toggle details',
+      it: 'Mostra o nascondi i dettagli',
+      es: 'Mostrar u ocultar detalles',
+      de: 'Details ein- oder ausblenden',
+      fr: 'Afficher ou masquer les détails',
+    },
+    agentProcess: {
+      en: 'Agent Process',
+      it: "Processo dell'agente",
+      es: 'Proceso del agente',
+      de: 'Agentenprozess',
+      fr: "Processus de l'agent",
+    },
+    retry: {
+      en: 'Retry',
+      it: 'Riprova',
+      es: 'Reintentar',
+      de: 'Erneut versuchen',
+      fr: 'Réessayer',
+    },
+    dismiss: {
+      en: 'Dismiss',
+      it: 'Ignora',
+      es: 'Descartar',
+      de: 'Verwerfen',
+      fr: 'Ignorer',
+    },
+    placeholder: {
+      en: 'Type your message',
+      it: 'Scrivi il tuo messaggio',
+      es: 'Escribe tu mensaje',
+      de: 'Nachricht eingeben',
+      fr: 'Écrivez votre message',
+    },
+    send: {
+      en: 'Send',
+      it: 'Invia',
+      es: 'Enviar',
+      de: 'Senden',
+      fr: 'Envoyer',
+    },
+  },
+
+  settings: {
+    drawer: {
+      en: 'Settings drawer',
+      it: 'Pannello impostazioni',
+      es: 'Panel de ajustes',
+      de: 'Einstellungsfenster',
+      fr: 'Panneau des réglages',
+    },
+    defaultAria: {
+      en: 'Default settings',
+      it: 'Impostazioni predefinite',
+      es: 'Ajustes predeterminados',
+      de: 'Standardeinstellungen',
+      fr: 'Réglages par défaut',
+    },
+    default: {
+      en: 'Default',
+      it: 'Predefinite',
+      es: 'Predeterminado',
+      de: 'Standard',
+      fr: 'Par défaut',
+    },
+    applyAria: {
+      en: 'Apply settings',
+      it: 'Applica le impostazioni',
+      es: 'Aplicar ajustes',
+      de: 'Einstellungen anwenden',
+      fr: 'Appliquer les réglages',
+    },
+    apply: {
+      en: 'Apply',
+      it: 'Applica',
+      es: 'Aplicar',
+      de: 'Anwenden',
+      fr: 'Appliquer',
+    },
+    loading: {
+      en: 'Loading settings…',
+      it: 'Caricamento impostazioni…',
+      es: 'Cargando ajustes…',
+      de: 'Einstellungen werden geladen…',
+      fr: 'Chargement des réglages…',
+    },
+    unavailable: {
+      en: 'Settings are not available. The chat still works with default options.',
+      it: 'Le impostazioni non sono disponibili. La chat funziona comunque con le opzioni predefinite.',
+      es: 'Los ajustes no están disponibles. El chat sigue funcionando con las opciones predeterminadas.',
+      de: 'Die Einstellungen sind nicht verfügbar. Der Chat funktioniert weiterhin mit den Standardoptionen.',
+      fr: 'Les réglages ne sont pas disponibles. Le chat fonctionne quand même avec les options par défaut.',
+    },
+  },
+
+  results: {
+    title: {
+      en: 'Results',
+      it: 'Risultati',
+      es: 'Resultados',
+      de: 'Ergebnisse',
+      fr: 'Résultats',
+    },
+    region: {
+      en: 'Movie results',
+      it: 'Risultati dei film',
+      es: 'Resultados de películas',
+      de: 'Filmergebnisse',
+      fr: 'Résultats de films',
+    },
+    thumbnail: {
+      en: 'thumbnail',
+      it: 'miniatura',
+      es: 'miniatura',
+      de: 'Vorschaubild',
+      fr: 'miniature',
+    },
+  },
+
+  // messaggi di errore/avviso della chat (vedi features/chat/events/failure.js)
+  errors: {
+    network_error: {
+      en: 'Connection to the server lost.',
+      it: 'Connessione al server persa.',
+      es: 'Se perdió la conexión con el servidor.',
+      de: 'Verbindung zum Server verloren.',
+      fr: 'Connexion au serveur perdue.',
+    },
+    stream_interrupted: {
+      en: 'The reply was interrupted.',
+      it: 'La risposta è stata interrotta.',
+      es: 'La respuesta se interrumpió.',
+      de: 'Die Antwort wurde unterbrochen.',
+      fr: 'La réponse a été interrompue.',
+    },
+    turn_in_progress: {
+      en: 'The assistant is still working on the previous message. Try again in a moment.',
+      it: "L'assistente sta ancora elaborando il messaggio precedente. Riprova tra un attimo.",
+      es: 'El asistente sigue trabajando en el mensaje anterior. Inténtalo de nuevo en un momento.',
+      de: 'Der Assistent bearbeitet noch die vorherige Nachricht. Versuche es gleich noch einmal.',
+      fr: "L'assistant traite encore le message précédent. Réessayez dans un instant.",
+    },
+    conversation_not_found: {
+      en: 'The conversation expired. Retrying starts a new one (earlier context is lost).',
+      it: 'La conversazione è scaduta. Riprovando ne parte una nuova (il contesto precedente va perso).',
+      es: 'La conversación caducó. Al reintentar se inicia una nueva (se pierde el contexto anterior).',
+      de: 'Die Unterhaltung ist abgelaufen. Ein neuer Versuch startet eine neue (der bisherige Kontext geht verloren).',
+      fr: 'La conversation a expiré. Réessayer en démarre une nouvelle (le contexte précédent est perdu).',
+    },
+    message_too_long: {
+      en: 'The message is too long.',
+      it: 'Il messaggio è troppo lungo.',
+      es: 'El mensaje es demasiado largo.',
+      de: 'Die Nachricht ist zu lang.',
+      fr: 'Le message est trop long.',
+    },
+    invalid_request: {
+      en: 'The message was not accepted.',
+      it: 'Il messaggio non è stato accettato.',
+      es: 'El mensaje no fue aceptado.',
+      de: 'Die Nachricht wurde nicht akzeptiert.',
+      fr: "Le message n'a pas été accepté.",
+    },
+    turn_failed: {
+      en: 'The assistant could not answer. Try again.',
+      it: "L'assistente non è riuscito a rispondere. Riprova.",
+      es: 'El asistente no pudo responder. Inténtalo de nuevo.',
+      de: 'Der Assistent konnte nicht antworten. Versuche es erneut.',
+      fr: "L'assistant n'a pas pu répondre. Réessayez.",
+    },
+    internal_error: {
+      en: 'Something went wrong on the server. Try again.',
+      it: 'Qualcosa è andato storto sul server. Riprova.',
+      es: 'Algo salió mal en el servidor. Inténtalo de nuevo.',
+      de: 'Auf dem Server ist etwas schiefgelaufen. Versuche es erneut.',
+      fr: "Une erreur s'est produite sur le serveur. Réessayez.",
+    },
+    checking: {
+      en: 'Connection lost. Checking the server…',
+      it: 'Connessione persa. Controllo il server…',
+      es: 'Conexión perdida. Comprobando el servidor…',
+      de: 'Verbindung verloren. Server wird geprüft…',
+      fr: 'Connexion perdue. Vérification du serveur…',
+    },
+    lostReply: {
+      en: 'The message was processed, but the connection dropped before the reply arrived. The reply cannot be recovered; do not resend the message.',
+      it: 'Il messaggio è stato elaborato, ma la connessione è caduta prima dell’arrivo della risposta. La risposta non è recuperabile; non reinviare il messaggio.',
+      es: 'El mensaje se procesó, pero la conexión se cayó antes de recibir la respuesta. La respuesta no se puede recuperar; no vuelvas a enviar el mensaje.',
+      de: 'Die Nachricht wurde verarbeitet, aber die Verbindung brach ab, bevor die Antwort ankam. Die Antwort kann nicht wiederhergestellt werden; sende die Nachricht nicht erneut.',
+      fr: 'Le message a été traité, mais la connexion a été coupée avant l’arrivée de la réponse. La réponse est irrécupérable ; ne renvoyez pas le message.',
+    },
+    unreachable: {
+      en: 'The server is not responding. Check your connection or start a new chat.',
+      it: 'Il server non risponde. Controlla la connessione o avvia una nuova chat.',
+      es: 'El servidor no responde. Comprueba tu conexión o inicia un nuevo chat.',
+      de: 'Der Server antwortet nicht. Prüfe deine Verbindung oder starte einen neuen Chat.',
+      fr: 'Le serveur ne répond pas. Vérifiez votre connexion ou démarrez un nouveau chat.',
+    },
+  },
+};
