@@ -1,6 +1,7 @@
 import * as U from '@/utils';
-import { mapState, mapMutations } from 'vuex';
+import { mapMutations } from 'vuex';
 import { getTrailerVideos } from '@/features/auth/api/tmdbApi';
+import { FLAGS } from '@/data/flags';
 import VideoComp from '@/components/VideoComp';
 
 export default {
@@ -24,14 +25,21 @@ export default {
     };
   },
   computed: {
-    ...mapState(['flags']),
+    // bandiera della lingua originale, solo per le lingue supportate
+    flagSrc() {
+      return FLAGS[this.obj.original_language];
+    },
   },
   methods: {
     ...mapMutations(['pushFavuriteObj', 'removeFavuriteObj']),
     // *****
     async getData(id, isMovie) {
       try {
-        const response = await getTrailerVideos({ id, isMovie });
+        const response = await getTrailerVideos({
+          id,
+          isMovie,
+          language: this.$store.getters.tmdbLanguage,
+        });
 
         if (response.data.results.length > 0) {
           this.trailerKey = response.data.results[0].key;

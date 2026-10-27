@@ -28,11 +28,26 @@ export default {
       popularMov: [],
       popularSeries: [],
       imgSize: 'w780',
-      linksNavLf: ['Home', 'TV Series', 'Movies', 'New & Popular', 'My List'],
       showChatModal: false,
     };
   },
+  watch: {
+    // cambio lingua: ricarica i popolari e rilancia la ricerca in corso
+    language() {
+      this.getTrends('movie');
+      this.getTrends('tv');
+
+      if (this.query) {
+        this.$store.dispatch('getAllData');
+      }
+    },
+  },
   computed: {
+    linksNavLf() {
+      return ['home', 'tvSeries', 'movies', 'newPopular', 'myList'].map((k) =>
+        this.$t(`nav.${k}`),
+      );
+    },
     ...mapState([
       'favouriteMovies',
       'favouriteSeries',
@@ -66,7 +81,10 @@ export default {
     },
     async getTrends(type) {
       try {
-        const response = await getPopularTrends(type);
+        const response = await getPopularTrends(
+          type,
+          this.$store.getters.tmdbLanguage,
+        );
 
         if (
           response.data &&

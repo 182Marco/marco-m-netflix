@@ -4,10 +4,12 @@ const API_KEY = process.env.VUE_APP_TMDB_API_KEY || '';
 const BASE_URL =
   process.env.VUE_APP_TMDB_BASE_URL || 'https://api.themoviedb.org/3';
 
-export const getPopularTrends = async (type) => {
+const FALLBACK_LANGUAGE = 'en-US';
+
+export const getPopularTrends = async (type, language = FALLBACK_LANGUAGE) => {
   try {
     return axios.get(
-      `${BASE_URL}/${type}/popular?api_key=${API_KEY}&language=en-US&page=1`,
+      `${BASE_URL}/${type}/popular?api_key=${API_KEY}&language=${language}&page=1`,
     );
   } catch (error) {
     console.error('getPopularTrends error:', error);
@@ -15,14 +17,26 @@ export const getPopularTrends = async (type) => {
   }
 };
 
-export const getTrailerVideos = async ({ id, isMovie }) => {
+export const getTrailerVideos = async ({
+  id,
+  isMovie,
+  language = FALLBACK_LANGUAGE,
+}) => {
   const endpoint = isMovie ? '/movie' : '/tv';
-  const language = isMovie ? 'it-IT' : 'en-US';
+  const get = (lang) =>
+    axios.get(
+      `${BASE_URL}${endpoint}/${id}/videos?api_key=${API_KEY}&language=${lang}`,
+    );
 
   try {
-    return axios.get(
-      `${BASE_URL}${endpoint}/${id}/videos?api_key=${API_KEY}&language=${language}`,
-    );
+    const response = await get(language);
+
+    // spesso non ci sono trailer nella lingua scelta: si ripiega sull'inglese
+    if (response.data.results.length === 0 && language !== FALLBACK_LANGUAGE) {
+      return await get(FALLBACK_LANGUAGE);
+    }
+
+    return response;
   } catch (error) {
     console.error('getTrailerVideos error:', error);
     throw error;
