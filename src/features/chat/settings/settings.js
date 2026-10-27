@@ -48,7 +48,8 @@ export const buildPreferences = (fields, values) =>
     ? null
     : Object.fromEntries(fields.map((field) => [field.id, values[field.id]]));
 
-// lang: 'it-IT' | 'en-US' | ...
+// lang: codice breve ('en', 'it', 'es', ...); un tag ('it-IT') si accorcia.
+// Il backend manda ogni label in tutte le lingue; se manca si usa `en`.
 export const localize = (label, lang) =>
   label[`${lang}`.split('-')[0]] || label.en;
 
