@@ -20,7 +20,7 @@ export const initialState = () => ({
   nextId: 1,
   turn: null, // { userId, processId, answerId, content } del turno in corso
   turnStatus: 'idle', // idle | waiting | streaming
-  notice: null, // { code, message, retryable, tone }
+  notice: null, // { code, messageKey, retryable, tone }
   failedTurn: null, // { ids, content } se l'utente puo' riprovare
   movies: [],
   moviesPanelVisible: false,

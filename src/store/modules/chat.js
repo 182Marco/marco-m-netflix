@@ -42,11 +42,10 @@ const patch =
   (state, ...args) =>
     Object.assign(state, reducer[name](state, ...args));
 
-const LOST_REPLY =
-  'The message was processed, but the connection dropped before the reply arrived. The reply cannot be recovered; do not resend the message.';
+// chiavi in locales/texts.js (categoria errors)
+const LOST_REPLY = 'errors.lostReply';
 
-const UNREACHABLE =
-  'The server is not responding. Check your connection or start a new chat.';
+const UNREACHABLE = 'errors.unreachable';
 
 export default {
   namespaced: true,
@@ -235,7 +234,7 @@ export default {
         ...failure,
         retryable: false,
         tone: 'info',
-        message: 'Connection lost. Checking the server…',
+        messageKey: 'errors.checking',
       });
 
       const outcome = await waitUntilIdle({
@@ -253,14 +252,14 @@ export default {
       } else if (outcome.status === 'timeout') {
         commit('failTurn', {
           ...failure,
-          message: UNREACHABLE,
+          messageKey: UNREACHABLE,
           retryable: false,
         });
       } else if (outcome.turnsCompleted > turnsBefore) {
         commit('setTurnsCompleted', outcome.turnsCompleted);
         commit('failTurn', {
           ...failure,
-          message: LOST_REPLY,
+          messageKey: LOST_REPLY,
           retryable: false,
         });
       } else {

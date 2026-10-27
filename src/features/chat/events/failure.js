@@ -1,40 +1,46 @@
-// Messaggi per l'utente; `reconcile`: dopo questo errore il turno potrebbe
+// `messageKey`: chiave in locales/texts.js (tradotta al render, non qui); `reconcile`: dopo questo errore il turno potrebbe
 // essere comunque arrivato al server (si controlla con GET /conversations/{id}).
 const FAILURES = {
   network_error: {
-    message: 'Connection to the server lost.',
+    messageKey: 'errors.network_error',
+
     retryable: true,
     reconcile: true,
   },
   stream_interrupted: {
-    message: 'The reply was interrupted.',
+    messageKey: 'errors.stream_interrupted',
+
     retryable: true,
     reconcile: true,
   },
   turn_in_progress: {
-    message:
-      'The assistant is still working on the previous message. Try again in a moment.',
+    messageKey: 'errors.turn_in_progress',
+
     retryable: true,
   },
   conversation_not_found: {
-    message:
-      'The conversation expired. Retrying starts a new one (earlier context is lost).',
+    messageKey: 'errors.conversation_not_found',
+
     retryable: true,
   },
   message_too_long: {
-    message: 'The message is too long.',
+    messageKey: 'errors.message_too_long',
+
     retryable: false,
   },
   invalid_request: {
-    message: 'The message was not accepted.',
+    messageKey: 'errors.invalid_request',
+
     retryable: false,
   },
   turn_failed: {
-    message: 'The assistant could not answer. Try again.',
+    messageKey: 'errors.turn_failed',
+
     retryable: true,
   },
   internal_error: {
-    message: 'Something went wrong on the server. Try again.',
+    messageKey: 'errors.internal_error',
+
     retryable: true,
   },
 };
@@ -48,7 +54,7 @@ export const describeFailure = (error) => {
 
   return {
     code,
-    message: known.message,
+    messageKey: known.messageKey,
     retryable: Boolean(known.retryable),
     reconcile: Boolean(known.reconcile),
     tone: 'error',

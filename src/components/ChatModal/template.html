@@ -42,7 +42,7 @@
               v-else
               class="typing-dots"
               role="status"
-              aria-label="The assistant is working"
+              :aria-label="$t('chat.working')"
             >
               <span></span><span></span><span></span>
             </div>
@@ -62,11 +62,11 @@
               class="accordion-trigger"
               @click="toggleProcess(message.id)"
             >
-              <span class="agent-title">{{ message.title }}</span>
+              <span class="agent-title">{{ $t(message.titleKey) }}</span>
 
               <img
                 src="@/assets/img/chevron.svg"
-                alt="Toggle details"
+                :alt="$t('chat.toggleDetails')"
                 class="chevron"
                 :class="{ rotate: message.isOpen }"
               />
@@ -137,20 +137,20 @@
         :class="`is-${notice.tone}`"
         role="alert"
       >
-        <span class="chat-notice-text">{{ notice.message }}</span>
+        <span class="chat-notice-text">{{ $t(notice.messageKey) }}</span>
         <button
           v-if="failedTurn"
           type="button"
           class="chat-notice-btn"
           @click="retry"
         >
-          Retry
+          {{ $t('chat.retry') }}
         </button>
         <button
           v-if="notice.tone !== 'info'"
           type="button"
           class="chat-notice-btn"
-          aria-label="Dismiss"
+          :aria-label="$t('chat.dismiss')"
           @click="clearNotice"
         >
           ✕
@@ -165,7 +165,7 @@
             v-model.trim="currentMessage"
             type="text"
             class="chat-input"
-            placeholder="Type your message"
+            :placeholder="$t('chat.placeholder')"
             :maxlength="maxMessageChars"
             :disabled="isBusy"
             @keyup.enter.prevent="sendMessage"
@@ -177,7 +177,7 @@
             :disabled="isBusy"
             @click="sendMessage"
           >
-            <img src="@/assets/img/send.svg" alt="Send" />
+            <img src="@/assets/img/send.svg" :alt="$t('chat.send')" />
           </button>
         </div>
       </div>

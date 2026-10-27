@@ -1,5 +1,5 @@
 // Shape: { id, role: 'user' | 'assistant' | 'agent-process', text, timestamp,
-//          title?, isOpen?, entries?, attributions? }
+//          titleKey?, isOpen?, entries?, attributions? }
 const pad = (n) => `${n}`.padStart(2, '0');
 
 export const formatTime = (date) =>
@@ -21,7 +21,7 @@ export const buildTurn = (startId, content) => {
     messages: [
       createMessage(userId, 'user', content),
       createMessage(processId, 'agent-process', '', {
-        title: 'Agent Process',
+        titleKey: 'chat.agentProcess',
         isOpen: true,
         entries: [],
       }),
