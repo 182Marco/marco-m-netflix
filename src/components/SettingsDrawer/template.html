@@ -10,6 +10,7 @@
         type="button"
         class="settings-btn"
         aria-label="Default settings"
+        :disabled="!ready"
         @click="$emit('default-click')"
       >
         Default
@@ -19,6 +20,7 @@
         type="button"
         class="settings-btn"
         aria-label="Apply settings"
+        :disabled="!ready"
         @click="$emit('toggle')"
       >
         Apply

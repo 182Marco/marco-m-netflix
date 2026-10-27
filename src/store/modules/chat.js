@@ -141,7 +141,7 @@ export default {
       return creation;
     },
 
-    async send({ commit, dispatch, state }, rawContent) {
+    async send({ commit, dispatch, state, rootGetters }, rawContent) {
       const content = `${rawContent}`.trim();
 
       if (
@@ -186,8 +186,21 @@ export default {
 
       try {
         await streamMessage(id, content, {
+          // valori correnti della modale; null se la configurazione manca
+          preferences: rootGetters['chatSettings/preferences'],
           signal: stream.signal,
           onEvent: (event) => {
+            if (isCurrent() && event.name === 'turn_start') {
+              commit(
+                'chatSettings/alignIgnored',
+                {
+                  applied: event.data.preferences,
+                  ignored: event.data.ignored_preferences,
+                },
+                { root: true },
+              );
+            }
+
             const intent = eventToIntent(event);
 
             if (isCurrent() && intent) {

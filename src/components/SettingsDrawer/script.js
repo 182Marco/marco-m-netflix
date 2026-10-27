@@ -6,5 +6,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    // false finche' la configurazione non e' pronta
+    ready: {
+      type: Boolean,
+      default: false,
+    },
   },
 };

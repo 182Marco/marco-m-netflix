@@ -10,8 +10,12 @@
     <SettingsDrawer
       class="chat-settings-drawer"
       :open="isSettingsDrawerOpen"
+      :ready="isSettingsReady"
       @toggle="toggleSettingsDrawer"
-    />
+      @default-click="restoreDefaults"
+    >
+      <SettingsForm />
+    </SettingsDrawer>
 
     <div class="chat-main">
       <div ref="messagesContainer" class="messages-scroll">

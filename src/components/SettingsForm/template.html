@@ -1,0 +1,56 @@
+<form class="settings-form" @submit.prevent>
+  <p v-if="status === 'loading' || status === 'idle'" class="settings-status">
+    Loading settings…
+  </p>
+
+  <div v-else-if="status === 'error'" class="settings-status" role="alert">
+    <p>
+      Settings are not available. The chat still works with default options.
+    </p>
+    <button type="button" class="settings-retry" @click="retry">Retry</button>
+  </div>
+
+  <template v-else>
+    <div v-for="field in fields" :key="field.id" class="settings-field">
+      <div v-if="field.type === 'boolean'" class="settings-switch-row">
+        <button
+          type="button"
+          role="switch"
+          class="settings-switch"
+          :class="{ 'is-on': values[field.id] }"
+          :aria-checked="values[field.id] ? 'true' : 'false'"
+          :aria-label="localize(field.label, lang)"
+          @click="setValue({ id: field.id, value: !values[field.id] })"
+        >
+          <span class="settings-switch-knob"></span>
+        </button>
+        <span class="settings-label">{{ localize(field.label, lang) }}</span>
+      </div>
+
+      <template v-else>
+        <span :id="`setting-${field.id}`" class="settings-label">
+          {{ localize(field.label, lang) }}
+        </span>
+        <div
+          class="settings-segments"
+          role="radiogroup"
+          :aria-labelledby="`setting-${field.id}`"
+          :style="{ '--segments': field.options.length }"
+        >
+          <button
+            v-for="option in field.options"
+            :key="option.value"
+            type="button"
+            role="radio"
+            class="settings-segment"
+            :class="{ 'is-active': values[field.id] === option.value }"
+            :aria-checked="values[field.id] === option.value ? 'true' : 'false'"
+            @click="setValue({ id: field.id, value: option.value })"
+          >
+            {{ localize(option.label, lang) }}
+          </button>
+        </div>
+      </template>
+    </div>
+  </template>
+</form>

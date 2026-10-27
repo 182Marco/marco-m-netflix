@@ -44,7 +44,14 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding: 20px 4vw 24px;
-  background: radial-gradient(circle at 50% 45%, #526579 0%, #344454 25%, #1D2733 50%, #111922 72%, #080D12 100%);
+  background: radial-gradient(
+    circle at 50% 45%,
+    #526579 0%,
+    #344454 25%,
+    #1d2733 50%,
+    #111922 72%,
+    #080d12 100%
+  );
 }
 
 .message-row {
@@ -91,11 +98,14 @@
 }
 
 .is-user .message-bubble {
-  background-color: #0d6fff;
+  background-color: #F4F7FA;
+  span, p {
+    color: #11161d;
+  }
 }
 
 .is-assistant .message-bubble {
-  background-color: rgb(4, 107, 4);
+  background-color: $chat-assistant-bg;
 }
 
 .accordion-trigger {
@@ -125,11 +135,11 @@
     filter: brightness(0) saturate(100%) invert(72%);
 
     &.rotate {
-        transform: rotate(90deg);
+      transform: rotate(90deg);
     }
-}
+  }
 
-&:hover .chevron {
+  &:hover .chevron {
     opacity: 1;
     filter: grayscale(1) brightness(1.5);
     filter: brightness(0) invert(1);
@@ -139,7 +149,7 @@
 .chat-input-fixed {
   height: 76px;
   border-top: 1px solid rgba(63, 68, 75, 0.9);
-  background-color: #18232E;
+  background-color: #18232e;
 
   .chat-input-wrap {
     height: 100%;
@@ -172,24 +182,21 @@
   padding: 0;
   margin: 0 15px;
   cursor: pointer;
-  
-  
-  img {
-      height: 32px;
-      width: auto;
-      opacity: 0.8;
-      filter: brightness(70%) saturate(100%) invert(64%) sepia(98%) saturate(3500%)
-        hue-rotate(202deg) brightness(101%) contrast(105%);
-      transition: all 0.3s ease-in-out;
-      cursor: pointer;
 
-      &:hover {
-        opacity: 1;
-        transform: scale(1.1);
+  img {
+    height: 32px;
+    width: auto;
+    opacity: 0.8;
+    filter: brightness(70%) saturate(100%) invert(64%) sepia(98%) saturate(3500%) hue-rotate(140deg) brightness(130%) contrast(105%);
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+      transform: scale(1.1);
     }
 
     &:focus {
-        outline: none;
+      outline: none;
     }
   }
 }

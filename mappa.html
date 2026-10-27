@@ -507,7 +507,7 @@ add('src/App/style.scss', { ico: 'scss', tl: 'Stile della pagina e animazione di
 
 /* componenti */
 add('src/components', { kind: 'dir', ico: 'folder', tl: 'I pezzi di interfaccia, ognuno nella sua cartella.',
-  pts: ['Ogni cartella ha sempre gli stessi 4 file: <code>index.vue</code>, <code>template.html</code>, <code>script.js</code>, <code>style.scss</code>.', 'Parte "film": Card, List, PromoMovie, VideoComp, CloseXButton.', 'Parte "barra": HeaderComp, NavbarLeft, NavbarRight, LanguageSelector.', 'Parte "chat AI": ChatModal, ChatModalHeader, SettingsDrawer, MovieResultsPanel, VideoResultTile.'],
+  pts: ['Ogni cartella ha sempre gli stessi 4 file: <code>index.vue</code>, <code>template.html</code>, <code>script.js</code>, <code>style.scss</code>.', 'Parte "film": Card, List, PromoMovie, VideoComp, CloseXButton.', 'Parte "barra": HeaderComp, NavbarLeft, NavbarRight, LanguageSelector.', 'Parte "chat AI": ChatModal, ChatModalHeader, SettingsDrawer, SettingsForm, MovieResultsPanel, VideoResultTile.'],
   ex: 'Vuoi capire "cosa succede se clicco sulla lente?" → apri <code>NavbarRight</code>.' });
 
 comp('Card', {
@@ -607,13 +607,21 @@ comp('ChatModalHeader', {
   t: ['Una <code>&lt;nav&gt;</code> con logo e tre pulsanti.', 'Il pulsante settings ha <code>aria-pressed</code> per gli screen reader.'], tex: 'Il testo del pulsante cambia solo l\'etichetta accessibile (Open/Close settings).',
   s: ['Dichiara gli eventi: <code>close</code>, <code>reset-chat</code>, <code>toggle-settings</code>.', 'Prop <code>settingsOpen</code> per sapere lo stato.'], sex: 'Non decide nulla: avvisa solo il genitore.', scode: 'emits: [\'close\', \'reset-chat\', \'toggle-settings\']', c: ['Barra scura con pulsanti semplici.']
 });
+comp('SettingsForm', {
+  tl: 'Il form delle impostazioni, costruito dalla risposta di GET /settings.',
+  pts: ['Interruttore per i campi boolean, segmenti di pari larghezza per i campi choice.', 'Mostra "Loading" finché la configurazione non è pronta e "Retry" se il caricamento fallisce.', 'Etichette in italiano o inglese in base alla lingua scelta.'],
+  ex: 'Nessuna opzione o default è scritta nel frontend: arriva tutto dal backend.', flow: ['icona bot', 'GET /settings', 'SettingsForm', 'preferences nei messaggi'],
+  tip: 'Lo stato vive nello store (<code>chatSettings</code>), non nel componente.',
+  t: ['Un <code>&lt;form&gt;</code> con <code>v-for</code> sui campi.', 'Ruoli <code>switch</code> e <code>radiogroup</code> per l\'accessibilità.'], tex: 'Il colore attivo è la variabile SCSS delle bolle dell\'assistente.',
+  s: ['Legge <code>fields</code> e <code>values</code> dallo store.', 'Scrive con la mutation <code>setValue</code>.'], sex: 'Non invia richieste: lo fa lo store.', scode: 'mapMutations(\'chatSettings\', [\'setValue\'])', c: ['Segmenti con bordo sottile, hover tenue, attivo verde.']
+});
 comp('SettingsDrawer', {
   tl: 'Il pannello che scorre dal lato con le impostazioni del bot.',
-  pts: ['Ha i pulsanti <b>Default</b> e <b>Apply</b>.', 'Il contenuto è uno <code>&lt;slot&gt;</code>: oggi vuoto, pronto per ospitare le opzioni.', 'Compare/scompare con animazione di scivolamento.'],
+  pts: ['Ha i pulsanti <b>Default</b> e <b>Apply</b>.', 'Il contenuto è uno <code>&lt;slot&gt;</code> che ospita <code>SettingsForm</code>.', 'Compare/scompare con animazione di scivolamento.'],
   ex: 'In futuro: scegliere modello, "creatività", fonti da usare; Apply le invia con ogni messaggio.', flow: ['settings', 'SettingsDrawer', '(futuro) chatApi', 'bot'],
-  tip: 'Il clic su Default emette <code>default-click</code>, ma nessuno lo ascolta ancora.',
+  tip: 'Default ripristina i valori ricevuti da GET /settings, senza chiamate al backend.',
   t: ['<code>&lt;aside&gt;</code> con ruolo "dialog".', 'Testata con i due pulsanti e corpo con lo slot.'], tex: 'La transizione si chiama <code>settings-drawer-slide</code>.',
-  s: ['Prop <code>open</code> controlla se è visibile.', 'Eventi: <code>toggle</code> (Apply) e <code>default-click</code>.'], sex: 'Apply oggi chiude semplicemente il pannello.', scode: 'emits: [\'toggle\', \'default-click\']', c: ['Pannello laterale scuro; la chat si restringe per fargli posto.']
+  s: ['Prop <code>open</code> controlla se è visibile.', 'Eventi: <code>toggle</code> (Apply) e <code>default-click</code>.'], sex: 'Apply chiude il pannello e mantiene le preferenze correnti.', scode: 'emits: [\'toggle\', \'default-click\']', c: ['Pannello laterale scuro; la chat si restringe per fargli posto.']
 });
 
 /* store, api, utils, data, scss, assets */

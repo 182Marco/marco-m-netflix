@@ -46,6 +46,8 @@ export default {
     openAiChat() {
       // every opening starts a new conversation with the bot
       this.$store.dispatch('chat/startNewChat');
+      // GET /settings parte subito, cosi' il form e' pronto prima dell'apertura
+      this.$store.dispatch('chatSettings/load');
       this.showChatModal = true;
 
       if (typeof document !== 'undefined') {
@@ -55,6 +57,7 @@ export default {
     closeAiChat() {
       // closing ends the session: stream aborted, local state cleared
       this.$store.dispatch('chat/endChat');
+      this.$store.commit('chatSettings/reset');
       this.showChatModal = false;
 
       if (typeof document !== 'undefined') {

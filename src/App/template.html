@@ -6,7 +6,11 @@
     <!-- featured movie on jumbo -->
     <PromoMovie />
     <main class="main-content">
-      <List :title="`Movies matching your search`" v-show="movies.length > 0" class="matchingGrupFirst">
+      <List
+        :title="`Movies matching your search`"
+        v-show="movies.length > 0"
+        class="matchingGrupFirst"
+      >
         <Card v-for="el in movies" :key="el.id" :obj="el" />
       </List>
       <List :title="`Series matching your search`" v-show="series.length > 0">
@@ -31,7 +35,7 @@
         <Card v-for="el in favouriteSeries" :key="`favS_${el.id}`" :obj="el" />
       </List>
     </main>
-</div>
+  </div>
 
   <transition name="fade-chat-modal">
     <ChatModal v-if="showChatModal" @close="closeAiChat" />

@@ -23,12 +23,12 @@ The project reproduces the main browsing experience of a streaming platform, inc
 * Real-time answers streamed from the NetflixScout backend (Server-Sent Events), rendered as Markdown
 * Collapsible **Agent Process** panel that shows the bot's progress and steps live (retrieval, reranking, API calls, SQL), with data-source attributions; Wikipedia sources are shown with clickable page and licence links (CC BY-SA)
 * **Results window** above the input with the films and series the answer presents (reuses `Card` at 70% size; YouTube videos get a small tile). Results accumulate across turns without duplicates; it can be hidden and reopened
-* Settings drawer that slides in from the side (Default / Apply buttons, ready to host bot options)
+* Settings drawer that slides in from the side (Default / Apply buttons) with a form built from the backend `GET /settings`; the current preferences are sent with every message
 * Every opening of the chat, and the "New chat" button, starts a new conversation and clears the results; "close bot" ends the session
 * Auto-scroll to the latest message; page scroll is locked while the chat is open
 * The chat component is preloaded in idle time so it opens instantly
 
-> **Backend:** start the NetflixScout `web_api` (`uvicorn web_api.main:app --port 8000`, one worker) and set `VUE_APP_CHAT_API_URL` if it is not on `http://localhost:8000`. Settings from the drawer are not sent yet (the API has no settings field).
+> **Backend:** start the NetflixScout `web_api` (`uvicorn web_api.main:app --port 8000`, one worker) and set `VUE_APP_CHAT_API_URL` if it is not on `http://localhost:8000`. The settings form is built from `GET /settings`; if it fails the chat still works and messages go out without `preferences`.
 
 Search and content data are retrieved through requests to the public TMDB REST API. The backend service, including its database and data processing, is external to the project and is not under the application's control.
 
@@ -165,7 +165,7 @@ The application follows a component-based Vue architecture. Each component lives
 
 * `src/main.js` — Vue application bootstrap
 * `src/App/` — root component: loads popular lists and opens/closes the chat
-* `src/components/` — UI components (`Card`, `List`, `HeaderComp`, `NavbarLeft`, `NavbarRight`, `PromoMovie`, `VideoComp`, `LanguageSelector`, `CloseXButton`, and the chat: `ChatModal`, `ChatModalHeader`, `SettingsDrawer`, `MovieResultsPanel`, `VideoResultTile`)
+* `src/components/` — UI components (`Card`, `List`, `HeaderComp`, `NavbarLeft`, `NavbarRight`, `PromoMovie`, `VideoComp`, `LanguageSelector`, `CloseXButton`, and the chat: `ChatModal`, `ChatModalHeader`, `SettingsDrawer`, `SettingsForm`, `MovieResultsPanel`, `VideoResultTile`)
 * `src/store/` — Vuex state (search, favourites, language, navbar colour) and the `chat` module (`modules/chat.js`)
 * `src/features/chat/` — chat client: HTTP (`api/`), SSE parser (`sse/`), event handling (`events/`), pure state transitions (`state/`), messages and Markdown (`messages/`), film list (`movies/`), reconnection (`session/`)
 * `src/features/auth/api/` — all TMDB API calls (`tmdbApi.js`)

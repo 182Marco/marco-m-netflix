@@ -65,7 +65,7 @@ When adding a component, copy this structure. Import it as `@/components/Name` (
 - Prettier: 2 spaces, single quotes, semicolons, trailing commas, 80 cols (`.prettierrc`). Run `npm run format` on files you touch.
 - **Two generations of code coexist on purpose:**
   - Original components (`Card`, `List`, `HeaderComp`, `NavbarLeft`, `NavbarRight`, `PromoMovie`, `VideoComp`, store) use **Options API** and a Vue 2 style, kept intentionally as a record of the author's progress. Do **not** refactor them for modernisation alone.
-  - **New work (AI chat: `ChatModal`, `ChatModalHeader`, `SettingsDrawer`, `MovieResultsPanel`, `VideoResultTile`, `features/chat`, and future code) uses modern Vue 3 practices** — `emits` declared, `modelValue`/`update:modelValue`, `beforeUnmount`. Prefer these for anything new.
+  - **New work (AI chat: `ChatModal`, `ChatModalHeader`, `SettingsDrawer`, `SettingsForm`, `MovieResultsPanel`, `VideoResultTile`, `features/chat`, and future code) uses modern Vue 3 practices** — `emits` declared, `modelValue`/`update:modelValue`, `beforeUnmount`. Prefer these for anything new.
 - Keep comments consistent with the surrounding file (existing ones are short, sometimes Italian).
 - Guard browser globals with `typeof window/document !== 'undefined'` as existing code does.
 
@@ -98,7 +98,8 @@ Layers (each in its own file, mostly pure functions):
 | Film list (flatten, dedupe, Card adapter) | `features/chat/movies/mergeMovies.js` |
 | Reconciliation after a disconnect | `features/chat/session/reconcile.js` |
 | Vuex module `chat` (thin actions) | `store/modules/chat.js` |
-| UI | `ChatModal`, `ChatModalHeader`, `SettingsDrawer`, `MovieResultsPanel`, `VideoResultTile` |
+| Settings (normalize, defaults, preferences) | `features/chat/settings/settings.js`, `store/modules/chatSettings.js` |
+| UI | `ChatModal`, `ChatModalHeader`, `SettingsDrawer`, `SettingsForm`, `MovieResultsPanel`, `VideoResultTile` |
 
 Lifecycle: opening the modal (`App.openAiChat`) dispatches `chat/startNewChat` (new conversation); closing (`App.closeAiChat`) dispatches `chat/endChat` (abort stream, best-effort `DELETE`, clear state). "New chat" does the same as opening. **Session guard:** `state.sessionId` changes on every start/end; every async callback captures it via `sessionGuard` and must ignore stale results. Keep this when adding async code.
 
@@ -108,7 +109,7 @@ Film window: `movies` (single list, newest first, deduped by `key`) and `moviesP
 
 Tests: there is no test runner. The pure modules and the store were verified with throwaway Node scripts (Node 22, `--experimental-default-type=module`, fake `fetch`), which is why files under `features/chat` and `store/modules/chat.js` import each other with relative paths and explicit `.js` extensions. Keep that.
 
-Settings from `SettingsDrawer` are not sent yet (the contract has no settings field).
+Settings: `GET /settings` is the only source of fields, options, labels and defaults (`NetflixScout/web_api/contracts/settings.md`). `App.openAiChat` dispatches `chatSettings/load` (once per chat entry; repeated calls are no-ops), `closeAiChat` commits `chatSettings/reset`. The `chatSettings` module is separate from `chat` on purpose: `chat/resetChat` wipes the whole `chat` state. Pure helpers live in `features/chat/settings/settings.js`; the form is `SettingsForm` (inside the `SettingsDrawer` slot). `chat/send` passes `chatSettings/preferences` to `streamMessage` on every turn (`null` when the config is missing: the field is omitted) and realigns only `ignored_preferences` from `turn_start`. "New chat" restores the defaults without refetching. Never hardcode options, labels or defaults.
 
 ## Before finishing a task
 

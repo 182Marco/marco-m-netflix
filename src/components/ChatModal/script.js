@@ -1,6 +1,7 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 import ChatModalHeader from '@/components/ChatModalHeader';
 import SettingsDrawer from '@/components/SettingsDrawer';
+import SettingsForm from '@/components/SettingsForm';
 import MovieResultsPanel from '@/components/MovieResultsPanel';
 import { MAX_MESSAGE_CHARS } from '@/features/chat/config';
 import { renderMarkdown } from '@/features/chat/messages/markdown';
@@ -16,6 +17,7 @@ export default {
   components: {
     ChatModalHeader,
     SettingsDrawer,
+    SettingsForm,
     MovieResultsPanel,
   },
 
@@ -37,6 +39,7 @@ export default {
       'moviesPanelVisible',
     ]),
     ...mapGetters('chat', ['isBusy']),
+    ...mapGetters('chatSettings', { isSettingsReady: 'isReady' }),
   },
 
   watch: {
@@ -59,6 +62,7 @@ export default {
 
   methods: {
     ...mapActions('chat', ['send', 'retry', 'startNewChat']),
+    ...mapMutations('chatSettings', ['restoreDefaults']),
     ...mapMutations('chat', [
       'toggleProcess',
       'clearNotice',
@@ -75,6 +79,8 @@ export default {
 
     resetChat() {
       this.currentMessage = '';
+      // nuovo contesto: preferenze ai default, schema gia' caricato
+      this.restoreDefaults();
       this.startNewChat();
     },
 
@@ -131,8 +137,8 @@ export default {
 
     scrollAllOpenProcessesToBottom() {
       this.messages
-        .filter(message => message.role === 'agent-process' && message.isOpen)
-        .forEach(message => {
+        .filter((message) => message.role === 'agent-process' && message.isOpen)
+        .forEach((message) => {
           this.scrollProcessToBottom(message.id);
         });
     },

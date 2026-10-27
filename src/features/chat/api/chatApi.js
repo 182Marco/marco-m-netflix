@@ -32,6 +32,8 @@ const request = async (path, options) => {
   return response;
 };
 
+export const getSettings = () => request('/settings').then((res) => res.json());
+
 const conversationPath = (id) => `/conversations/${encodeURIComponent(id)}`;
 
 export const createConversation = () =>
@@ -68,11 +70,15 @@ const readEvents = async (body, onEvent) => {
 };
 
 // risolve quando lo stream si chiude; onEvent riceve { name, data }
-export const streamMessage = async (id, content, { signal, onEvent }) => {
+export const streamMessage = async (
+  id,
+  content,
+  { preferences, signal, onEvent },
+) => {
   const response = await request(`${conversationPath(id)}/messages`, {
     method: 'POST',
     headers: JSON_HEADERS,
-    body: JSON.stringify({ content }),
+    body: JSON.stringify(preferences ? { content, preferences } : { content }),
     signal,
   });
 
