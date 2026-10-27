@@ -5,6 +5,10 @@
   flex-direction: column;
   gap: 38px;
   min-width: 0;
+
+  @media (max-width: 500px) {
+    gap: 25px;
+  }
 }
 
 .settings-field {
@@ -113,6 +117,10 @@
   overflow-wrap: anywhere;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
+
+  @media (max-width: 500px) {
+    min-height: unset;
+  }
 
   &:first-child {
     border-left: 0;

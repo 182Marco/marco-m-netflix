@@ -5,7 +5,7 @@ import NavbarRight from '@/components/NavbarRight';
 export default {
   // TODO ON HEADER   :class="{ transparent: transparent, fillBlack: fillBlack }"
   name: 'HeaderComp',
-  emits: ['open-ai-chat'],
+  emits: ['open-ai-chat', 'go-home'],
   props: {},
   components: {
     NavbarRight,

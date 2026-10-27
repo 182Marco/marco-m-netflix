@@ -13,8 +13,10 @@ The project reproduces the main browsing experience of a streaming platform, inc
 * Live search by title (movies and series together, as you type)
 * Interface language selector (EN / IT / ES / DE / FR, with SVG flags): every UI text switches language and the TMDB calls (popular lists, search, trailers) use the matching `language` tag
 * Card preview with poster, star rating (1-5), synopsis, release date and original language flag
-* Trailer playback (YouTube embed)
-* Favourites lists for movies and series (add / remove from the card)
+* Trailer playback (YouTube embed) with a large, always-visible round close button (top right) so it is obvious the trailer can be closed, even after YouTube goes fullscreen
+* Favourites lists for movies and series (add / remove from the card); while empty, **My List** shows a dashed placeholder with a hint
+* Working navbar links: Home, TV Series, Movies, New & Popular and My List scroll smoothly to their section (the list title stops 15px under the fixed header); clicking the logo scrolls back to the top
+* Gift and bell menus in the navbar (`NotificationMenu`): the bell has a red "1" badge until opened, and the message about the new AI bot opens the search like the magnifier
 * Header that changes colour on scroll
 
 **AI chat assistant — "Netflix Scout"** *(new)*
@@ -22,7 +24,7 @@ The project reproduces the main browsing experience of a streaming platform, inc
 * Chat window opened from the AI icon next to the search bar
 * Real-time answers streamed from the NetflixScout backend (Server-Sent Events), rendered as Markdown
 * Collapsible **Agent Process** panel that shows the bot's progress and steps live (retrieval, reranking, API calls, SQL), with data-source attributions; Wikipedia sources are shown with clickable page and licence links (CC BY-SA)
-* **Results window** above the input with the films and series the answer presents (reuses `Card` at 70% size; YouTube videos get a small tile). Results accumulate across turns without duplicates; it can be hidden and reopened
+* **Results window** above the input with the films and series the answer presents (reuses `Card` at 70% size; YouTube videos get a small tile). Results accumulate across turns without duplicates; it works as an accordion (header with count and chevron) that can be collapsed and reopened
 * Settings drawer that slides in from the side (Default / Apply buttons) with a form built from the backend `GET /settings`; the current preferences are sent with every message
 * Every opening of the chat, and the "New chat" button, starts a new conversation and clears the results; "close bot" ends the session
 * Auto-scroll to the latest message; page scroll is locked while the chat is open
@@ -164,8 +166,8 @@ npm run lint
 The application follows a component-based Vue architecture. Each component lives in its own folder with `index.vue`, `template.html`, `script.js` and `style.scss`.
 
 * `src/main.js` — Vue application bootstrap
-* `src/App/` — root component: loads popular lists and opens/closes the chat
-* `src/components/` — UI components (`Card`, `List`, `HeaderComp`, `NavbarLeft`, `NavbarRight`, `PromoMovie`, `VideoComp`, `LanguageSelector`, `CloseXButton`, and the chat: `ChatModal`, `ChatModalHeader`, `SettingsDrawer`, `SettingsForm`, `MovieResultsPanel`, `VideoResultTile`)
+* `src/App/` — root component: loads popular lists, opens/closes the chat, handles the navbar links (smooth scroll to each list) and the empty "My List" placeholder
+* `src/components/` — UI components (`Card`, `List`, `HeaderComp`, `NavbarLeft`, `NavbarRight`, `PromoMovie`, `VideoComp`, `LanguageSelector`, `NotificationMenu`, `CloseXButton`, and the chat: `ChatModal`, `ChatModalHeader`, `SettingsDrawer`, `SettingsForm`, `MovieResultsPanel`, `VideoResultTile`)
 * `locales/` — all UI texts in one object (`texts.js`: categories × `en`/`it`/`es`/`de`/`fr`) and the supported-languages list; imported through the `@locales` alias. Use `$t('category.key')` in components; never hardcode visible strings
 * `src/store/` — Vuex state (search, favourites, language code, navbar colour; getters `t` and `tmdbLanguage`) and the `chat` module (`modules/chat.js`)
 * `src/features/chat/` — chat client: HTTP (`api/`), SSE parser (`sse/`), event handling (`events/`), pure state transitions (`state/`), messages and Markdown (`messages/`), film list (`movies/`), reconnection (`session/`)

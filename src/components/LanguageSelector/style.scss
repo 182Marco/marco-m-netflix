@@ -90,6 +90,7 @@
   color: $white;
 
   transition: all 0.15s ease;
+  cursor: pointer;
 
   &:hover {
     background: $btnCol;

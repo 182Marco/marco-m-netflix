@@ -26,20 +26,26 @@
         class="fas fa-search"
       ></i>
     </li>
+    <NotificationMenu
+      icon="fas fa-gift"
+      :label="$t('navbar.gifts')"
+      :open="openMenu === 'gift'"
+      @toggle="toggleMenu('gift')"
+      @close="openMenu = null"
+      @select="openSearchFromMenu"
+    />
+    <NotificationMenu
+      icon="fas fa-bell"
+      :label="$t('navbar.notifications')"
+      :open="openMenu === 'bell'"
+      :badge="!bellSeen"
+      @toggle="toggleMenu('bell')"
+      @close="openMenu = null"
+      @select="openSearchFromMenu"
+    />
     <li class="tablet">
       <a href="#">
-        <i class="fas fa-gift"></i>
-      </a>
-    </li>
-    <li class="tablet">
-      <a href="#">
-        <i class="fas fa-bell"></i>
-      </a>
-    </li>
-    <li class="tablet">
-      <a href="#" class="withArrow">
         <img src="@/assets/img/marcoMilza.webp" :alt="$t('navbar.authorAlt')" />
-        <div class="arrow"></div>
       </a>
     </li>
   </ul>

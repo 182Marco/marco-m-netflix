@@ -12,63 +12,69 @@
   background-color: #18232e;
 }
 
-.results-window {
-  max-height: 50vh;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: 0 4vw 8px;
-}
-
-.results-header {
-  position: relative;
-  height: 34px;
-}
-
-.results-title {
-  margin: 0;
-  line-height: 34px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: rgba(238, 245, 255, 0.9);
-}
-
-// CloseXButton positions its icon absolutely: anchor it to the top right
-.results-close {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 20px;
-  height: 34px;
-
-  :deep(.x-close-btn.header-modal-close) {
-    top: 8px;
-    right: 0;
-  }
-}
-
-.results-reopen {
+.results-toggle {
   @include flex(row, flex-start, center);
   gap: 8px;
-  height: 32px;
+  width: 100%;
+  height: 40px;
   padding: 0 4vw;
   border: 0;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.04);
   color: rgba(238, 245, 255, 0.9);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
+  text-align: left;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 
+  &:hover {
+    background: rgba(255, 255, 255, 0.09);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(238, 245, 255, 0.7);
+    outline-offset: -2px;
+  }
+
+  // Chevron on the right: down when open, rotated when collapsed
   .chevron {
     width: 14px;
     height: auto;
-    transform: rotate(-90deg);
+    margin-left: auto;
     filter: brightness(0) invert(1);
-    opacity: 0.7;
+    opacity: 0.8;
+    transform: rotate(180deg);
+    transition: transform 0.25s ease, opacity 0.2s ease;
   }
 
   &:hover .chevron {
     opacity: 1;
   }
+}
+
+.is-open .results-toggle .chevron {
+  transform: rotate(0deg);
+}
+
+.results-title {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.results-count {
+  min-width: 20px;
+  padding: 1px 7px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.14);
+  font-size: 0.72rem;
+  line-height: 16px;
+  text-align: center;
+}
+
+.results-window {
+  max-height: 50vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 8px 4vw;
 }
 
 .results-collapse-enter-active,

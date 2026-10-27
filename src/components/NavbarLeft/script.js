@@ -3,4 +3,5 @@ export default {
   props: {
     links: Array,
   },
+  emits: ['select'],
 };

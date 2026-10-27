@@ -1,0 +1,25 @@
+<li ref="root" class="notification-menu tablet">
+  <button
+    type="button"
+    class="trigger"
+    :aria-label="label"
+    :aria-expanded="open"
+    @click="$emit('toggle')"
+  >
+    <i :class="icon"></i>
+    <span v-if="badge" class="badge">1</span>
+  </button>
+  <transition name="drop">
+    <div v-if="open" class="dropdown" role="menu">
+      <button
+        type="button"
+        class="item"
+        role="menuitem"
+        @click="$emit('select')"
+      >
+        <img src="@/assets/img/logoIA.svg" alt="" class="item-icon" />
+        <span class="item-text">{{ $t('navbar.botNotification') }}</span>
+      </button>
+    </div>
+  </transition>
+</li>

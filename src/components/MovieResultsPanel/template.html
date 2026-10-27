@@ -1,17 +1,24 @@
-<section class="movie-results" aria-label="Movie results">
-  <transition name="results-collapse">
-    <div v-show="open" class="results-window">
-      <header class="results-header">
-        <h3 class="results-title">Results</h3>
-        <div class="results-close">
-          <CloseXButton
-            button-class="header-modal-close"
-            aria-label="Hide results"
-            @click="$emit('close')"
-          />
-        </div>
-      </header>
+<section class="movie-results" :class="{ 'is-open': open }">
+  <button
+    type="button"
+    class="results-toggle"
+    :aria-expanded="open"
+    aria-controls="movie-results-window"
+    @click="$emit(open ? 'close' : 'open')"
+  >
+    <span class="results-title">{{ $t('results.title') }}</span>
+    <span class="results-count">{{ items.length }}</span>
+    <img src="@/assets/img/chevron.svg" alt="" class="chevron" />
+  </button>
 
+  <transition name="results-collapse">
+    <div
+      v-show="open"
+      id="movie-results-window"
+      class="results-window"
+      role="region"
+      :aria-label="$t('results.region')"
+    >
       <List>
         <template v-for="item in items" :key="item.key">
           <Card v-if="isCard(item)" :obj="item" compact />
@@ -20,15 +27,4 @@
       </List>
     </div>
   </transition>
-
-  <button
-    v-show="!open"
-    type="button"
-    class="results-reopen"
-    aria-label="Show results"
-    @click="$emit('open')"
-  >
-    <img src="@/assets/img/chevron.svg" alt="" class="chevron" />
-    <span>Results ({{ items.length }})</span>
-  </button>
 </section>

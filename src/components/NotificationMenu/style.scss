@@ -1,0 +1,106 @@
+/* parcials */
+@import '@/scss/var';
+
+.notification-menu {
+  position: relative;
+
+  .trigger {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: $white;
+    font-size: 1.3rem;
+    cursor: pointer;
+  }
+
+  .badge {
+    position: absolute;
+    top: -7px;
+    right: -9px;
+    box-sizing: border-box;
+    min-width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background-color: $brand;
+    color: $white;
+    font-family: $main-font;
+    font-size: 0.65rem;
+    font-weight: bold;
+    line-height: 17px;
+    text-align: center;
+    box-shadow: 0 0 0 2px $header-col1;
+    pointer-events: none;
+  }
+
+  .dropdown {
+    position: absolute;
+    z-index: 20;
+    top: calc(100% + 16px);
+    right: -14px;
+    width: 300px;
+    max-width: calc(100vw - 32px);
+    padding: 6px;
+    background-color: rgba($header-col2, 0.97);
+    border: 1px solid rgba($white, 0.1);
+    border-top: 2px solid $brand;
+    border-radius: 6px;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.6);
+    transform-origin: top right;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      right: 18px;
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-bottom: 7px solid $brand;
+    }
+  }
+
+  .item {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    color: $SearchTxtCol;
+    font-family: $main-font;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: rgba($white, 0.08);
+    }
+  }
+
+  .item-icon {
+    flex: none;
+    width: 30px;
+    margin-right: 12px;
+  }
+
+  .item-text {
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  .drop-enter-active,
+  .drop-leave-active {
+    transition: opacity 0.18s ease, transform 0.18s ease;
+  }
+
+  .drop-enter-from,
+  .drop-leave-to {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+}

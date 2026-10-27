@@ -3,11 +3,13 @@
     <div class="wrap-logoNav">
       <img
         class="tablet"
+        @click="$emit('go-home')"
         src="@/assets/img/brand.svg"
         :alt="$t('header.logoAlt')"
       />
       <img
         class="mobile"
+        @click="$emit('go-home')"
         src="@/assets/img/netflix.png"
         :alt="$t('header.logoAlt')"
       />

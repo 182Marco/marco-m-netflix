@@ -95,6 +95,20 @@ export const TEXTS = {
       de: 'Deine Lieblingsserien',
       fr: 'Votre liste de séries favorites',
     },
+    favEmpty: {
+      en: 'Your favourite list is still empty',
+      it: 'La tua lista dei preferiti è ancora vuota',
+      es: 'Tu lista de favoritos todavía está vacía',
+      de: 'Deine Favoritenliste ist noch leer',
+      fr: 'Votre liste de favoris est encore vide',
+    },
+    favEmptyHint: {
+      en: 'Tap the + on a title to save it here',
+      it: 'Premi il + su un titolo per salvarlo qui',
+      es: 'Pulsa el + en un título para guardarlo aquí',
+      de: 'Tippe bei einem Titel auf das +, um ihn hier zu speichern',
+      fr: 'Appuyez sur le + d’un titre pour l’ajouter ici',
+    },
   },
 
   header: {
@@ -122,6 +136,27 @@ export const TEXTS = {
       es: 'Autor de la app',
       de: 'Autor der App',
       fr: "Auteur de l'application",
+    },
+    notifications: {
+      en: 'Notifications',
+      it: 'Notifiche',
+      es: 'Notificaciones',
+      de: 'Benachrichtigungen',
+      fr: 'Notifications',
+    },
+    gifts: {
+      en: 'Gifts',
+      it: 'Regali',
+      es: 'Regalos',
+      de: 'Geschenke',
+      fr: 'Cadeaux',
+    },
+    botNotification: {
+      en: 'There is a new AI bot to help you pick a movie or get cinema info. Click the AI symbol inside the search.',
+      it: "C'è un nuovo bot IA per scegliere un film o avere info sul cinema. Clicca sul simbolo IA dentro la ricerca.",
+      es: 'Hay un nuevo bot de IA para elegir una película u obtener información sobre cine. Haz clic en el símbolo IA dentro de la búsqueda.',
+      de: 'Es gibt einen neuen KI-Bot, der dir bei der Filmauswahl hilft und Kinoinfos liefert. Klicke in der Suche auf das KI-Symbol.',
+      fr: 'Il y a un nouveau bot IA pour choisir un film ou obtenir des infos sur le cinéma. Cliquez sur le symbole IA dans la recherche.',
     },
     language: {
       en: 'Language',

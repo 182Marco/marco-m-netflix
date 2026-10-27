@@ -29,6 +29,7 @@ export default {
       popularSeries: [],
       imgSize: 'w780',
       showChatModal: false,
+      myListPulse: false,
     };
   },
   watch: {
@@ -44,8 +45,16 @@ export default {
   },
   computed: {
     linksNavLf() {
-      return ['home', 'tvSeries', 'movies', 'newPopular', 'myList'].map((k) =>
-        this.$t(`nav.${k}`),
+      return ['home', 'tvSeries', 'movies', 'newPopular', 'myList'].map(
+        (k) => ({
+          key: k,
+          label: this.$t(`nav.${k}`),
+        }),
+      );
+    },
+    isMyListEmpty() {
+      return (
+        this.favouriteMovies.length === 0 && this.favouriteSeries.length === 0
       );
     },
     ...mapState([
@@ -58,6 +67,57 @@ export default {
     ]),
   },
   methods: {
+    onNavSelect(key) {
+      if (key === 'home') {
+        this.scrollToTop();
+      } else if (key === 'tvSeries') {
+        this.scrollToTitle('popularSeries');
+      } else if (key === 'movies' || key === 'newPopular') {
+        this.scrollToTitle('popularMovies');
+      } else if (key === 'myList') {
+        this.scrollToMyList();
+      }
+    },
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    // titolo della lista a 15px sotto l'header fisso
+    scrollToTitle(refName) {
+      const list = this.$refs[refName];
+      const title = list && list.$el && list.$el.querySelector('h2');
+      const header = document.querySelector('header');
+
+      if (!title) {
+        return;
+      }
+
+      const top =
+        title.getBoundingClientRect().top +
+        window.scrollY -
+        (header ? header.offsetHeight : 0) -
+        15;
+
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    },
+    // scorre in fondo fino alla lista dei preferiti (anche se vuota)
+    scrollToMyList() {
+      const el = this.$refs.myList;
+
+      if (!el || typeof el.scrollIntoView !== 'function') {
+        return;
+      }
+
+      el.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      // pulse ritriggerabile: riparte anche con click ravvicinati
+      this.myListPulse = false;
+      clearTimeout(this.pulseTimer);
+      this.$nextTick(() => {
+        this.myListPulse = true;
+        this.pulseTimer = setTimeout(() => {
+          this.myListPulse = false;
+        }, 2200);
+      });
+    },
     openAiChat() {
       // every opening starts a new conversation with the bot
       this.$store.dispatch('chat/startNewChat');
@@ -108,6 +168,7 @@ export default {
     },
   },
   beforeUnmount() {
+    clearTimeout(this.pulseTimer);
     window.removeEventListener('scroll', this.handleScroll);
 
     if (typeof document !== 'undefined') {

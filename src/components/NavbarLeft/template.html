@@ -1,7 +1,9 @@
 <nav>
   <ul>
-    <li v-for="(link, i) in links" :key="i">
-      <a href="#">{{ link }}</a>
+    <li v-for="link in links" :key="link.key">
+      <a href="#" @click.prevent="$emit('select', link.key)"
+        >{{ link.label }}</a
+      >
     </li>
   </ul>
 </nav>

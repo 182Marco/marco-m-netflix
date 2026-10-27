@@ -18,6 +18,8 @@ A front-end-only Netflix clone (Vue 3 + Vuex 4, Vue CLI) that reads data from th
 
 There is no test suite. Verify changes with `npm run lint` and `npm run build`, and by running the app when UI is touched.
 
+Before running any npm script, check `node -v` is 22 (the shell may default to 16; nvm has v22 under `~/.nvm/versions/node`). `npm run lint` and `npm run build` fail on older Node, and a failed or even successful `npm run build` rewrites the committed `dist/`: afterwards restore it with `git checkout -- dist && git clean -fdq dist` unless the task is a deploy.
+
 ## Environment
 
 Copy `.env.example` to `.env` and fill in:
@@ -67,7 +69,7 @@ When adding a component, copy this structure. Import it as `@/components/Name` (
 - Prettier: 2 spaces, single quotes, semicolons, trailing commas, 80 cols (`.prettierrc`). Run `npm run format` on files you touch.
 - **Two generations of code coexist on purpose:**
   - Original components (`Card`, `List`, `HeaderComp`, `NavbarLeft`, `NavbarRight`, `PromoMovie`, `VideoComp`, store) use **Options API** and a Vue 2 style, kept intentionally as a record of the author's progress. Do **not** refactor them for modernisation alone.
-  - **New work (AI chat: `ChatModal`, `ChatModalHeader`, `SettingsDrawer`, `SettingsForm`, `MovieResultsPanel`, `VideoResultTile`, `features/chat`, and future code) uses modern Vue 3 practices** — `emits` declared, `modelValue`/`update:modelValue`, `beforeUnmount`. Prefer these for anything new.
+  - **New work (`NotificationMenu`, AI chat: `ChatModal`, `ChatModalHeader`, `SettingsDrawer`, `SettingsForm`, `MovieResultsPanel`, `VideoResultTile`, `features/chat`, and future code) uses modern Vue 3 practices** — `emits` declared, `modelValue`/`update:modelValue`, `beforeUnmount`. Prefer these for anything new.
 - Keep comments consistent with the surrounding file (existing ones are short, sometimes Italian).
 - Guard browser globals with `typeof window/document !== 'undefined'` as existing code does.
 
@@ -85,6 +87,10 @@ When adding a component, copy this structure. Import it as `@/components/Name` (
 - `ChatModal` toggles `document.body.style.overflow` through `App`; keep it restored on close/unmount.
 - `App/style.scss` has a global `section { padding: 0 5vw }`; new components should not use `<section>` without resetting it.
 - `List` hides its title row when no `title` is passed (used by `MovieResultsPanel`).
+- Navbar links: `App.linksNavLf` is `[{ key, label }]`; `NavbarLeft` emits `select` with the `key` and `App.onNavSelect` scrolls (Home -> top, TV Series -> `popularSeries` title, Movies/New & Popular -> `popularMovies` title, both 15px under the fixed header; My List -> `myList` block with a `myListPulse` glow). `HeaderComp` emits `go-home` on logo click. A new link needs its `nav.*` text and a case in `onNavSelect`.
+- "My List": while both favourites lists are empty, `App` shows one `List` with the `.fav-empty` placeholder (`list.favEmpty` / `list.favEmptyHint`) instead of the two favourites lists.
+- `NotificationMenu` (gift and bell in `NavbarRight`): props `icon`, `label`, `open`, `badge`; emits `toggle`, `select`, `close`. `NavbarRight` owns `openMenu` (one open at a time) and `bellSeen` (hides the "1" badge); `select` opens the search like the magnifier. The text comes from `navbar.botNotification`; the profile photo has no arrow any more.
+- `CloseXButton` is used only by `VideoComp` (the old `header-modal-close` variant has no users, `MovieResultsPanel` no longer uses it). Its base size must not change: the trailer's big round close button (64px, top right) is applied from `VideoComp/style.scss` with `:deep()`. `MovieResultsPanel` is now an accordion: the toggle header (title, count, chevron) emits `open` / `close`.
 - `dist/` is committed build output and `deploy.sh` publishes it; don't hand-edit it. `main` (empty file) at the repo root is a stray artifact.
 - `netlify.toml` still says Node 16 while the project requires Node 22; fix it if you touch deployment.
 

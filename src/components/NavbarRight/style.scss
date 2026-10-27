@@ -42,10 +42,6 @@ ul {
         width: 26px;
         display: inline-block;
       }
-      .arrow {
-        @include equilateral-triangle(down, 5px, $white);
-        margin-left: 4px;
-      }
     }
     i,
     select {

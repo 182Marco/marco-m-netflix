@@ -1,12 +1,14 @@
 import { mapMutations, mapState, mapActions } from 'vuex';
 // components
 import LanguageSelector from '@/components/LanguageSelector';
+import NotificationMenu from '@/components/NotificationMenu';
 
 export default {
   name: 'NavbarRight',
   emits: ['open-ai-chat'],
   components: {
     LanguageSelector,
+    NotificationMenu,
   },
   mounted() {
     const preload = () => import('@/components/ChatModal');
@@ -22,6 +24,8 @@ export default {
     return {
       showSearch: false,
       navCol: false,
+      openMenu: null,
+      bellSeen: false,
     };
   },
   computed: {
@@ -49,6 +53,19 @@ export default {
     putFocus() {
       this.showSearch = !this.showSearch;
       setTimeout(() => this.$refs.input.focus(), 10);
+    },
+    toggleMenu(name) {
+      if (name === 'bell') this.bellSeen = true;
+      this.openMenu = this.openMenu === name ? null : name;
+    },
+    // come il click sulla lente, ma senza richiuderla se è già aperta
+    openSearchFromMenu() {
+      this.openMenu = null;
+      this.bellSeen = true;
+      if (!this.showSearch) {
+        this.putFocus();
+        this.$store.dispatch('changeColNav');
+      }
     },
     sengaPosto() {
       console.log('funzione da scrivere chiamata');
