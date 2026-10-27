@@ -20,10 +20,13 @@ export default {
     },
     ariaLabel: {
       type: String,
-      default: 'Close',
+      default: null,
     },
   },
   computed: {
+    label() {
+      return this.ariaLabel || this.$t('a11y.close');
+    },
     iconStyle() {
       return {
         fontSize:

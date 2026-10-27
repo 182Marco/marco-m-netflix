@@ -1,8 +1,16 @@
 <header class="fillBlack" ref="header">
   <div class="cont">
     <div class="wrap-logoNav">
-      <img class="tablet" src="@/assets/img/brand.svg" alt="logo" />
-      <img class="mobile" src="@/assets/img/netflix.png" alt="logo" />
+      <img
+        class="tablet"
+        src="@/assets/img/brand.svg"
+        :alt="$t('header.logoAlt')"
+      />
+      <img
+        class="mobile"
+        src="@/assets/img/netflix.png"
+        :alt="$t('header.logoAlt')"
+      />
       <slot></slot>
     </div>
     <NavbarRight @open-ai-chat="$emit('open-ai-chat')" />

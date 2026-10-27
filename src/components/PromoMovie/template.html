@@ -10,9 +10,9 @@
     v-if="$store.state.showPromo"
     class="promo-img tablet"
     src="@/assets/img/interstellar.webp"
-    alt="interstellar promo"
+    :alt="$t('promo.alt')"
   />
   <button @click="showVideo = !showVideo" class="close-promo-video">
-    <i class="fas fa-play"></i> Play
+    <i class="fas fa-play"></i> {{ $t('card.play') }}
   </button>
 </div>

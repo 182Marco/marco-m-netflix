@@ -1,13 +1,13 @@
 <form class="settings-form" @submit.prevent>
   <p v-if="status === 'loading' || status === 'idle'" class="settings-status">
-    Loading settings…
+    {{ $t('settings.loading') }}
   </p>
 
   <div v-else-if="status === 'error'" class="settings-status" role="alert">
-    <p>
-      Settings are not available. The chat still works with default options.
-    </p>
-    <button type="button" class="settings-retry" @click="retry">Retry</button>
+    <p>{{ $t('settings.unavailable') }}</p>
+    <button type="button" class="settings-retry" @click="retry">
+      {{ $t('chat.retry') }}
+    </button>
   </div>
 
   <template v-else>

@@ -9,7 +9,7 @@
     <img
       v-if="item.poster_url"
       :src="item.poster_url"
-      :alt="`${item.title} thumbnail`"
+      :alt="`${item.title} ${$t('results.thumbnail')}`"
     />
   </div>
   <p class="video-title">{{ item.title }}</p>

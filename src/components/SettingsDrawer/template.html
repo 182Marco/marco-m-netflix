@@ -3,27 +3,27 @@
     v-if="open"
     class="settings-drawer"
     role="dialog"
-    aria-label="Settings drawer"
+    :aria-label="$t('settings.drawer')"
   >
     <header class="settings-drawer-header">
       <button
         type="button"
         class="settings-btn"
-        aria-label="Default settings"
+        :aria-label="$t('settings.defaultAria')"
         :disabled="!ready"
         @click="$emit('default-click')"
       >
-        Default
+        {{ $t('settings.default') }}
       </button>
 
       <button
         type="button"
         class="settings-btn"
-        aria-label="Apply settings"
+        :aria-label="$t('settings.applyAria')"
         :disabled="!ready"
         @click="$emit('toggle')"
       >
-        Apply
+        {{ $t('settings.apply') }}
       </button>
     </header>
 

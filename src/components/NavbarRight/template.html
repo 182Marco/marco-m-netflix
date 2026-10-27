@@ -2,16 +2,17 @@
   <ul>
     <li class="search-item">
       <div v-show="showSearch" class="input-wrap">
-      <img
-        @click="$emit('open-ai-chat')"
-        src="@/assets/img/logoIA.svg"
-        alt="Open AI chat"
-        class="ia-chat-btn"
-      />
+        <img
+          @click="$emit('open-ai-chat')"
+          src="@/assets/img/logoIA.svg"
+          :alt="$t('navbar.openAiChat')"
+          class="ia-chat-btn"
+        />
         <input
           id="searchMovieInput"
           ref="input"
           type="text"
+          :placeholder="$t('navbar.searchPlaceholder')"
           v-model.trim="query"
           @keyup="$store.dispatch('getAllData')"
         />
@@ -37,7 +38,7 @@
     </li>
     <li class="tablet">
       <a href="#" class="withArrow">
-        <img src="@/assets/img/marcoMilza.webp" alt="Autore dell' App" />
+        <img src="@/assets/img/marcoMilza.webp" :alt="$t('navbar.authorAlt')" />
         <div class="arrow"></div>
       </a>
     </li>

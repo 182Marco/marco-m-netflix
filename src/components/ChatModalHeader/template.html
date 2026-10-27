@@ -11,16 +11,18 @@
       <button
         type="button"
         class="settings-btn"
-        :aria-label="settingsOpen ? 'Close settings' : 'Open settings'"
+        :aria-label="
+          settingsOpen ? $t('chat.closeSettings') : $t('chat.openSettings')
+        "
         :aria-pressed="settingsOpen ? 'true' : 'false'"
         @click="$emit('toggle-settings')"
       >
-        settings
+        {{ $t('chat.settings') }}
       </button>
       <button type="button" @click="$emit('reset-chat')">
-        new chat
+        {{ $t('chat.newChat') }}
       </button>
-      <button @click="$emit('close')">close bot</button>
+      <button @click="$emit('close')">{{ $t('chat.closeBot') }}</button>
     </div>
   </nav>
 </header>

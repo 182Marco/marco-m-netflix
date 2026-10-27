@@ -7,31 +7,25 @@
     <PromoMovie />
     <main class="main-content">
       <List
-        :title="`Movies matching your search`"
+        :title="$t('list.moviesSearch')"
         v-show="movies.length > 0"
         class="matchingGrupFirst"
       >
         <Card v-for="el in movies" :key="el.id" :obj="el" />
       </List>
-      <List :title="`Series matching your search`" v-show="series.length > 0">
+      <List :title="$t('list.seriesSearch')" v-show="series.length > 0">
         <Card v-for="el in series" :key="el.id" :obj="el" />
       </List>
-      <List :title="`Popular movies on Netflix:`">
+      <List :title="$t('list.popularMovies')">
         <Card v-for="el in popularMov" :key="el.id" :obj="el" />
       </List>
-      <List :title="`Popular series on Netflix`">
+      <List :title="$t('list.popularSeries')">
         <Card v-for="el in popularSeries" :key="el.id" :obj="el" />
       </List>
-      <List
-        :title="`Your favourite movie list`"
-        v-show="favouriteMovies.length > 0"
-      >
+      <List :title="$t('list.favMovies')" v-show="favouriteMovies.length > 0">
         <Card v-for="el in favouriteMovies" :key="`favM_${el.id}`" :obj="el" />
       </List>
-      <List
-        :title="`Your favourite series list`"
-        v-show="favouriteSeries.length > 0"
-      >
+      <List :title="$t('list.favSeries')" v-show="favouriteSeries.length > 0">
         <Card v-for="el in favouriteSeries" :key="`favS_${el.id}`" :obj="el" />
       </List>
     </main>

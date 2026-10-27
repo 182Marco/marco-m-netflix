@@ -44,7 +44,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['toggleColNav', 'setQueryLang']),
+    ...mapMutations(['toggleColNav']),
     ...mapActions(['changeColNav']),
     putFocus() {
       this.showSearch = !this.showSearch;

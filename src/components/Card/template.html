@@ -23,19 +23,22 @@
       ></i>
     </div>
     <p class="overview">{{ clipLongText(obj.overview) }}</p>
-    <p class="releaseDate">release date: {{ obj.release_date }}</p>
+    <p class="releaseDate">
+      {{ $t('card.releaseDate') }} {{ obj.release_date }}
+    </p>
     <div class="original-lang" :class="{ active: open }">
-      <span>Original lenguage:</span>
+      <span>{{ $t('card.originalLanguage') }}</span>
       <img
         class="flag"
-        v-if="flags.includes(obj.original_language)"
-        :src="require(`@/assets/img/${obj.original_language}.png`)"
-        :alt="`${obj.original_language} flag`"
+        v-if="flagSrc"
+        :src="flagSrc"
+        :alt="`${obj.original_language} ${$t('card.flag')}`"
       />
       <span v-else>{{ obj.original_language }}</span>
     </div>
     <button
       class="btn play"
+      :aria-label="$t('card.play')"
       @click="
           getData(obj.id, obj.title);
           showVideo = !showVideo;
@@ -51,7 +54,7 @@
         "
       v-show="!obj.favourite"
     >
-      <i class="fas fa-plus"></i> Add to favourites list
+      <i class="fas fa-plus"></i> {{ $t('card.addFav') }}
     </h3>
     <h3
       class="remove add-to-favourites"
@@ -61,7 +64,7 @@
         "
       v-show="obj.favourite"
     >
-      <i class="fas fa-minus"></i> Remove from favourites list
+      <i class="fas fa-minus"></i> {{ $t('card.removeFav') }}
     </h3>
     <VideoComp v-if="showVideo" :keyFromApi="trailerKey" :obj="obj"></VideoComp>
   </div>
@@ -93,14 +96,14 @@
           v-if="obj.poster_path"
           :class="{ active: open }"
           :src="`https://image.tmdb.org/t/p/w342${obj.poster_path}`"
-          :alt="`${obj.title ? obj.title : obj.name} sign poster`"
+          :alt="`${obj.title ? obj.title : obj.name} ${$t('card.posterAlt')}`"
         />
         <!-- Placeholder when the image is missing -->
         <img
           v-else
           :class="{ active: open }"
           :src="require('@/assets/img/bigBrand.webp')"
-          :alt="`${obj.title ? obj.title : obj.name} sign poster`"
+          :alt="`${obj.title ? obj.title : obj.name} ${$t('card.posterAlt')}`"
         />
       </div>
       <p class="name" :class="{ active: open }">
