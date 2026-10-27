@@ -1,5 +1,11 @@
-<div ref="root" class="lang-selector" @click="toggle">
+<div
+  ref="root"
+  class="lang-selector"
+  :title="$t('navbar.language')"
+  @click="toggle"
+>
   <div class="lang-current">
+    <img :src="currentOption.flag" alt="" class="lang-flag" />
     <span> {{ currentOption.label }} </span>
   </div>
   <div class="lang-arrow" :class="{ open }"></div>

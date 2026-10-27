@@ -1,3 +1,6 @@
+import { LANGUAGES } from '@locales/texts';
+import { FLAGS } from '@/data/flags';
+
 export default {
   name: 'LanguageSelector',
 
@@ -11,18 +14,12 @@ export default {
   data() {
     return {
       open: false,
-      options: [
-        {
-          label: 'IT',
-          value: 'it-IT',
-          flag: require('@/assets/img/it.png'),
-        },
-        {
-          label: 'EN',
-          value: 'en-US',
-          flag: require('@/assets/img/en.png'),
-        },
-      ],
+      // lingue e bandiere: locales/texts.js + data/flags.js
+      options: LANGUAGES.map(({ code, label }) => ({
+        label,
+        value: code,
+        flag: FLAGS[code],
+      })),
     };
   },
   computed: {
@@ -30,12 +27,6 @@ export default {
       return (
         this.options.find((x) => x.value === this.modelValue) || this.options[0]
       );
-    },
-
-    currentLabel() {
-      const found = this.options.find((x) => x.value === this.modelValue);
-
-      return found ? found.label : 'IT';
     },
   },
 
