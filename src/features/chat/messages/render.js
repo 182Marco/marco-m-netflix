@@ -13,8 +13,16 @@ export const storyToEntry = ({ level, text }) => ({
 });
 
 // ---- righe per tipo di step (campi: presenters/web/<tool>/serializer.py)
-const tmdbLines = (step) =>
-  asArray(step.calls).map((call) => words(call.label, call.url));
+// ogni chiamata HTTP di un tool, nell'ordine in cui è avvenuta: metodo e URL completo
+// (path e query) cosi' come li ha inviati il backend, che maschera solo la chiave (***)
+const callLine = (call) =>
+  typeof call === 'string'
+    ? call
+    : words(call && call.method, call && call.url);
+
+const callLines = (step) => asArray(step.calls).map(callLine);
+
+const tmdbLines = (step) => callLines(step);
 
 const tmdbAttributions = (step) =>
   asArray(step.attributions).map((item) => str(item.text));
@@ -39,7 +47,7 @@ const searchLine = (search) =>
   );
 
 const youtubeLines = (step) => [
-  ...asArray(step.calls).map(str),
+  ...callLines(step),
   ...asArray(step.searches).map(searchLine),
   ...asArray(step.groups).flatMap((group) =>
     [...asArray(group.confirmed), ...asArray(group.to_verify)].map(videoLine),
@@ -101,7 +109,7 @@ const wikipediaPageLines = (page, labels) => [
 
 const wikipediaLines = (step) => {
   const labels = labelsOf(step);
-  const calls = asArray(step.calls).map(str);
+  const calls = callLines(step);
 
   return [
     ...(calls.length ? calls : [str(labels.none)]),
@@ -109,6 +117,38 @@ const wikipediaLines = (step) => {
     ...asArray(step.opens).map((open) => wikipediaOpenLine(open, labels)),
     ...asArray(step.pages).flatMap((page) => wikipediaPageLines(page, labels)),
     ...asArray(step.hints).map(str),
+  ];
+};
+
+const omdbRatingLine = (rating) =>
+  words(
+    `${str(rating.source_label)}${
+      rating.kind_label ? ` [${str(rating.kind_label)}]` : ''
+    }:`,
+    rating.value,
+    rating.votes ? `(${str(rating.votes)})` : '',
+  );
+
+const omdbLines = (step) => {
+  const labels = labelsOf(step);
+  const calls = callLines(step);
+  const candidates = asArray(step.candidates);
+
+  return [
+    ...(calls.length ? calls : [str(labels.no_calls)]),
+    words(
+      step.status_label,
+      step.work ? `- ${str(step.work)}` : '',
+      step.imdb_id ? `(${str(step.imdb_id)})` : '',
+    ),
+    ...(step.reason ? [str(step.reason)] : []),
+    ...asArray(step.ratings).map(omdbRatingLine),
+    ...(candidates.length
+      ? [
+          `${str(labels.candidates)}:`,
+          ...candidates.map((item) => `- ${str(item.text)}`),
+        ]
+      : []),
   ];
 };
 
@@ -145,17 +185,19 @@ const LINES = {
   tmdb_calls: tmdbLines,
   youtube_calls: youtubeLines,
   wikipedia_calls: wikipediaLines,
+  omdb_calls: omdbLines,
   db_query: dbLines,
   retrieval: ragLines,
   rerank: ragLines,
 };
 
-// la fonte YouTube, le attribuzioni JustWatch e la fonte Wikipedia (testo CC BY-SA,
-// con licenza e pagine linkate nei `links`) devono restare visibili
+// la fonte YouTube, le attribuzioni JustWatch, la fonte Wikipedia (testo CC BY-SA,
+// con licenza e pagine linkate nei `links`) e la fonte OMDb devono restare visibili
 const ATTRIBUTIONS = {
   tmdb_calls: tmdbAttributions,
   youtube_calls: (step) => [str(step.source)],
   wikipedia_calls: (step) => [str(step.source)],
+  omdb_calls: (step) => [str(step.source)],
 };
 
 const LINKS = {
