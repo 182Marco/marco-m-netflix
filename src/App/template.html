@@ -34,7 +34,7 @@
             <p class="fav-empty-hint">{{ $t('list.favEmptyHint') }}</p>
           </div>
         </List>
-        <template v-else>
+        <div v-else>
           <List
             :title="$t('list.favMovies')"
             v-show="favouriteMovies.length > 0"
@@ -55,7 +55,7 @@
               :obj="el"
             />
           </List>
-        </template>
+        </div>
       </div>
     </main>
   </div>
