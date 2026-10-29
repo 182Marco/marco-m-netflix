@@ -152,6 +152,32 @@ const omdbLines = (step) => {
   ];
 };
 
+const tvmazeLines = (step) => {
+  const labels = labelsOf(step);
+  const calls = callLines(step);
+  const candidates = asArray(step.candidates);
+  const show = typeof step.show === 'object' && step.show ? step.show : null;
+
+  return [
+    ...(calls.length ? calls : [str(labels.no_calls)]),
+    words(
+      step.status_label,
+      show ? `- ${str(show.name)}` : '',
+      show && show.summary ? `(${str(show.summary)})` : '',
+    ),
+    ...(step.reason ? [str(step.reason)] : []),
+    ...(asArray(step.read).length
+      ? [`${str(labels.read)}: ${asArray(step.read).map(str).join(', ')}`]
+      : []),
+    ...(candidates.length
+      ? [
+          `${str(labels.candidates)}:`,
+          ...candidates.map((item) => `- ${str(item.text)}`),
+        ]
+      : []),
+  ];
+};
+
 // link cliccabili: solo https (mai javascript: o http:), gli stessi che il backend ha costruito
 const isHttps = (url) => {
   try {
@@ -181,27 +207,52 @@ const wikipediaLinks = (step) => {
   ];
 };
 
+// attribuzione TVmaze (CC BY-SA 4.0): link alla pagina della serie e alla licenza, come li invia il backend
+const tvmazeLinks = (step) => {
+  const labels = labelsOf(step);
+  const show = typeof step.show === 'object' && step.show ? step.show : null;
+  const license = typeof step.license === 'object' && step.license ? step.license : null;
+
+  return [
+    ...(show && show.url
+      ? [{ label: `${str(labels.page)}: ${str(show.name)}`, url: str(show.url) }]
+      : []),
+    ...(license
+      ? [
+          {
+            label: `${str(labels.license)}: ${str(license.name)}`,
+            url: str(license.url),
+          },
+        ]
+      : []),
+  ];
+};
+
 const LINES = {
   tmdb_calls: tmdbLines,
   youtube_calls: youtubeLines,
   wikipedia_calls: wikipediaLines,
   omdb_calls: omdbLines,
+  tvmaze_calls: tvmazeLines,
   db_query: dbLines,
   retrieval: ragLines,
   rerank: ragLines,
 };
 
 // la fonte YouTube, le attribuzioni JustWatch, la fonte Wikipedia (testo CC BY-SA,
-// con licenza e pagine linkate nei `links`) e la fonte OMDb devono restare visibili
+// con licenza e pagine linkate nei `links`), la fonte OMDb e la fonte TVmaze (CC BY-SA,
+// con pagina della serie e licenza nei `links`) devono restare visibili
 const ATTRIBUTIONS = {
   tmdb_calls: tmdbAttributions,
   youtube_calls: (step) => [str(step.source)],
   wikipedia_calls: (step) => [str(step.source)],
   omdb_calls: (step) => [str(step.source)],
+  tvmaze_calls: (step) => [str(step.source)],
 };
 
 const LINKS = {
   wikipedia_calls: wikipediaLinks,
+  tvmaze_calls: tvmazeLinks,
 };
 
 // un kind sconosciuto resta un blocco generico con il solo titolo
