@@ -194,6 +194,13 @@ export const TEXTS = {
       de: 'KI-Chat öffnen',
       fr: 'Ouvrir le chat IA',
     },
+    clearSearch: {
+      en: 'Clear search',
+      it: 'Cancella ricerca',
+      es: 'Borrar búsqueda',
+      de: 'Suche löschen',
+      fr: 'Effacer la recherche',
+    },
     searchPlaceholder: {
       en: 'Search movies and series',
       it: 'Cerca film e serie',

@@ -21,6 +21,27 @@ $height-input-search: 36px;
   }
 }
 
+.clear-btn {
+  position: absolute;
+  z-index: 3;
+  right: 98px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0 4px;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: rgba($white, 0.6);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+
+  &:hover {
+    color: $white;
+    transform: translateY(-50%) scale(1.2);
+  }
+}
+
 nav,
 ul {
   @include flex(row, flex-end, center);
@@ -60,7 +81,7 @@ ul {
           position: relative;
           z-index: 1;
           height: $height-input-search;
-          padding: 0 65px 0 39px;
+          padding: 0 125px 0 39px;
           font-size: 1.1rem;
           background-color: $searchBarCol;
           color: $white;

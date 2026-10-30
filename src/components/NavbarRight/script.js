@@ -5,7 +5,7 @@ import NotificationMenu from '@/components/NotificationMenu';
 
 export default {
   name: 'NavbarRight',
-  emits: ['open-ai-chat'],
+  emits: ['open-ai-chat', 'search-focus'],
   components: {
     LanguageSelector,
     NotificationMenu,
@@ -53,6 +53,14 @@ export default {
     putFocus() {
       this.showSearch = !this.showSearch;
       setTimeout(() => this.$refs.input.focus(), 10);
+    },
+    // con una ricerca attiva, focus e digitazione riportano ai risultati
+    onSearchFocus() {
+      if (this.query !== '') this.$emit('search-focus');
+    },
+    clearSearch() {
+      this.query = '';
+      this.$refs.input.focus();
     },
     toggleMenu(name) {
       if (name === 'bell') this.bellSeen = true;

@@ -75,6 +75,28 @@ export default {
         this.scrollToTitle(anchorId(key));
       }
     },
+    // risultati di ricerca (film, poi serie) sotto l'header; solo al focus
+    scrollToSearchResults() {
+      const list = this.movies.length
+        ? this.$refs.moviesList
+        : this.series.length
+        ? this.$refs.seriesList
+        : null;
+      const el = list && list.$el;
+      const header = document.querySelector('header');
+
+      if (!el) {
+        return;
+      }
+
+      const top =
+        el.getBoundingClientRect().top +
+        window.scrollY -
+        (header ? header.offsetHeight : 0) -
+        15;
+
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    },
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },

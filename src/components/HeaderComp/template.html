@@ -13,6 +13,9 @@
       />
       <slot></slot>
     </div>
-    <NavbarRight @open-ai-chat="$emit('open-ai-chat')" />
+    <NavbarRight
+      @open-ai-chat="$emit('open-ai-chat')"
+      @search-focus="$emit('search-focus')"
+    />
   </div>
 </header>

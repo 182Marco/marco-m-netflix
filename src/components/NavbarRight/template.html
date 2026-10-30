@@ -15,7 +15,18 @@
           :placeholder="$t('navbar.searchPlaceholder')"
           v-model.trim="query"
           @keyup="$store.dispatch('getAllData')"
+          @focus="onSearchFocus"
+          @input="onSearchFocus"
         />
+        <button
+          v-show="query !== ''"
+          type="button"
+          class="clear-btn"
+          :aria-label="$t('navbar.clearSearch')"
+          @click="clearSearch"
+        >
+          &times;
+        </button>
         <LanguageSelector v-model="language" />
       </div>
       <i

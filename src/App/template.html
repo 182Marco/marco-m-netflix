@@ -1,19 +1,28 @@
 <div id="app">
   <div class="appMenu-page">
-    <HeaderComp @open-ai-chat="openAiChat" @go-home="scrollToTop">
+    <HeaderComp
+      @open-ai-chat="openAiChat"
+      @go-home="scrollToTop"
+      @search-focus="scrollToSearchResults"
+    >
       <NavbarLeft :links="linksNavLf" @select="onNavSelect" />
     </HeaderComp>
     <!-- featured movie on jumbo -->
     <PromoMovie />
     <main class="main-content">
       <List
+        ref="moviesList"
         :title="$t('list.moviesSearch')"
         v-show="movies.length > 0"
         class="matchingGrupFirst"
       >
         <Card v-for="el in movies" :key="el.id" :obj="el" />
       </List>
-      <List :title="$t('list.seriesSearch')" v-show="series.length > 0">
+      <List
+        ref="seriesList"
+        :title="$t('list.seriesSearch')"
+        v-show="series.length > 0"
+      >
         <Card v-for="el in series" :key="el.id" :obj="el" />
       </List>
       <HomeSection
