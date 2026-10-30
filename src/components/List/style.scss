@@ -6,9 +6,6 @@
 .cont {
   display: flex;
 
-  @media (max-width: 800px) {
-    margin-left: 25px;
-  }
   &.cards {
     margin-top: 12px;
     overflow-x: auto;
@@ -16,7 +13,7 @@
     flex-wrap: nowrap;
     @include flex(row, flex-start, flex-start);
     @media (max-width: 630px) {
-      margin: 25px 0 20px 25px;
+      margin: 25px 0 20px;
     }
   }
   h2 {

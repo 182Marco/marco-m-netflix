@@ -56,6 +56,12 @@ img {
 .main-content {
   width: $widthInnerHeader;
   margin: 0 auto;
+
+  // mobile: 15px a sinistra, le righe scorrono fino al bordo destro
+  @media (max-width: 800px) {
+    width: calc(100% - 15px);
+    margin: 0 0 0 15px;
+  }
 }
 
 .matchingGrupFirst {
