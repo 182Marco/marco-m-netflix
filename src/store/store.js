@@ -4,6 +4,7 @@ import { translate } from '../utils/translate';
 import { LANGUAGES, DEFAULT_LANGUAGE } from '@locales/texts';
 import chat from './modules/chat';
 import chatSettings from './modules/chatSettings';
+import home from './modules/home';
 
 // lingua salvata dall'utente (solo se e' una di quelle supportate)
 const loadLanguage = () => {
@@ -31,7 +32,7 @@ const applyLanguage = (language) => {
 };
 
 const store = createStore({
-  modules: { chat, chatSettings },
+  modules: { chat, chatSettings, home },
   state: {
     // colorare nav
     colNav: false,

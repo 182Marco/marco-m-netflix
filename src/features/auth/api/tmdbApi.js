@@ -17,6 +17,21 @@ export const getPopularTrends = async (type, language = FALLBACK_LANGUAGE) => {
   }
 };
 
+export const getTrending = async (type, language = FALLBACK_LANGUAGE) =>
+  axios.get(
+    `${BASE_URL}/trending/${type}/day?api_key=${API_KEY}&language=${language}&page=1`,
+  );
+
+// genres: id separati da "|" (OR) o ","(AND), come vuole TMDB
+export const discoverByGenre = async ({
+  type,
+  genres,
+  language = FALLBACK_LANGUAGE,
+}) =>
+  axios.get(
+    `${BASE_URL}/discover/${type}?api_key=${API_KEY}&language=${language}&with_genres=${genres}&sort_by=popularity.desc&page=1`,
+  );
+
 export const getTrailerVideos = async ({
   id,
   isMovie,

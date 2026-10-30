@@ -16,12 +16,12 @@
       <List :title="$t('list.seriesSearch')" v-show="series.length > 0">
         <Card v-for="el in series" :key="el.id" :obj="el" />
       </List>
-      <List ref="popularMovies" :title="$t('list.popularMovies')">
-        <Card v-for="el in popularMov" :key="el.id" :obj="el" />
-      </List>
-      <List ref="popularSeries" :title="$t('list.popularSeries')">
-        <Card v-for="el in popularSeries" :key="el.id" :obj="el" />
-      </List>
+      <HomeSection
+        v-for="sec in homeSections"
+        :key="sec.key"
+        :section-key="sec.key"
+        :eager="!!sec.eager"
+      />
       <div ref="myList" class="my-list" :class="{ pulse: myListPulse }">
         <List v-if="isMyListEmpty" :title="$t('nav.myList')">
           <div class="fav-empty">

@@ -96,6 +96,8 @@
           v-if="obj.poster_path"
           :class="{ active: open }"
           :src="`https://image.tmdb.org/t/p/w342${obj.poster_path}`"
+          loading="lazy"
+          decoding="async"
           :alt="`${obj.title ? obj.title : obj.name} ${$t('card.posterAlt')}`"
         />
         <!-- Placeholder when the image is missing -->
@@ -103,6 +105,8 @@
           v-else
           :class="{ active: open }"
           :src="require('@/assets/img/bigBrand.webp')"
+          loading="lazy"
+          decoding="async"
           :alt="`${obj.title ? obj.title : obj.name} ${$t('card.posterAlt')}`"
         />
       </div>

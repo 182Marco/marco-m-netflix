@@ -1,0 +1,15 @@
+<div :id="anchorId" ref="root" class="home-section">
+  <List :title="$t(`home.sections.${sectionKey}`)">
+    <Card
+      v-for="el in section.data"
+      :key="`${sectionKey}_${el.id}`"
+      :obj="el"
+    />
+    <!-- segnaposto finche' la riga non e' caricata: evita salti di layout -->
+    <div v-if="!section.loaded && !section.error" class="placeholder"></div>
+    <div v-if="section.error" class="error">
+      <p>{{ $t('home.error') }}</p>
+      <button type="button" @click="load">{{ $t('home.retry') }}</button>
+    </div>
+  </List>
+</div>

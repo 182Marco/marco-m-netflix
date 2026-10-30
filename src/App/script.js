@@ -1,8 +1,13 @@
 import { mapState } from 'vuex';
-import { getPopularTrends } from '@/features/auth/api/tmdbApi';
 import HeaderComp from '@/components/HeaderComp';
 import NavbarLeft from '@/components/NavbarLeft';
 import List from '@/components/List';
+import HomeSection from '@/components/HomeSection';
+import {
+  HOME_SECTIONS,
+  NAV_SECTION_KEYS,
+  anchorId,
+} from '@/features/home/sections';
 import Card from '@/components/Card';
 import PromoMovie from '@/components/PromoMovie';
 import ChatModal from '@/components/ChatModal';
@@ -13,31 +18,26 @@ export default {
     HeaderComp,
     NavbarLeft,
     List,
+    HomeSection,
     Card,
     PromoMovie,
     ChatModal,
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
-    this.getTrends('movie');
-    this.getTrends('tv');
   },
   data() {
     return {
-      // arrays populated on page load
-      popularMov: [],
-      popularSeries: [],
+      homeSections: HOME_SECTIONS,
       imgSize: 'w780',
       showChatModal: false,
       myListPulse: false,
     };
   },
   watch: {
-    // cambio lingua: ricarica i popolari e rilancia la ricerca in corso
+    // cambio lingua: le righe della Home si aggiornano da sole (HomeSection);
+    // qui si rilancia la ricerca in corso
     language() {
-      this.getTrends('movie');
-      this.getTrends('tv');
-
       if (this.query) {
         this.$store.dispatch('getAllData');
       }
@@ -45,12 +45,13 @@ export default {
   },
   computed: {
     linksNavLf() {
-      return ['home', 'tvSeries', 'movies', 'newPopular', 'myList'].map(
-        (k) => ({
-          key: k,
-          label: this.$t(`nav.${k}`),
-        }),
-      );
+      return [
+        ...NAV_SECTION_KEYS.map((key) => ({
+          key,
+          label: this.$t(`home.navLabels.${key}`),
+        })),
+        { key: 'myList', label: this.$t('nav.myList') },
+      ];
     },
     isMyListEmpty() {
       return (
@@ -68,23 +69,19 @@ export default {
   },
   methods: {
     onNavSelect(key) {
-      if (key === 'home') {
-        this.scrollToTop();
-      } else if (key === 'tvSeries') {
-        this.scrollToTitle('popularSeries');
-      } else if (key === 'movies' || key === 'newPopular') {
-        this.scrollToTitle('popularMovies');
-      } else if (key === 'myList') {
+      if (key === 'myList') {
         this.scrollToMyList();
+      } else if (HOME_SECTIONS.some((s) => s.key === key)) {
+        this.scrollToTitle(anchorId(key));
       }
     },
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
     // titolo della lista a 15px sotto l'header fisso
-    scrollToTitle(refName) {
-      const list = this.$refs[refName];
-      const title = list && list.$el && list.$el.querySelector('h2');
+    scrollToTitle(anchor) {
+      const section = document.getElementById(anchor);
+      const title = section && section.querySelector('h2');
       const header = document.querySelector('header');
 
       if (!title) {
@@ -137,33 +134,6 @@ export default {
 
       if (typeof document !== 'undefined') {
         document.body.style.overflow = '';
-      }
-    },
-    async getTrends(type) {
-      try {
-        const response = await getPopularTrends(
-          type,
-          this.$store.getters.tmdbLanguage,
-        );
-
-        if (
-          response.data &&
-          Array.isArray(response.data.results) &&
-          response.data.results.length > 0
-        ) {
-          response.data.result = [
-            ...response.data.results.map((e) => ({ ...e, favourite: false })),
-          ];
-          if (response.data.results[0].title) {
-            this.popularMov = response.data.result;
-          } else {
-            this.popularSeries = response.data.result;
-          }
-        } else {
-          console.error('No results found or invalid data:', response.data);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
       }
     },
   },
