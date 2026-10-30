@@ -166,10 +166,11 @@ npm run lint
 The application follows a component-based Vue architecture. Each component lives in its own folder with `index.vue`, `template.html`, `script.js` and `style.scss`.
 
 * `src/main.js` — Vue application bootstrap
-* `src/App/` — root component: loads popular lists, opens/closes the chat, handles the navbar links (smooth scroll to each list) and the empty "My List" placeholder
-* `src/components/` — UI components (`Card`, `List`, `HeaderComp`, `NavbarLeft`, `NavbarRight`, `PromoMovie`, `VideoComp`, `LanguageSelector`, `NotificationMenu`, `CloseXButton`, and the chat: `ChatModal`, `ChatModalHeader`, `SettingsDrawer`, `SettingsForm`, `MovieResultsPanel`, `VideoResultTile`)
+* `src/features/home/` — Home rows config (`sections.js`: TMDB calls per row, which rows load immediately, header links) and the movie+tv merge
+* `src/App/` — root component: renders the Home rows (7 mixed movie/TV rows, only Trending and Popular load at start), opens/closes the chat, handles the navbar links (smooth scroll to each list) and the empty "My List" placeholder
+* `src/components/` — UI components (`Card`, `List`, `HeaderComp`, `NavbarLeft`, `NavbarRight`, `HomeSection` (Home row: IntersectionObserver, lazy fetch), `PromoMovie`, `VideoComp`, `LanguageSelector`, `NotificationMenu`, `CloseXButton`, and the chat: `ChatModal`, `ChatModalHeader`, `SettingsDrawer`, `SettingsForm`, `MovieResultsPanel`, `VideoResultTile`)
 * `locales/` — all UI texts in one object (`texts.js`: categories × `en`/`it`/`es`/`de`/`fr`) and the supported-languages list; imported through the `@locales` alias. Use `$t('category.key')` in components; never hardcode visible strings
-* `src/store/` — Vuex state (search, favourites, language code, navbar colour; getters `t` and `tmdbLanguage`) and the `chat` module (`modules/chat.js`)
+* `src/store/` — Vuex state (search, favourites, language code, navbar colour; getters `t` and `tmdbLanguage`) the `home` module (`modules/home.js`, per-row cache) and the `chat` module (`modules/chat.js`)
 * `src/features/chat/` — chat client: HTTP (`api/`), SSE parser (`sse/`), event handling (`events/`), pure state transitions (`state/`), messages and Markdown (`messages/`), film list (`movies/`), reconnection (`session/`)
 * `src/features/auth/api/` — all TMDB API calls (`tmdbApi.js`)
 * `src/utils/` — small helpers (text clipping, scroll thresholds, `translate`)

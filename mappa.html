@@ -177,7 +177,7 @@
       <span><i style="border:1.5px dashed var(--muted)"></i>Simulato</span>
     </div>
     <div class="steps">
-      <div class="step"><b>A · All'avvio.</b> <code>App</code> chiede a TMDB i film e le serie popolari e li mostra in due righe di <code>Card</code>.</div>
+      <div class="step"><b>A · All'avvio.</b> <code>App</code> mostra 7 righe miste film+serie (<code>HomeSection</code>): solo "Di tendenza" e "Popolari" chiamano TMDB subito, le altre quando entrano nella finestra.</div>
       <div class="step"><b>B · Ricerca.</b> Ogni lettera digitata aggiorna lo store, che chiede a TMDB film e serie con quel titolo.</div>
       <div class="step"><b>C · Card.</b> Click su un poster: anteprima grande. Da lì puoi guardare il trailer o salvare tra i preferiti.</div>
       <div class="step"><b>D · Chat.</b> L'icona AI apre la chat. Oggi risponde sempre con la stessa frase e un "processo" di esempio.</div>
@@ -466,7 +466,7 @@ add('vue.config.js', { ico: 'js', tl: 'Configurazione di Vue CLI / webpack.', pt
 add('jsconfig.json', { ico: 'json', tl: 'Dice all\'editor dove portano gli alias <code>@</code> e <code>@locales</code>.', pts: ['Serve solo all\'editor (autocompletamento, "vai alla definizione"), non alla build.'] });
 add('locales', { kind: 'dir', ico: 'folder', tl: 'I testi dell\'interfaccia, fuori da src.', pts: ['Per ora c\'è solo <code>texts.js</code>.'] });
 add('locales/texts.js', { ico: 'js', tl: 'Tutti i testi visibili, per categoria e per lingua.',
-  pts: ['<code>TEXTS</code>: categorie (<code>nav</code>, <code>list</code>, <code>card</code>, <code>chat</code>, <code>settings</code>, <code>errors</code>…) e dentro ogni testo le chiavi <code>en</code>, <code>it</code>, <code>es</code>, <code>de</code>, <code>fr</code>.', '<code>LANGUAGES</code>: codice, tag TMDB (<code>it-IT</code>…) ed etichetta di ogni lingua.', 'Se manca una traduzione si usa l\'inglese.', 'I codici sono quelli ufficiali ISO 639-1: spagnolo <code>es</code>, francese <code>fr</code>.'],
+  pts: ['<code>TEXTS</code>: categorie (<code>nav</code>, <code>home</code>, <code>list</code>, <code>card</code>, <code>chat</code>, <code>settings</code>, <code>errors</code>…) e dentro ogni testo le chiavi <code>en</code>, <code>it</code>, <code>es</code>, <code>de</code>, <code>fr</code>.', '<code>LANGUAGES</code>: codice, tag TMDB (<code>it-IT</code>…) ed etichetta di ogni lingua.', 'Se manca una traduzione si usa l\'inglese.', 'I codici sono quelli ufficiali ISO 639-1: spagnolo <code>es</code>, francese <code>fr</code>.'],
   ex: 'Nel template scrivi <code>{{ $t(\'card.addFav\') }}</code> e compare "Aggiungi ai preferiti" se la lingua è IT.', code: "addFav: {\n  en: 'Add to favourites list',\n  it: 'Aggiungi ai preferiti',\n  es: 'Añadir a favoritos', ...\n}", flow: ['LanguageSelector', 'store.language', '$t()', 'texts.js'] });
 add('netlify.toml', { ico: 'cfg', tl: 'Configurazione per pubblicare su Netlify.', pts: ['Imposta la versione di Node della build.'], tip: 'Dice Node 16, ma il progetto oggi richiede Node 22: da aggiornare se usi Netlify.' });
 add('deploy.sh', { ico: 'sh', tl: 'Script per pubblicare il sito su GitHub Pages.',
@@ -504,16 +504,16 @@ add('src/main.js', { ico: 'js', tl: 'Il punto di partenza: crea l\'app Vue e la 
 add('src/App', { kind: 'dir', ico: 'folder', tl: 'Il componente radice: la pagina intera.', pts: ['Tutti gli altri componenti vivono dentro di lui.'], sub: true });
 add('src/App/index.vue', { ico: 'vue', tl: 'Collante di App: unisce template, script e stile.', pts: ['Stesso schema di tutti i componenti.'] });
 add('src/App/template.html', { ico: 'html', tl: 'L\'ossatura della pagina, dall\'alto in basso.',
-  pts: ['<b>HeaderComp</b> con il menu a sinistra (<code>NavbarLeft</code>): i link scorrono la pagina.', '<b>PromoMovie</b>: la locandina grande di Interstellar.', '<b>Righe (List)</b>: film trovati, serie trovate, film popolari, serie popolari, poi il blocco "La mia lista".', 'Se non hai preferiti, "La mia lista" mostra un segnaposto tratteggiato con cuore (<code>list.favEmpty</code>); altrimenti preferiti film e serie.', '<b>ChatModal</b> in fondo, visibile solo quando serve.'],
-  ex: 'Le righe "trovate" e "preferiti" usano <code>v-show</code>: appaiono solo se la lista ha elementi.', flow: ['Header', 'PromoMovie', 'List × 4', 'La mia lista', 'ChatModal'] });
+  pts: ['<b>HeaderComp</b> con il menu a sinistra (<code>NavbarLeft</code>): i link scorrono la pagina.', '<b>PromoMovie</b>: la locandina grande di Interstellar.', '<b>Righe</b>: film trovati, serie trovate (<code>List</code>), le 7 righe della Home (<code>HomeSection</code>), poi il blocco "La mia lista".', 'Se non hai preferiti, "La mia lista" mostra un segnaposto tratteggiato con cuore (<code>list.favEmpty</code>); altrimenti preferiti film e serie.', '<b>ChatModal</b> in fondo, visibile solo quando serve.'],
+  ex: 'Le righe "trovate" e "preferiti" usano <code>v-show</code>: appaiono solo se la lista ha elementi.', flow: ['Header', 'PromoMovie', 'List × 2', 'HomeSection × 7', 'La mia lista', 'ChatModal'] });
 add('src/App/script.js', { ico: 'js', tl: 'Il regista della pagina: carica i dati e apre/chiude la chat.',
-  pts: ['Al caricamento chiede film e serie popolari.', '<code>openAiChat()</code> mostra la chat e blocca lo scroll della pagina sotto.', '<code>closeAiChat()</code> la chiude e sblocca lo scroll.', 'Legge dallo store film/serie cercati e preferiti.', 'Quando cambia la lingua ricarica i popolari e rilancia la ricerca in corso.', '<code>onNavSelect(key)</code>: Home → cima, TV Series/Movies/New &amp; Popular → titolo della lista a 15px sotto la barra, My List → fondo pagina con un lampo sul segnaposto (<code>myListPulse</code>).', '<code>scrollToTop()</code> è usato anche dal clic sul logo.'],
-  code: 'mounted() {\n  this.getTrends(\'movie\');\n  this.getTrends(\'tv\');\n}', flow: ['mounted', 'getTrends', 'tmdbApi', 'popularMov / popularSeries'] });
+  pts: ['Disegna una <code>HomeSection</code> per ogni riga di <code>features/home/sections.js</code>: le chiamate le fanno loro.', '<code>openAiChat()</code> mostra la chat e blocca lo scroll della pagina sotto.', '<code>closeAiChat()</code> la chiude e sblocca lo scroll.', 'Legge dallo store film/serie cercati e preferiti.', 'Quando cambia la lingua rilancia la ricerca in corso (le righe Home si aggiornano da sole).', '<code>onNavSelect(key)</code>: riga Home → titolo trovato dall\'id <code>home-&lt;key&gt;</code>, a 15px sotto la barra, My List → fondo pagina con un lampo sul segnaposto (<code>myListPulse</code>).', '<code>scrollToTop()</code> è usato anche dal clic su una zona vuota dell\'header.'],
+  code: '<HomeSection v-for="sec in homeSections" ... />', flow: ['HomeSection', 'IntersectionObserver', 'home/load', 'tmdbApi', 'store home'] });
 add('src/App/style.scss', { ico: 'scss', tl: 'Stile della pagina e animazione di comparsa della chat.', pts: ['Sfondo scuro, spaziature del contenuto principale.', 'Transizione "fade" per la finestra chat.', 'Segnaposto dei preferiti vuoti (<code>.fav-empty</code>): bordo tratteggiato, cuore che pulsa, lampo rosso quando arrivi da "My List".'] });
 
 /* componenti */
 add('src/components', { kind: 'dir', ico: 'folder', tl: 'I pezzi di interfaccia, ognuno nella sua cartella.',
-  pts: ['Ogni cartella ha sempre gli stessi 4 file: <code>index.vue</code>, <code>template.html</code>, <code>script.js</code>, <code>style.scss</code>.', 'Parte "film": Card, List, PromoMovie, VideoComp, CloseXButton.', 'Parte "barra": HeaderComp, NavbarLeft, NavbarRight, LanguageSelector, NotificationMenu.', 'Parte "chat AI": ChatModal, ChatModalHeader, SettingsDrawer, SettingsForm, MovieResultsPanel, VideoResultTile.'],
+  pts: ['Ogni cartella ha sempre gli stessi 4 file: <code>index.vue</code>, <code>template.html</code>, <code>script.js</code>, <code>style.scss</code>.', 'Parte "film": Card, List, HomeSection, PromoMovie, VideoComp, CloseXButton.', 'Parte "barra": HeaderComp, NavbarLeft, NavbarRight, LanguageSelector, NotificationMenu.', 'Parte "chat AI": ChatModal, ChatModalHeader, SettingsDrawer, SettingsForm, MovieResultsPanel, VideoResultTile.'],
   ex: 'Vuoi capire "cosa succede se clicco sulla lente?" → apri <code>NavbarRight</code>.' });
 
 comp('Card', {
@@ -527,6 +527,14 @@ comp('Card', {
   sex: 'Una trama di 200 parole viene tagliata a circa 60 e chiusa con "…".',
   scode: 'obj.title ? "film" : "serie"',
   c: ['Effetto zoom e ombra dei poster.', 'Anteprima a schermo intero con sfondo sfocato (usa anche <code>scss/cardOpen.scss</code>).', 'Stelle gialle.']
+});
+comp('HomeSection', {
+  tl: 'Una riga della Home che si carica da sola quando arriva nella finestra.',
+  pts: ['Usa <code>IntersectionObserver</code> (parte 300px prima) e chiede la riga allo store (<code>home/load</code>).', 'Le righe "eager" (Di tendenza, Popolari) partono subito.', 'Mostra un segnaposto alto come una riga, oppure errore con "Riprova".', 'Se cambia la lingua ricarica solo le righe già attivate.'],
+  ex: '<code>&lt;HomeSection section-key="comedy" /&gt;</code>', flow: ['IntersectionObserver', 'home/load', 'tmdbApi', 'List + Card'],
+  t: ['Un <code>&lt;div id="home-&lt;key&gt;"&gt;</code> con una <code>List</code> e le <code>Card</code>.'], tex: 'L\'id è l\'ancora a cui scorrono i link dell\'header.',
+  s: ['Props: <code>sectionKey</code> e <code>eager</code>.'], sex: 'I dati stanno nello store, non nel componente.', scode: 'props: { sectionKey: String, eager: Boolean }',
+  c: ['Segnaposto e messaggio di errore alti 400px.']
 });
 comp('List', {
   tl: 'Una riga con un titolo e dentro le Card.',
@@ -548,7 +556,7 @@ comp('HeaderComp', {
 comp('NavbarLeft', {
   tl: 'I link di navigazione a sinistra (Home, TV Series…).',
   pts: ['Riceve da App la lista dei link, ognuno <code>{ key, label }</code>, e li mostra.', 'Al clic emette <code>select</code> con la <code>key</code> e App scorre alla sezione giusta.'],
-  ex: 'Aggiungere "Kids"? Aggiungi la chiave nell\'array <code>linksNavLf</code> in App, il testo in <code>nav.*</code> e il caso in <code>onNavSelect</code>.', flow: ['App.linksNavLf', 'NavbarLeft', 'menu'],
+  ex: 'Aggiungere un link? Serve una riga Home, il testo in <code>home.navLabels.*</code> e la chiave in <code>NAV_SECTION_KEYS</code>.', flow: ['App.linksNavLf', 'NavbarLeft', 'menu'],
   t: ['Un elenco <code>&lt;ul&gt;</code> generato con <code>v-for</code>.'], tex: '5 parole nell\'array → 5 voci di menu.',
   s: ['Una prop: <code>links</code>; un evento: <code>select</code>.'], sex: 'Nessuna logica propria.', scode: 'props: { links: Array }', c: ['Link bianchi che diventano più chiari al passaggio del mouse.']
 });
@@ -642,6 +650,7 @@ add('src/store/store.js', { ico: 'js', tl: 'Lo store Vuex: dove stanno ricerca, 
   code: 'this.$store.commit(\'setQuery\', \'bat\');\nthis.$store.dispatch(\'getAllData\');',
   flow: ['NavbarRight', 'setQuery', 'getAllData', 'tmdbApi', 'movies / series', 'App'], tip: 'I nomi <code>pushFavuriteObj</code>/<code>removeFavuriteObj</code> hanno un refuso storico: rinominandoli bisogna aggiornare Card.' });
 add('src/store/modules', { kind: 'dir', ico: 'folder', tl: 'Cartella prevista per dividere lo store in moduli.', pts: ['Per ora contiene file vuoti (<code>movie.js</code>, <code>navbar.js</code>).'] });
+add('src/store/modules/home.js', { ico: 'js', tl: 'Il modulo Vuex della Home: la cache di ogni riga.', pts: ['Per ogni riga: <code>data</code>, <code>loading</code>, <code>loaded</code>, <code>error</code> e la lingua dei dati.', '<code>home/load</code> non rifà la chiamata se la riga è già caricata o in corso.', 'Se la lingua cambia durante la richiesta, la risposta vecchia viene scartata.'], flow: ['HomeSection', 'home/load', 'tmdbApi', 'state.sections'] });
 add('src/store/modules/chat.js', { ico: 'js', tl: 'Il modulo Vuex della chat: conversazione, messaggi, lista film.',
   pts: ['Azioni sottili: <code>startNewChat</code>, <code>endChat</code>, <code>send</code>, <code>retry</code>.', 'Ogni richiesta asincrona controlla <code>sessionId</code>: se la chat è stata chiusa o ricreata, il risultato viene scartato.', 'Le transizioni di stato sono funzioni pure in <code>features/chat/state/turnReducer.js</code>.'],
   ex: 'Chiudi la chat mentre il bot risponde → lo stream viene interrotto e gli eventi in ritardo non toccano la chat successiva.', flow: ['ChatModal', 'chat/send', 'chatApi', 'eventi SSE', 'turnReducer', 'messages / movies'] });
@@ -651,20 +660,21 @@ add('src/store/modules/navbar.js', { ico: 'js', tl: 'Modulo store per la barra (
 add('src/features', { kind: 'dir', ico: 'folder', tl: 'Codice organizzato per funzionalità.', pts: ['Le chiamate API (<code>auth/api</code>) e il client della chat (<code>chat/</code>).'] });
 add('src/features/auth', { kind: 'dir', ico: 'folder', tl: 'Cartella storica (il nome non descrive il contenuto).', pts: ['Contiene la sottocartella <code>api/</code>.'] });
 add('src/features/auth/api', { kind: 'dir', ico: 'folder', tl: 'Tutte le chiamate di rete.', pts: ['Regola del progetto: i componenti non chiamano Axios direttamente.'] });
+add('src/features/home', { kind: 'dir', ico: 'folder', tl: 'La configurazione delle righe della Home.', pts: ['<code>sections.js</code>: per ogni riga le chiamate TMDB (film + serie), se parte subito (<code>eager</code>) e quali righe hanno un link nell\'header.', '<code>mergeSection</code> unisce film e serie, toglie i doppioni, ordina per popolarità e tiene 20 card.'] });
 add('src/features/chat', { kind: 'dir', ico: 'folder', tl: 'Il client della chat, diviso per responsabilità.',
   pts: ['<b>api/chatApi.js</b>: fetch verso il backend e lettura dello stream.', '<b>sse/parseSse.js</b>: da testo a eventi, anche con pezzi spezzati.', '<b>events/</b>: evento del backend → intento per lo stato; messaggi di errore.', '<b>state/turnReducer.js</b>: transizioni di stato pure.', '<b>messages/</b>: forma dei messaggi, righe del processo, Markdown sicuro.', '<b>movies/mergeMovies.js</b>: lista film unica, senza duplicati.', '<b>session/reconcile.js</b>: cosa fare dopo una disconnessione.'],
   ex: 'Il contratto del backend è in <code>web_api/FRONTEND_API.md</code> (progetto NetflixScout).' });
 add('src/components/MovieResultsPanel', { kind: 'dir', ico: 'folder', tl: 'La finestra dei film sopra l\'input della chat.', pts: ['Riusa <code>List</code> e <code>Card</code> (versione compatta, 70%).', 'Funziona da accordion: l\'intestazione con chevron apre e chiude la lista, che non si cancella.', 'I video YouTube usano <code>VideoResultTile</code>.'] });
 add('src/components/VideoResultTile', { kind: 'dir', ico: 'folder', tl: 'Tessera minima per i video YouTube dei risultati.', pts: ['<code>Card</code> non è adatta ai video: qui miniatura, titolo, canale e link, con la fonte YouTube.'] });
 add('src/features/auth/api/tmdbApi.js', { ico: 'js', tl: 'Le chiamate a TMDB, tutte in un unico posto.',
-  pts: ['<code>getPopularTrends(type, language)</code>: film o serie popolari.', '<code>getTrailerVideos({id, isMovie, language})</code>: video del titolo; se non c\'è nella lingua scelta ripiega su <code>en-US</code>.', '<code>searchMovies</code> e <code>searchSeries</code>: ricerca per titolo.', 'Il parametro <code>language</code> è il tag TMDB della lingua scelta (<code>getters.tmdbLanguage</code>).', 'Legge chiave e URL base dal file <code>.env</code>.'],
+  pts: ['<code>getPopularTrends(type, language)</code>: film o serie popolari.', '<code>getTrending(type, language)</code>: di tendenza oggi.', '<code>discoverByGenre({type, genres, language})</code>: per genere, ordinati per popolarità.', '<code>getTrailerVideos({id, isMovie, language})</code>: video del titolo; se non c\'è nella lingua scelta ripiega su <code>en-US</code>.', '<code>searchMovies</code> e <code>searchSeries</code>: ricerca per titolo.', 'Il parametro <code>language</code> è il tag TMDB della lingua scelta (<code>getters.tmdbLanguage</code>).', 'Legge chiave e URL base dal file <code>.env</code>.'],
   ex: 'Cerchi "alien" in italiano: viene chiamato <code>…/search/movie?query=alien&amp;language=it-IT</code>.',
   code: 'export const searchMovies = async ({ query, language }) =>\n  axios.get(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}&language=${language}`);',
   flow: ['store / App / Card', 'tmdbApi.js', 'TMDB'], tip: 'Il client del bot della chat è in <code>features/chat/api/chatApi.js</code>.' });
 
 add('src/utils', { kind: 'dir', ico: 'folder', tl: 'Piccole funzioni di aiuto, senza interfaccia.', pts: ['Si importano tutte da <code>@/utils</code>.'] });
 add('src/utils/index.js', { ico: 'js', tl: 'Il "banco" delle utility: le ri-esporta tutte.', pts: ['Permette di scrivere <code>import * as U from \'@/utils\'</code>.'] });
-add('src/utils/translate.js', { ico: 'js', tl: 'Trova un testo in <code>locales/texts.js</code> data una chiave e una lingua.', pts: ['<code>translate(\'card.addFav\', \'it\')</code> → "Aggiungi ai preferiti".', 'Se la lingua manca usa l\'inglese, se la chiave manca restituisce la chiave stessa.', 'Lo usa il getter <code>t</code> dello store, da cui nasce <code>$t()</code>.'], flow: ['$t()', 'getter t', 'translate', 'texts.js'] });
+add('src/utils/translate.js', { ico: 'js', tl: 'Trova un testo in <code>locales/texts.js</code> data una chiave e una lingua.', pts: ['<code>translate(\'card.addFav\', \'it\')</code> → "Aggiungi ai preferiti".', 'Accetta chiavi a più livelli (<code>home.sections.popular</code>).', 'Se la lingua manca usa l\'inglese, se la chiave manca restituisce la chiave stessa.', 'Lo usa il getter <code>t</code> dello store, da cui nasce <code>$t()</code>.'], flow: ['$t()', 'getter t', 'translate', 'texts.js'] });
 add('src/utils/clipLongText.js', { ico: 'js', tl: 'Accorcia i testi lunghi e aggiunge "…".',
   pts: ['Se il testo è breve lo lascia com\'è.', 'Altrimenti tiene le prime N parole (60 se non indicato).', 'Se può, finisce alla prima virgola o punto dopo il taglio.'], ex: 'Titolo "The Lord of the Rings" con N=2 → "The Lord ...".', flow: ['Card', 'clipLongText', 'testo corto'] });
 add('src/utils/getScrollThresholdNav.js', { ico: 'js', tl: 'Dice dopo quanti pixel di scroll la barra diventa nera.',

@@ -35,11 +35,13 @@ Never commit `.env` or real keys. Variables must start with `VUE_APP_` to reach 
 ```
 src/
   main.js                 createApp + Vuex plugin + mount
-  App/                    root component (loads popular lists, owns chat open/close)
+  App/                    root component (renders the Home rows, owns chat open/close)
   components/<Name>/      one folder per component (see convention below)
   store/store.js          Vuex store: search state, favourites, navbar colour, language (short code), getters `t` / `tmdbLanguage`
   store/modules/chat.js   namespaced `chat` module (conversation, messages, film list)
-  features/auth/api/      tmdbApi.js — ALL axios calls to TMDB live here
+  store/modules/home.js   namespaced `home` module: per-row cache (data, loading, loaded, error, language)
+  features/home/          sections.js: Home rows config (fetchers, eager, nav keys) + mergeSection
+  features/auth/api/      tmdbApi.js — ALL axios calls to TMDB live here (`getTrending`, `discoverByGenre` for the Home rows)
   features/chat/          chat client: api, sse, events, state, messages, movies, session
   utils/                  pure helpers (clipLongText, getScrollThreshold, translate)
   data/flags.js           SVG flag per language code
@@ -49,7 +51,7 @@ src/
 locales/texts.js          OUTSIDE src: every UI text by category and language + LANGUAGES list (alias `@locales`)
 ```
 
-Data flow: `App` fetches popular movies/series on mount; typing in the search box (`NavbarRight`) commits `setQuery` and dispatches `getAllData`, which calls TMDB and fills `movies`/`series` in the store; `App` renders them through `List` + `Card`.
+Data flow: `App` renders one `HomeSection` per row of `features/home/sections.js` (mixed movie+tv, cached in the `home` Vuex module; `trending`/`popular` are `eager`, the others load via IntersectionObserver; anchor id `home-<key>`, title `home.sections.<key>`, header label `home.navLabels.<key>`; each row is 2 calls, movie + tv, merged by popularity, max 20 cards; no virtual scroller on purpose: `Card` opens as `position: fixed` and has a different mobile layout); typing in the search box (`NavbarRight`) commits `setQuery` and dispatches `getAllData`, which calls TMDB and fills `movies`/`series` in the store; `App` renders them through `List` + `Card`.
 
 ## Component convention (important)
 
@@ -79,6 +81,8 @@ When adding a component, copy this structure. Import it as `@/components/Name` (
 - **Language** is `state.language` (short code, persisted in `localStorage`, also sets `<html lang>`). `getters.tmdbLanguage` gives the TMDB tag (`en-US`, `it-IT`, …); every call in `tmdbApi.js` must receive it (`getPopularTrends`, `searchMovies/Series`, `getTrailerVideos`, which falls back to `en-US` when a trailer does not exist in that language). `App` refetches popular lists and the current search when it changes; favourites keep the language they were saved in. The chat backend does not receive the UI language.
 - Chat failures carry `messageKey` (a `errors.*` key), not text: it is translated at render time (`ChatModal`). The same goes for the `agent-process` title (`titleKey`).
 
+- `translate` / `$t` accept paths of any depth (`home.sections.popular`); the leaf must be an object with the language codes.
+- Home rows: `HomeSection` observes its root (`rootMargin` 300px) and dispatches `home/load`, which is a no-op when the row is loaded or loading in the same TMDB language; on language change only already activated rows refetch, and a response for an old language is dropped. `vue-virtual-scroller` was evaluated and not adopted (`Card` opens as `position: fixed`, mobile layout differs): rows are capped at 20 cards and posters are `loading="lazy"`.
 - All HTTP calls go through `src/features/*/api/` (`tmdbApi.js` for TMDB via axios, `chatApi.js` for the bot via `fetch`). Do not call axios/fetch from components or the store directly.
 - Store mutation names `pushFavuriteObj` / `removeFavuriteObj` contain a historical typo; do not rename without updating every usage (`Card`).
 - Movies vs series are told apart by `obj.title` (movie) vs `obj.name` (series).
@@ -87,7 +91,7 @@ When adding a component, copy this structure. Import it as `@/components/Name` (
 - `ChatModal` toggles `document.body.style.overflow` through `App`; keep it restored on close/unmount.
 - `App/style.scss` has a global `section { padding: 0 5vw }`; new components should not use `<section>` without resetting it.
 - `List` hides its title row when no `title` is passed (used by `MovieResultsPanel`).
-- Navbar links: `App.linksNavLf` is `[{ key, label }]`; `NavbarLeft` emits `select` with the `key` and `App.onNavSelect` scrolls (Home -> top, TV Series -> `popularSeries` title, Movies/New & Popular -> `popularMovies` title, both 15px under the fixed header; My List -> `myList` block with a `myListPulse` glow). `HeaderComp` emits `go-home` on logo click. A new link needs its `nav.*` text and a case in `onNavSelect`.
+- Navbar links: `App.linksNavLf` is `[{ key, label }]`: the `NAV_SECTION_KEYS` of `features/home/sections.js` (label `home.navLabels.<key>`) plus `myList`. `NavbarLeft` emits `select` with the `key` and `App.onNavSelect` scrolls (Home row -> its `h2` found by anchor id `home-<key>`, 15px under the fixed header; My List -> `myList` block with a `myListPulse` glow). `HeaderComp` emits `go-home` on a click on the empty header area (not on links, fields, menus or `nav`); `App` scrolls to top. A new link needs a Home row (or `myList`), its `home.navLabels.<key>` text and an entry in `NAV_SECTION_KEYS`.
 - "My List": while both favourites lists are empty, `App` shows one `List` with the `.fav-empty` placeholder (`list.favEmpty` / `list.favEmptyHint`) instead of the two favourites lists.
 - `NotificationMenu` (gift and bell in `NavbarRight`): props `icon`, `label`, `open`, `badge`; emits `toggle`, `select`, `close`. `NavbarRight` owns `openMenu` (one open at a time) and `bellSeen` (hides the "1" badge); `select` opens the search like the magnifier. The text comes from `navbar.botNotification`; the profile photo has no arrow any more.
 - `CloseXButton` is used only by `VideoComp` (the old `header-modal-close` variant has no users, `MovieResultsPanel` no longer uses it). Its base size must not change: the trailer's big round close button (64px, top right) is applied from `VideoComp/style.scss` with `:deep()`. `MovieResultsPanel` is now an accordion: the toggle header (title, count, chevron) emits `open` / `close`.
