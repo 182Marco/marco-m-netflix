@@ -178,6 +178,41 @@ const tvmazeLines = (step) => {
   ];
 };
 
+const wikidataLines = (step) => {
+  const labels = labelsOf(step);
+  const calls = callLines(step);
+  const work = typeof step.work === 'object' && step.work ? step.work : null;
+  const candidates = asArray(step.candidates);
+
+  return [
+    ...(calls.length ? calls : [str(labels.no_calls)]),
+    words(
+      step.status_label,
+      work ? `- ${str(work.name)}` : '',
+      work && work.summary ? `(${str(work.summary)})` : '',
+    ),
+    ...(step.reason ? [str(step.reason)] : []),
+    ...asArray(step.groups).flatMap((group) => [
+      `${str(group.label)}:`,
+      ...asArray(group.items).map((item) => `- ${str(item.text)}`),
+    ]),
+    ...(asArray(step.unavailable).length
+      ? [
+          `${str(labels.unavailable)}: ${asArray(step.unavailable)
+            .map(str)
+            .join('; ')}`,
+        ]
+      : []),
+    ...(candidates.length
+      ? [
+          `${str(labels.candidates)}:`,
+          ...candidates.map((item) => `- ${str(item.text)}`),
+        ]
+      : []),
+    ...(step.partial && step.partial_label ? [str(step.partial_label)] : []),
+  ];
+};
+
 // link cliccabili: solo https (mai javascript: o http:), gli stessi che il backend ha costruito
 const isHttps = (url) => {
   try {
@@ -211,12 +246,53 @@ const wikipediaLinks = (step) => {
 const tvmazeLinks = (step) => {
   const labels = labelsOf(step);
   const show = typeof step.show === 'object' && step.show ? step.show : null;
-  const license = typeof step.license === 'object' && step.license ? step.license : null;
+  const license =
+    typeof step.license === 'object' && step.license ? step.license : null;
 
   return [
     ...(show && show.url
-      ? [{ label: `${str(labels.page)}: ${str(show.name)}`, url: str(show.url) }]
+      ? [
+          {
+            label: `${str(labels.page)}: ${str(show.name)}`,
+            url: str(show.url),
+          },
+        ]
       : []),
+    ...(license
+      ? [
+          {
+            label: `${str(labels.license)}: ${str(license.name)}`,
+            url: str(license.url),
+          },
+        ]
+      : []),
+  ];
+};
+
+// attribuzione Wikidata (CC0): link alla pagina dell'opera, a ogni opera collegata e alla licenza, come li invia il backend
+const wikidataLinks = (step) => {
+  const labels = labelsOf(step);
+  const work = typeof step.work === 'object' && step.work ? step.work : null;
+  const license =
+    typeof step.license === 'object' && step.license ? step.license : null;
+
+  return [
+    ...(work && work.url
+      ? [
+          {
+            label: `${str(labels.page)}: ${str(work.name)}`,
+            url: str(work.url),
+          },
+        ]
+      : []),
+    ...asArray(step.groups).flatMap((group) =>
+      asArray(group.items)
+        .filter((item) => item.url)
+        .map((item) => ({
+          label: `${str(group.label)}: ${str(item.text)}`,
+          url: str(item.url),
+        })),
+    ),
     ...(license
       ? [
           {
@@ -234,25 +310,29 @@ const LINES = {
   wikipedia_calls: wikipediaLines,
   omdb_calls: omdbLines,
   tvmaze_calls: tvmazeLines,
+  wikidata_calls: wikidataLines,
   db_query: dbLines,
   retrieval: ragLines,
   rerank: ragLines,
 };
 
 // la fonte YouTube, le attribuzioni JustWatch, la fonte Wikipedia (testo CC BY-SA,
-// con licenza e pagine linkate nei `links`), la fonte OMDb e la fonte TVmaze (CC BY-SA,
-// con pagina della serie e licenza nei `links`) devono restare visibili
+// con licenza e pagine linkate nei `links`), la fonte OMDb, la fonte TVmaze (CC BY-SA,
+// con pagina della serie e licenza nei `links`) e la fonte Wikidata (CC0, con pagine e licenza nei `links`)
+// devono restare visibili
 const ATTRIBUTIONS = {
   tmdb_calls: tmdbAttributions,
   youtube_calls: (step) => [str(step.source)],
   wikipedia_calls: (step) => [str(step.source)],
   omdb_calls: (step) => [str(step.source)],
   tvmaze_calls: (step) => [str(step.source)],
+  wikidata_calls: (step) => [str(step.source)],
 };
 
 const LINKS = {
   wikipedia_calls: wikipediaLinks,
   tvmaze_calls: tvmazeLinks,
+  wikidata_calls: wikidataLinks,
 };
 
 // un kind sconosciuto resta un blocco generico con il solo titolo
