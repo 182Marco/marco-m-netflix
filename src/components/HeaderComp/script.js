@@ -25,6 +25,21 @@ export default {
   methods: {
     ...mapMutations(['goTransparent', 'black']),
 
+    // click sull'header fuori da link, campi e menu: torna in cima
+    onHeaderClick(event) {
+      const target = event.target;
+
+      if (
+        target &&
+        target.closest &&
+        target.closest('a, button, input, select, textarea, label, nav')
+      ) {
+        return;
+      }
+
+      this.$emit('go-home');
+    },
+
     handleScroll() {
       if (!this.colNav) {
         if (typeof window === 'undefined') {
