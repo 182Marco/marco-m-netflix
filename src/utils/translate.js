@@ -1,11 +1,13 @@
 import { TEXTS, DEFAULT_LANGUAGE } from '@locales/texts';
 
-// path 'categoria.chiave'; se manca la lingua si usa l'inglese, poi il path
+// path 'categoria.chiave' (anche piu' livelli: 'home.sections.popular');
+// se manca la lingua si usa l'inglese, poi il path
 export const translate = (path, language) => {
-  const [category, key] = String(path).split('.');
-  const entry = TEXTS[category] && TEXTS[category][key];
+  const entry = String(path)
+    .split('.')
+    .reduce((node, part) => (node ? node[part] : undefined), TEXTS);
 
-  if (!entry) {
+  if (!entry || typeof entry !== 'object') {
     return path;
   }
 
