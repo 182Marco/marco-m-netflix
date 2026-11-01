@@ -85,12 +85,26 @@ export const TEXTS = {
     },
     // etichette brevi per l'header (solo le sezioni con un link)
     navLabels: {
+      trending: {
+        en: 'Trending',
+        it: 'Di tendenza',
+        es: 'Tendencias',
+        de: 'Trends',
+        fr: 'Tendances',
+      },
       popular: {
         en: 'Top picks',
         it: 'Più amati',
         es: 'Favoritos',
         de: 'Beliebt',
         fr: 'Favoris',
+      },
+      actionAdventure: {
+        en: 'Action',
+        it: 'Azione',
+        es: 'Acción',
+        de: 'Action',
+        fr: 'Action',
       },
       comedy: {
         en: 'Laughs',
@@ -222,19 +236,12 @@ export const TEXTS = {
       de: 'Benachrichtigungen',
       fr: 'Notifications',
     },
-    gifts: {
-      en: 'Gifts',
-      it: 'Regali',
-      es: 'Regalos',
-      de: 'Geschenke',
-      fr: 'Cadeaux',
-    },
     botNotification: {
-      en: 'There is a new AI bot to help you pick a movie or get cinema info. Click the AI symbol inside the search.',
-      it: "C'è un nuovo bot IA per scegliere un film o avere info sul cinema. Clicca sul simbolo IA dentro la ricerca.",
-      es: 'Hay un nuevo bot de IA para elegir una película u obtener información sobre cine. Haz clic en el símbolo IA dentro de la búsqueda.',
-      de: 'Es gibt einen neuen KI-Bot, der dir bei der Filmauswahl hilft und Kinoinfos liefert. Klicke in der Suche auf das KI-Symbol.',
-      fr: 'Il y a un nouveau bot IA pour choisir un film ou obtenir des infos sur le cinéma. Cliquez sur le symbole IA dans la recherche.',
+      en: 'There is a new AI bot to help you pick a movie or get cinema info.',
+      it: "C'è un nuovo bot IA per scegliere un film o avere info sul cinema.",
+      es: 'Hay un nuevo bot de IA para elegir una película u obtener información sobre cine.',
+      de: 'Es gibt einen neuen KI-Bot, der dir bei der Filmauswahl hilft und Kinoinfos liefert.',
+      fr: 'Il y a un nouveau bot IA pour choisir un film ou obtenir des infos sur le cinéma.',
     },
     language: {
       en: 'Language',
@@ -319,22 +326,22 @@ export const TEXTS = {
 
   chat: {
     toggle: {
-    openChat: {
-      en: 'Open the AI assistant',
-      it: "Apri l'assistente AI",
-      es: 'Abrir el asistente de IA',
-      de: 'KI-Assistent öffnen',
-      fr: "Ouvrir l'assistant IA",
+      openChat: {
+        en: 'Open the AI assistant',
+        it: "Apri l'assistente AI",
+        es: 'Abrir el asistente de IA',
+        de: 'KI-Assistent öffnen',
+        fr: "Ouvrir l'assistant IA",
+      },
+      backToNetflix: {
+        en: 'Back to Netflix',
+        it: 'Torna a Netflix',
+        es: 'Volver a Netflix',
+        de: 'Zurück zu Netflix',
+        fr: 'Retour à Netflix',
+      },
     },
-    backToNetflix: {
-      en: 'Back to Netflix',
-      it: 'Torna a Netflix',
-      es: 'Volver a Netflix',
-      de: 'Zurück zu Netflix',
-      fr: 'Retour à Netflix',
-    },
-  },
-  settings: {
+    settings: {
       en: 'settings',
       it: 'impostazioni',
       es: 'ajustes',

@@ -53,10 +53,12 @@ export const HOME_SECTIONS = [
   { key: 'familyAnimation', fetchers: genre('16|10751', '16|10751') },
 ];
 
-// sezioni con un link nell'header, in ordine di pagina (escluse quelle subito
-// sotto la promo: trending); testo in `home.navLabels.<key>`
+// sezioni con un link nell'header, in ordine di pagina (tutte e 7);
+// testo in `home.navLabels.<key>`
 export const NAV_SECTION_KEYS = [
+  'trending',
   'popular',
+  'actionAdventure',
   'comedy',
   'sciFiFantasy',
   'crimeMystery',

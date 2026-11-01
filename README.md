@@ -16,7 +16,7 @@ The project reproduces the main browsing experience of a streaming platform, inc
 * Trailer playback (YouTube embed) with a large, always-visible round close button (top right) so it is obvious the trailer can be closed, even after YouTube goes fullscreen
 * Favourites lists for movies and series (add / remove from the card); while empty, **My List** shows a dashed placeholder with a hint
 * Working navbar links: Home, TV Series, Movies, New & Popular and My List scroll smoothly to their section (the list title stops 15px under the fixed header); clicking the logo scrolls back to the top
-* Gift and bell menus in the navbar (`NotificationMenu`): the bell has a red "1" badge until opened, and the message about the new AI bot opens the search like the magnifier
+* Bell menu in the navbar (`NotificationMenu`): opens on hover, has a red "1" badge until first opened, and the message about the new AI bot opens the chat directly
 * Header that changes colour on scroll
 
 **AI chat assistant — "Netflix Scout"** *(new)*

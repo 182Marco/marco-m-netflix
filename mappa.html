@@ -562,10 +562,10 @@ comp('NavbarLeft', {
 });
 comp('NavbarRight', {
   tl: 'La parte destra della barra: ricerca, chat AI, lingua, profilo.',
-  pts: ['Lente: apre/chiude il campo di ricerca.', 'Mentre scrivi, a ogni tasto lancia la ricerca su TMDB.', 'Icona AI: apre la chat.', 'Contiene il selettore di lingua.', 'Regalo e campanella sono due <code>NotificationMenu</code>: ne è aperta una sola alla volta (<code>openMenu</code>); il pallino "1" della campanella sparisce al primo clic (<code>bellSeen</code>).', 'La foto profilo non ha più la freccina.', 'In background precarica il codice della chat così si apre subito.'],
+  pts: ['Lente: apre/chiude il campo di ricerca.', 'Mentre scrivi, a ogni tasto lancia la ricerca su TMDB.', 'Icona AI: apre la chat.', 'Contiene il selettore di lingua.', 'La campanella è una <code>NotificationMenu</code> che si apre in hover (<code>bellOpen</code>); il pallino "1" sparisce alla prima apertura (<code>bellSeen</code>); un clic sulla notifica apre direttamente la chat.', 'La foto profilo non ha più la freccina.', 'In background precarica il codice della chat così si apre subito.'],
   ex: 'Scrivi "spid": a ogni lettera lo store chiama TMDB e le righe "Movies/Series matching your search" si aggiornano.',
   flow: ['tasto premuto', 'setQuery', 'getAllData', 'TMDB', 'List con risultati'], tip: 'C\'è una funzione <code>sengaPosto()</code> che stampa in console: è un resto di sviluppo.',
-  t: ['Input di ricerca (visibile solo dopo il clic sulla lente).', 'Icona <code>logoIA.svg</code> per la chat.', 'Selettore lingua.', 'Due <code>NotificationMenu</code> (regalo e campanella) e foto profilo (solo tablet/desktop).'],
+  t: ['Input di ricerca (visibile solo dopo il clic sulla lente).', 'Icona <code>logoIA.svg</code> per la chat.', 'Selettore lingua.', 'Una <code>NotificationMenu</code> (campanella) e foto profilo (solo tablet/desktop).'],
   tex: '<code>v-model.trim="query"</code> toglie gli spazi inutili mentre scrivi.',
   s: ['<code>query</code> e <code>language</code> sono collegati allo store.', '<code>putFocus()</code> apre la ricerca e mette il cursore nel campo.', '<code>mounted()</code> usa <code>requestIdleCallback</code> per precaricare ChatModal quando il browser è libero.'],
   sex: 'Il click sulla lente cambia anche il colore della barra (<code>changeColNav</code>).',
@@ -594,9 +594,9 @@ comp('CloseXButton', {
   s: ['Prop: <code>color</code>, <code>hoverColor</code>, <code>size</code>, <code>buttonClass</code>, <code>ariaLabel</code>.', 'Passa i colori al CSS tramite variabili.'], sex: 'Con <code>size="2rem"</code> l\'icona diventa il doppio del normale.', scode: '\'--x-close-color\': this.color || \'#7f7f7f\'', c: ['Colori letti dalle variabili CSS impostate dallo script.']
 });
 comp('NotificationMenu', {
-  tl: 'La tendina di campanellina e regalino, con il pallino rosso "1".',
-  pts: ['Mostra il messaggio sul nuovo bot IA, tradotto con <code>navbar.botNotification</code>.', 'Il pallino con l\'1 compare solo se <code>badge</code> è vero (campanellina, finché non si ricarica la pagina).', 'Al clic sul messaggio avvisa <code>NavbarRight</code>, che apre la ricerca come la lente.'],
-  ex: 'Clicca la campanellina: il pallino sparisce e si apre la tendina.', flow: ['clic campanellina', 'NotificationMenu', 'NavbarRight', 'ricerca aperta'] });
+  tl: 'La tendina della campanellina, con il pallino rosso "1".',
+  pts: ['Mostra il messaggio sul nuovo bot IA, tradotto con <code>navbar.botNotification</code>.', 'Il pallino con l\'1 compare solo se <code>badge</code> è vero (finché non si ricarica la pagina). Si apre in hover (eventi <code>show</code>/<code>hide</code>).', 'Al clic sul messaggio avvisa <code>NavbarRight</code>, che apre direttamente la chat.'],
+  ex: 'Passa il mouse sulla campanellina: il pallino sparisce e si apre la tendina.', flow: ['hover campanellina', 'NotificationMenu', 'NavbarRight', 'chat aperta'] });
 comp('LanguageSelector', {
   tl: 'Il menu a tendina IT / EN con bandierine.',
   pts: ['Mostra la lingua attuale e, al clic, le opzioni.', 'Si chiude se clicchi fuori.', 'Offre 5 lingue (EN, IT, ES, DE, FR), ognuna con la sua bandierina, prese da <code>LANGUAGES</code> e <code>FLAGS</code>.', 'Cambia la lingua dell\'intera interfaccia e dei dati TMDB (popolari, ricerca, trailer).'],

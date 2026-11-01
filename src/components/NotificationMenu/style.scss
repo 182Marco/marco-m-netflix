@@ -50,6 +50,16 @@
     box-shadow: 0 14px 34px rgba(0, 0, 0, 0.6);
     transform-origin: top right;
 
+    // ponte invisibile sopra la freccia: il hover non si interrompe
+    &::after {
+      content: '';
+      position: absolute;
+      top: -18px;
+      left: 0;
+      right: 0;
+      height: 18px;
+    }
+
     &::before {
       content: '';
       position: absolute;

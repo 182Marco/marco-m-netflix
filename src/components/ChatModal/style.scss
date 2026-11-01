@@ -268,6 +268,11 @@
       max-width: 61.8%;
     }
 
+    // il cerchio fixed sta sopra il drawer: l'input riprende il suo spazio
+    .chat-input-wrap {
+      padding-left: 0;
+    }
+
     .chat-settings-drawer {
       position: relative;
       width: 38.2%;

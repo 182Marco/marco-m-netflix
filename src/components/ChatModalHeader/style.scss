@@ -78,10 +78,6 @@
 
   button {
     @include chat-btn();
-    @media (max-width: 500px) {
-      font-size: 17px;
-      gap: 33px;
-    }
 
     &:hover {
       color: $white;
@@ -92,9 +88,5 @@
   .settings-btn {
     @include chat-btn();
     line-height: 1;
-
-    @media (max-width: 500px) {
-      font-size: 17px;
-    }
   }
 }

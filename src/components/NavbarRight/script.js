@@ -24,7 +24,7 @@ export default {
     return {
       showSearch: false,
       navCol: false,
-      openMenu: null,
+      bellOpen: false,
       bellSeen: false,
     };
   },
@@ -62,18 +62,15 @@ export default {
       this.query = '';
       this.$refs.input.focus();
     },
-    toggleMenu(name) {
-      if (name === 'bell') this.bellSeen = true;
-      this.openMenu = this.openMenu === name ? null : name;
-    },
-    // come il click sulla lente, ma senza richiuderla se è già aperta
-    openSearchFromMenu() {
-      this.openMenu = null;
+    // la campanella si apre in hover; il badge sparisce alla prima apertura
+    showBell() {
       this.bellSeen = true;
-      if (!this.showSearch) {
-        this.putFocus();
-        this.$store.dispatch('changeColNav');
-      }
+      this.bellOpen = true;
+    },
+    // la notifica apre direttamente il bot
+    openChatFromBell() {
+      this.bellOpen = false;
+      this.$emit('open-ai-chat');
     },
     sengaPosto() {
       console.log('funzione da scrivere chiamata');

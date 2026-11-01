@@ -38,21 +38,13 @@
       ></i>
     </li>
     <NotificationMenu
-      icon="fas fa-gift"
-      :label="$t('navbar.gifts')"
-      :open="openMenu === 'gift'"
-      @toggle="toggleMenu('gift')"
-      @close="openMenu = null"
-      @select="openSearchFromMenu"
-    />
-    <NotificationMenu
       icon="fas fa-bell"
       :label="$t('navbar.notifications')"
-      :open="openMenu === 'bell'"
+      :open="bellOpen"
       :badge="!bellSeen"
-      @toggle="toggleMenu('bell')"
-      @close="openMenu = null"
-      @select="openSearchFromMenu"
+      @show="showBell"
+      @hide="bellOpen = false"
+      @select="openChatFromBell"
     />
     <li class="tablet">
       <a href="#">

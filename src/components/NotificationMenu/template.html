@@ -1,10 +1,14 @@
-<li ref="root" class="notification-menu tablet">
+<li
+  class="notification-menu tablet"
+  @mouseenter="$emit('show')"
+  @mouseleave="$emit('hide')"
+>
   <button
     type="button"
     class="trigger"
     :aria-label="label"
     :aria-expanded="open"
-    @click="$emit('toggle')"
+    @focus="$emit('show')"
   >
     <i :class="icon"></i>
     <span v-if="badge" class="badge">1</span>
