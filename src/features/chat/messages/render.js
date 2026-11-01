@@ -58,16 +58,26 @@ const youtubeLines = (step) => [
 const dbLines = (step) =>
   asArray(step.queries).map((query) => str(query.display_sql || query.sql));
 
-const chunkLine = (chunk) =>
-  words(
+const fixed = (value) => (typeof value === 'number' ? value.toFixed(3) : '');
+
+// K largo: la similarity 0-1 tra parentesi. Rerank e K stretto: il punteggio del
+// reranker (`score`) e, tra parentesi, la similarity che il film aveva nel K largo.
+const chunkLine = (chunk, step = {}) => {
+  const isRetrieval = step.kind === 'retrieval';
+  const similarity = isRetrieval ? chunk.score : chunk.similarity;
+  return words(
     chunk.title || chunk.id,
     chunk.year ? `(${str(chunk.year)})` : '',
-    typeof chunk.score === 'number' ? `· ${chunk.score.toFixed(3)}` : '',
+    !isRetrieval && typeof chunk.score === 'number'
+      ? `· ${fixed(chunk.score)}`
+      : '',
+    typeof similarity === 'number' ? `(${fixed(similarity)})` : '',
   );
+};
 
 const ragLines = (step) => [
   ...(step.embedded_text ? [`"${str(step.embedded_text)}"`] : []),
-  ...asArray(step.chunks).map(chunkLine),
+  ...asArray(step.chunks).map((chunk) => chunkLine(chunk, step)),
 ];
 
 const labelsOf = (step) =>
@@ -314,6 +324,7 @@ const LINES = {
   db_query: dbLines,
   retrieval: ragLines,
   rerank: ragLines,
+  selection: ragLines,
 };
 
 // la fonte YouTube, le attribuzioni JustWatch, la fonte Wikipedia (testo CC BY-SA,
