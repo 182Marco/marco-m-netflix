@@ -72,4 +72,6 @@
   <transition name="fade-chat-modal">
     <ChatModal v-if="showChatModal" @close="closeAiChat" />
   </transition>
+
+  <AppToggle :chat-open="showChatModal" @toggle="toggleAiChat" />
 </div>

@@ -1,0 +1,58 @@
+// cerchio fixed: il contenitore e' grande quanto il cerchio stesso
+.app-toggle {
+  position: fixed;
+  left: 12px;
+  bottom: 14px;
+  z-index: 1400; // sopra la chat (1200/1201) e il Card aperto dalla chat (1300)
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  border-radius: 50%;
+  // avorio caldo: il rosso del logo risalta sia sul nero dell'app che sul blu della chat
+  background: #f4efe8;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+
+  &:hover {
+    transform: scale(1.06);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(0, 0, 0, 0.25);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+}
+
+.app-toggle-img {
+  width: 37px;
+  height: 37px;
+  object-fit: contain;
+  display: block;
+
+  // la N e' alta e stretta: meno larga per non toccare i bordi
+  &.is-netflix {
+    width: auto;
+    height: 33px;
+  }
+}
+
+.app-toggle-fade-enter-active,
+.app-toggle-fade-leave-active {
+  transition: opacity 0.2s ease-out;
+}
+
+.app-toggle-fade-enter-from,
+.app-toggle-fade-leave-to {
+  opacity: 0;
+}

@@ -1,0 +1,25 @@
+<button
+  type="button"
+  class="app-toggle"
+  :class="{ 'is-chat': chatOpen }"
+  :aria-label="chatOpen ? $t('toggle.backToNetflix') : $t('toggle.openChat')"
+  :title="chatOpen ? $t('toggle.backToNetflix') : $t('toggle.openChat')"
+  @click="$emit('toggle')"
+>
+  <transition name="app-toggle-fade" mode="out-in">
+    <img
+      v-if="chatOpen"
+      key="netflix"
+      class="app-toggle-img is-netflix"
+      src="@/assets/img/netflix.png"
+      alt=""
+    />
+    <img
+      v-else
+      key="scout"
+      class="app-toggle-img"
+      src="@/assets/img/NetflixScoutMini.png"
+      alt=""
+    />
+  </transition>
+</button>

@@ -45,7 +45,7 @@ img {
 
 .fade-chat-modal-enter-active,
 .fade-chat-modal-leave-active {
-  transition: opacity 0.25s ease;
+  transition: opacity 0.2s ease-out;
 }
 
 .fade-chat-modal-enter-from,

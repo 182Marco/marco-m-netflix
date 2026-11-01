@@ -318,7 +318,23 @@ export const TEXTS = {
   },
 
   chat: {
-    settings: {
+    toggle: {
+    openChat: {
+      en: 'Open the AI assistant',
+      it: "Apri l'assistente AI",
+      es: 'Abrir el asistente de IA',
+      de: 'KI-Assistent öffnen',
+      fr: "Ouvrir l'assistant IA",
+    },
+    backToNetflix: {
+      en: 'Back to Netflix',
+      it: 'Torna a Netflix',
+      es: 'Volver a Netflix',
+      de: 'Zurück zu Netflix',
+      fr: 'Retour à Netflix',
+    },
+  },
+  settings: {
       en: 'settings',
       it: 'impostazioni',
       es: 'ajustes',

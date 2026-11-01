@@ -11,6 +11,7 @@ import {
 import Card from '@/components/Card';
 import PromoMovie from '@/components/PromoMovie';
 import ChatModal from '@/components/ChatModal';
+import AppToggle from '@/components/AppToggle';
 
 export default {
   name: 'App',
@@ -22,6 +23,7 @@ export default {
     Card,
     PromoMovie,
     ChatModal,
+    AppToggle,
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
@@ -147,6 +149,10 @@ export default {
       if (typeof document !== 'undefined') {
         document.body.style.overflow = 'hidden';
       }
+    },
+    toggleAiChat() {
+      if (this.showChatModal) this.closeAiChat();
+      else this.openAiChat();
     },
     closeAiChat() {
       // closing ends the session: stream aborted, local state cleared

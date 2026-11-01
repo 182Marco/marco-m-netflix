@@ -147,7 +147,7 @@
 }
 
 .chat-input-fixed {
-  height: 76px;
+  height: 88px;
   border-top: 1px solid rgba(63, 68, 75, 0.9);
   background-color: #18232e;
 
@@ -155,13 +155,16 @@
     height: 100%;
     @include flex(row, space-between, center);
     margin: 0 auto;
+    // spazio per il cerchio fixed (AppToggle) in basso a sinistra
+    padding-left: 68px;
   }
 }
 
 .chat-input {
-  height: 36px;
+  height: 46px;
+  font-size: 19px;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 18px;
+  border-radius: 23px;
   background: #11161d;
   background-color: #263544;
   color: $white;
