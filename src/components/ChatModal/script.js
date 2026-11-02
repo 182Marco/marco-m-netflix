@@ -27,6 +27,7 @@ export default {
       isSettingsDrawerOpen: false,
       maxMessageChars: MAX_MESSAGE_CHARS,
       forceStick: false,
+      isMobile: false,
     };
   },
 
@@ -58,9 +59,24 @@ export default {
 
   mounted() {
     this.syncScrollAfterRender();
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      this.mobileQuery = window.matchMedia('(max-width: 700px)');
+      this.isMobile = this.mobileQuery.matches;
+      this.mobileQuery.addEventListener('change', this.onMobileChange);
+    }
+  },
+
+  beforeUnmount() {
+    if (this.mobileQuery) {
+      this.mobileQuery.removeEventListener('change', this.onMobileChange);
+    }
   },
 
   methods: {
+    onMobileChange(e) {
+      this.isMobile = e.matches;
+    },
+
     ...mapActions('chat', ['send', 'retry', 'startNewChat']),
     ...mapMutations('chatSettings', ['restoreDefaults']),
     ...mapMutations('chat', [

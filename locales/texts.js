@@ -412,11 +412,20 @@ export const TEXTS = {
       fr: 'Ignorer',
     },
     placeholder: {
-      en: 'Type your message',
-      it: 'Scrivi il tuo messaggio',
-      es: 'Escribe tu mensaje',
-      de: 'Nachricht eingeben',
-      fr: 'Écrivez votre message',
+      full: {
+        en: 'Describe what you would like to see or what information you are looking for',
+        it: 'Descrivi cosa vorresti vedere o quali informazioni stai cercando',
+        es: 'Describe qué te gustaría ver o qué información estás buscando',
+        de: 'Beschreibe, was du sehen möchtest oder welche Informationen du suchst',
+        fr: 'Décrivez ce que vous aimeriez voir ou les informations que vous recherchez',
+      },
+      short: {
+        en: 'What do you want to watch or know?',
+        it: 'Cosa vuoi vedere o sapere?',
+        es: '¿Qué quieres ver o saber?',
+        de: 'Was möchtest du sehen oder wissen?',
+        fr: 'Que voulez-vous voir ou savoir ?',
+      },
     },
     send: {
       en: 'Send',

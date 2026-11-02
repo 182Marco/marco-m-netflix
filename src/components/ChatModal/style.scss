@@ -98,8 +98,9 @@
 }
 
 .is-user .message-bubble {
-  background-color: #F4F7FA;
-  span, p {
+  background-color: #f4f7fa;
+  span,
+  p {
     color: #11161d;
   }
 }
@@ -190,7 +191,8 @@
     height: 32px;
     width: auto;
     opacity: 0.8;
-    filter: brightness(70%) saturate(100%) invert(64%) sepia(98%) saturate(3500%) hue-rotate(140deg) brightness(130%) contrast(105%);
+    filter: brightness(70%) saturate(100%) invert(64%) sepia(98%)
+      saturate(3500%) hue-rotate(140deg) brightness(130%) contrast(105%);
     cursor: pointer;
 
     &:hover {
@@ -205,6 +207,10 @@
 }
 
 @media (max-width: 700px) {
+  .chat-input {
+    font-size: 15px;
+  }
+
   .message-bubble,
   .agent-process-bubble {
     max-width: min(84vw, 520px);

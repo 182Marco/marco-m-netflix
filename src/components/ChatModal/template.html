@@ -165,7 +165,9 @@
             v-model.trim="currentMessage"
             type="text"
             class="chat-input"
-            :placeholder="$t('chat.placeholder')"
+            :placeholder="
+              $t(isMobile ? 'chat.placeholder.short' : 'chat.placeholder.full')
+            "
             :maxlength="maxMessageChars"
             :disabled="isBusy"
             @keyup.enter.prevent="sendMessage"
