@@ -1,34 +1,36 @@
 <nav>
   <ul>
     <li class="search-item">
-      <div v-show="showSearch" class="input-wrap">
-        <img
-          @click="$emit('open-ai-chat')"
-          src="@/assets/img/logoIA.svg"
-          :alt="$t('navbar.openAiChat')"
-          class="ia-chat-btn"
-        />
-        <input
-          id="searchMovieInput"
-          ref="input"
-          type="text"
-          :placeholder="$t('navbar.searchPlaceholder')"
-          v-model.trim="query"
-          @keyup="$store.dispatch('getAllData')"
-          @focus="onSearchFocus"
-          @input="onSearchFocus"
-        />
-        <button
-          v-show="query !== ''"
-          type="button"
-          class="clear-btn"
-          :aria-label="$t('navbar.clearSearch')"
-          @click="clearSearch"
-        >
-          &times;
-        </button>
-        <LanguageSelector v-model="language" />
-      </div>
+      <Transition name="search-fade">
+        <div v-show="showSearch" class="input-wrap">
+          <img
+            @click="$emit('open-ai-chat')"
+            src="@/assets/img/logoIA.svg"
+            :alt="$t('navbar.openAiChat')"
+            class="ia-chat-btn"
+          />
+          <input
+            id="searchMovieInput"
+            ref="input"
+            type="text"
+            :placeholder="$t('navbar.searchPlaceholder')"
+            v-model.trim="query"
+            @keyup="$store.dispatch('getAllData')"
+            @focus="onSearchFocus"
+            @input="onSearchFocus"
+          />
+          <button
+            v-show="query !== ''"
+            type="button"
+            class="clear-btn"
+            :aria-label="$t('navbar.clearSearch')"
+            @click="clearSearch"
+          >
+            &times;
+          </button>
+          <LanguageSelector v-model="language" />
+        </div>
+      </Transition>
       <i
         @click="
             putFocus();
