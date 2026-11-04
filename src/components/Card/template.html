@@ -89,7 +89,7 @@
           :class="{ active: open }"
           :style="{
               backgroundImage:
-                'url(' + require('@/assets/img/bigBrand.webp') + ')',
+                'url(' + require('@/assets/img/bigBrand.avif') + ')',
             }"
         ></div>
         <img
@@ -104,7 +104,7 @@
         <img
           v-else
           :class="{ active: open }"
-          :src="require('@/assets/img/bigBrand.webp')"
+          :src="require('@/assets/img/bigBrand.avif')"
           loading="lazy"
           decoding="async"
           :alt="`${obj.title ? obj.title : obj.name} ${$t('card.posterAlt')}`"
