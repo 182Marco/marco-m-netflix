@@ -521,7 +521,7 @@ comp('Card', {
   pts: ['Mostra il poster (o un\'immagine di riserva se manca).', 'Al clic si apre l\'anteprima a tutto schermo con titolo, stelle, trama, data e lingua originale.', 'Pulsante Play: scarica il trailer e lo mostra in <code>VideoComp</code>.', 'Aggiunge/toglie il titolo dai preferiti.'],
   ex: 'Hai cercato "matrix": ogni risultato è una <code>Card</code>. Clic → anteprima → Play → parte il trailer.',
   flow: ['clic sul poster', 'Card', 'tmdbApi.getTrailerVideos', 'VideoComp'],
-  t: ['Prima parte: anteprima grande (visibile solo quando "aperta").', 'Stelle: voto da 0 a 10 diviso 2 e arrotondato (es. 7,6 → 4 stelle piene).', 'Seconda parte: il poster cliccabile con il nome corto.', 'Se manca il poster usa <code>bigBrand.webp</code>.'],
+  t: ['Prima parte: anteprima grande (visibile solo quando "aperta").', 'Stelle: voto da 0 a 10 diviso 2 e arrotondato (es. 7,6 → 4 stelle piene).', 'Seconda parte: il poster cliccabile con il nome corto.', 'Se manca il poster usa <code>bigBrand.avif</code>.'],
   tex: 'Voto 7,6 → <code>Math.ceil(7.6/2)</code> = 4 stelle piene, 1 vuota.',
   s: ['<code>open</code>: anteprima aperta o no.', '<code>getData(id, isMovie)</code>: scarica la chiave YouTube del trailer.', '<code>clipLongText()</code>: accorcia la trama (60 parole) e il titolo (2 parole) sul poster.', 'Distingue film da serie guardando se esiste <code>title</code> (film) o <code>name</code> (serie).'],
   sex: 'Una trama di 200 parole viene tagliata a circa 60 e chiusa con "…".',
@@ -574,7 +574,7 @@ comp('NavbarRight', {
 });
 comp('PromoMovie', {
   tl: 'La grande locandina in cima: Interstellar con il tasto Play.',
-  pts: ['Mostra un\'immagine fissa (<code>interstellar.webp</code>).', 'Il pulsante Play apre il trailer in <code>VideoComp</code>.', 'Sparisce quando cerchi qualcosa (per lasciare spazio ai risultati).'],
+  pts: ['Mostra un\'immagine fissa (<code>interstellar.avif</code>).', 'Il pulsante Play apre il trailer in <code>VideoComp</code>.', 'Sparisce quando cerchi qualcosa (per lasciare spazio ai risultati).'],
   ex: 'Scrivi una ricerca: la locandina sparisce. Svuota il campo: torna.', flow: ['store.showPromo', 'PromoMovie', 'VideoComp'],
   t: ['Immagine visibile solo se <code>showPromo</code> è vero.', 'Tasto Play che attiva/disattiva il video.'], tex: 'L\'immagine ha la classe <code>tablet</code>: non c\'è su telefono.',
   s: ['ID TMDB del film (<code>157336</code>) e chiave del video YouTube sono scritti nel codice.', '<code>showVideo</code> decide se mostrare il lettore.'], sex: 'Per cambiare film in evidenza cambi id, chiave e immagine.', scode: 'idFilmPromo: \'157336\'', c: ['Immagine a tutta larghezza con sfumatura in basso.']
@@ -690,12 +690,12 @@ add('src/scss/cardOpen.scss', { ico: 'scss', tl: 'Gli stili dell\'anteprima aper
 
 add('src/assets', { kind: 'dir', ico: 'folder', tl: 'Immagini e icone.', pts: [] });
 add('src/assets/img', { kind: 'dir', ico: 'folder', tl: 'Tutte le immagini del progetto.',
-  pts: ['<code>brand.svg</code>, <code>netflix.png</code>: loghi.', '<code>interstellar.webp</code>: locandina grande.', '<code>bigBrand.webp</code>: immagine di riserva per poster mancanti.', '<code>gb.svg</code>, <code>it.svg</code>, <code>es.svg</code>, <code>de.svg</code>, <code>fr.svg</code>: bandiere (SVG leggeri).', '<code>logoIA.svg</code>, <code>NetflixScout.png</code>, <code>send.svg</code>, <code>chevron.svg</code>: chat AI.', '<code>marcoMilza.webp</code>: foto profilo.'] });
-['brand.svg', 'netflix.png', 'interstellar.webp', 'bigBrand.webp', 'gb.svg', 'it.svg', 'es.svg', 'de.svg', 'fr.svg', 'logoIA.svg', 'NetflixScout.png', 'send.svg', 'chevron.svg', 'marcoMilza.webp'].forEach(function (f) {
+  pts: ['<code>brand.svg</code>, <code>netflix.avif</code>: loghi.', '<code>interstellar.avif</code>: locandina grande.', '<code>bigBrand.avif</code>: immagine di riserva per poster mancanti.', '<code>gb.svg</code>, <code>it.svg</code>, <code>es.svg</code>, <code>de.svg</code>, <code>fr.svg</code>: bandiere (SVG leggeri).', '<code>logoIA.svg</code>, <code>NetflixScout.avif</code>, <code>send.svg</code>, <code>chevron.svg</code>: chat AI.', '<code>marcoMilza.avif</code>: foto profilo.'] });
+['brand.svg', 'netflix.avif', 'interstellar.avif', 'bigBrand.avif', 'gb.svg', 'it.svg', 'es.svg', 'de.svg', 'fr.svg', 'logoIA.svg', 'NetflixScout.avif', 'send.svg', 'chevron.svg', 'marcoMilza.avif'].forEach(function (f) {
   const m = {
-    'brand.svg': 'Logo grande della barra (tablet/desktop).', 'netflix.png': 'Logo piccolo per mobile.', 'interstellar.webp': 'Locandina di Interstellar in <code>PromoMovie</code>.',
-    'bigBrand.webp': 'Immagine di riserva quando un titolo non ha poster.', 'gb.svg': 'Bandiera inglese (UK).', 'it.svg': 'Bandiera italiana.', 'es.svg': 'Bandiera spagnola.', 'de.svg': 'Bandiera tedesca.', 'fr.svg': 'Bandiera francese.', 'logoIA.svg': 'Icona che apre la chat AI.',
-    'NetflixScout.png': 'Logo del bot nell\'intestazione della chat.', 'send.svg': 'Icona del pulsante invia.', 'chevron.svg': 'Freccia dell\'accordion "Agent Process".', 'marcoMilza.webp': 'Foto profilo in alto a destra.'
+    'brand.svg': 'Logo grande della barra (tablet/desktop).', 'netflix.avif': 'Logo piccolo per mobile.', 'interstellar.avif': 'Locandina di Interstellar in <code>PromoMovie</code>.',
+    'bigBrand.avif': 'Immagine di riserva quando un titolo non ha poster.', 'gb.svg': 'Bandiera inglese (UK).', 'it.svg': 'Bandiera italiana.', 'es.svg': 'Bandiera spagnola.', 'de.svg': 'Bandiera tedesca.', 'fr.svg': 'Bandiera francese.', 'logoIA.svg': 'Icona che apre la chat AI.',
+    'NetflixScout.avif': 'Logo del bot nell\'intestazione della chat.', 'send.svg': 'Icona del pulsante invia.', 'chevron.svg': 'Freccia dell\'accordion "Agent Process".', 'marcoMilza.avif': 'Foto profilo in alto a destra.'
   };
   add('src/assets/img/' + f, { ico: 'img', tl: m[f], pts: [] });
 });
